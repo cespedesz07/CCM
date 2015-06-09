@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.ccm"
+    android:versionCode="1"
+    android:versionName="1.0" 
+    android:installLocation="auto">
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="21" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo_app_100x80"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" 
+        android:name=".parseutils.CCMApplication">
+        
+   
+        
+        <meta-data 
+            android:name="com.facebook.sdk.ApplicationId"   
+            android:value="@string/facebook_app_id"/>
+        
+        
+        
+        <!-- Actividades -->
+        <activity
+            android:name="com.example.ccm.eventos.AreaListActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MENUITEMLISTACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        
+        
+        
+        
+        <activity
+            android:name="Login"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        
+        
+        <activity
+            android:name="com.example.ccm.splash.SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name" 
+            android:theme="@style/Theme.AppCompat">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        
+        <activity android:name="LoginEmailActivity"></activity>
+        
+        
+        <activity 
+            android:name="com.facebook.FacebookActivity"
+			 android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+			 android:theme="@android:style/Theme.Translucent.NoTitleBar" 
+			 android:label="@string/app_name" />
+    </application>
+
+</manifest>

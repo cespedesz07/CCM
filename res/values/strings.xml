@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="facebook_app_id">694373840674926</string>
+
+    <string name="app_name">XXCCM</string>
+    <string name="type_msg">Type message</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="or">or</string>
+    <string name="email">Email</string>
+    <string name="documento">Documento</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="registro">Registrar</string>
+    <string name="login">Iniciar!</string>
+    <string name="forgot_my_pwd">I’ve forgotten my password?</string>
+    <string name="my_chats">My Chats</string>
+    <string name="all_chats">All Chats</string>
+    <string name="search">Search</string>
+    <string name="to">To:</string>
+    <string name="edit">Edit</string>
+    <string name="new_chat">New Chat</string>
+    <string name="alert_ok">OK, Entendido!</string>
+    <string name="alert_espera">Espera un poco...</string>
+    <string name="err_doc_vacio">Por favor digita el documento.</string>
+    <string name="err_email_vacio">Por favor digita el correo electrónico.</string>
+    <string name="err_campos_vacios">Por favor ingresa todos los campos.</string>
+    <string name="err_usuario_null">El usuario digitado no existe, por favor reintentar.</string>
+    <string name="err_registro">Error al registrarse. Por favor intente de nuevo.</string>
+    <string name="alert_loading">Loading...</string>
+    <string name="msg_no_user_found">No users found for chat!</string>
+    <string name="title_activity_facebook_login">FacebookLoginActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_login">LoginActivity</string>
+
+</resources>
