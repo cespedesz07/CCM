@@ -1,8 +1,8 @@
 package com.example.ccm;
 
 
+import com.example.ccm.application.CCMApplication;
 import com.example.ccm.eventos.AreaListActivity;
-import com.example.ccm.parseutils.CCMApplication;
 import com.parse.LogInCallback;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
@@ -31,7 +31,12 @@ import android.widget.Toast;
 
 
 
-
+/**
+ * Actividad que corresponde al inicio de sesion nativo con el documento y el email del usuario
+ * Implementa OnTuchListener para crear el efecto de presionado en los botones 
+ * @author Santiago Céspedes Zapata - cespedesz07@gmail.com
+ *
+ */
 public class LoginEmailActivity extends Activity implements OnClickListener, OnTouchListener{
 	
 	
@@ -63,7 +68,14 @@ public class LoginEmailActivity extends Activity implements OnClickListener, OnT
 			if ( ParseAnonymousUtils.isLinked( usuarioActual ) ){
 				//TODO: Hacer el intent para cuando el usuario sea anónimo
 			}
-			else{ //Si el usuario no es anónimo
+			else{ 
+				//Si el usuario no es anónimo
+				//Abre directamente el AreaListActivity y el AreaDetailActivity para seleccionar los eventos
+				//IMPORTANTE: Para abrir el master/detail, es necesario agregar en el Manifest lo siguiente:
+				// <intent-filter>
+                //     <action android:name="android.intent.action.MENUITEMLISTACTIVITY" />
+                //     <category android:name="android.intent.category.DEFAULT" />
+				// </intent-filter>
 				Intent intent = new Intent( LoginEmailActivity.this, AreaListActivity.class  );
 				startActivity( intent );
 				finish();
@@ -134,7 +146,6 @@ public class LoginEmailActivity extends Activity implements OnClickListener, OnT
 	}	
 	
 	
-	/*
 	private void login( String emailString, String documentoString ){
 		dialogEspera.dismiss();
 		ParseUser.logInInBackground( emailString, documentoString, new LogInCallback() {			
@@ -153,10 +164,8 @@ public class LoginEmailActivity extends Activity implements OnClickListener, OnT
 			}
 		} );
 	}
-	*/
 	
 	
-	/*
 	private void registrar( String emailString, String documentoString ){
 		dialogEspera.dismiss();
 		ParseUser user = new ParseUser();
@@ -175,30 +184,25 @@ public class LoginEmailActivity extends Activity implements OnClickListener, OnT
 			}			
 		} );
 	}
-	*/
-	
-	
-	
-	
+		
 	
 
 	
 	
-	
+	/*
 	protected void inicializarActionBar(){
-		/*
 		final ActionBar actionBar = getActionBar();
 		if ( actionBar != null ){
 			actionBar.setDisplayShowTitleEnabled( true );
 			actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_STANDARD );
 			actionBar.setDisplayUseLogoEnabled( true );
-			actionBar.setLogo( R.drawable.logo_app );
+			actionBar.setLogo( R.drawable.logo_app_100x80 );
 			//actionBar.setBackgroundDrawable(  getResources().getDrawable( R.drawable.actionbar_bg )  );
 			actionBar.setDisplayHomeAsUpEnabled( true );
 			actionBar.setHomeButtonEnabled( true );
 		}
-		*/
 	}
+	*/
 	
 	
 	
@@ -213,6 +217,7 @@ public class LoginEmailActivity extends Activity implements OnClickListener, OnT
 
 	
 	//Método para capturar el presionado del botón y cabiar el fondo del mismo
+	//esto es para crear el efecto de presionado de los botones
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if ( event.getAction() == MotionEvent.ACTION_DOWN ){	//Si se presiona la pantalla...

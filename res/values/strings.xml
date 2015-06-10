@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
+    
     <string name="facebook_app_id">694373840674926</string>
+    
+    
+    <!-- Números asociados con la libreria Parse para su inicializacion
+	     (Ver mas info en la clase CCMApplication.java -->
+    <string name="parse_app_id">6iYB10BfMZCaWNOfccmsHEZjn6KZhPVVrNzyv9da</string>
+    <string name="parse_client_key">t1LyLjDNlovPqTmhBZJvTjYzsUnYOQl7Qh7yodHs</string>
+    
 
     <string name="app_name">XXCCM</string>
     <string name="type_msg">Type message</string>

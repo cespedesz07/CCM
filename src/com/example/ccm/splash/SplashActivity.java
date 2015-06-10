@@ -9,22 +9,23 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.ImageView;
 
-import com.example.ccm.Login;
+import com.example.ccm.LoginActivity;
 import com.example.ccm.LoginEmailActivity;
 import com.example.ccm.R;
 import com.facebook.FacebookSdk;
 
+
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * Splash Screen que muestra el logo del CCM, el logo de la Universidad Nacional
+ * y el logo de la sociedad colombiana de matemáticas
+ * @author Santiago Céspedes Zapata - cespedesz07@gmail.com
  *
- * @see SystemUiHider
  */
 public class SplashActivity extends Activity {
 	
 	
-	//CONSTANTES
-	private static final long DURACION_SPLASH = 1000;
+	//Duracion del Splash Screen
+	private static final long DURACION_SPLASH = 2000;
 	
 	
 	//ATRIBUTOS
@@ -43,7 +44,8 @@ public class SplashActivity extends Activity {
 		TimerTask task = new TimerTask(){
 			@Override
 			public void run() {
-				Intent loginIntent = new Intent( SplashActivity.this, Login.class );
+				//Cuando termine el Splash, se redirige a la actividad LoginActivity
+				Intent loginIntent = new Intent( SplashActivity.this, LoginActivity.class );
 				startActivity( loginIntent );
 				finish();
 			}			
