@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,57 +9,58 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:orientation="vertical"
         android:paddingBottom="@dimen/pad_20dp"
         android:paddingLeft="@dimen/pad_15dp"
         android:paddingRight="@dimen/pad_15dp"
         android:paddingTop="@dimen/pad_20dp" >
 
+        
+        
         <ImageView
             android:id="@+id/logo_congreso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/pad_80dp"
+            android:layout_marginTop="80dp"
             android:layout_weight="0.20"
             android:src="@drawable/logo_congreso_320x119" />
         
-        
-        <com.facebook.login.widget.LoginButton
-	    	android:id="@+id/facebook_login_button"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_gravity="center_horizontal"
-		    android:layout_marginTop="30dp"
-		    android:layout_marginBottom="30dp" /> 
-        
-        
-
-       
-
         <LinearLayout
-            android:id="@+id/main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/btnLogin"
-                style="@style/btn_red_large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/login" />
-
-            <Button
-                android:id="@+id/btnRegistro"
-                style="@style/btn_red_large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/pad_30dp"
-                android:layout_weight="1"
-                android:text="@string/registro" />
-        </LinearLayout>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="150dp" >
+        
+	        <!-- Botón para el inicio de sesion pr facebook 
+	             IMPORTANTE: Para poder habilitar el boton es necesario:
+	             1) Registrar en el manifest la com.facebook.FacebookActivity
+	             2) Registrar algunos metadatos en el manifest: 
+	             <meta-data
+	                 android:name="com.facebook.sdk.ApplicationId"   
+	            	android:value="@string/facebook_app_id"/>
+	      	-->
+	        <com.facebook.login.widget.LoginButton
+		    	android:id="@+id/facebook_login_button"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="center_horizontal"
+			    android:layout_marginTop="40dp" /> 
+	        
+	        
+	        
+	        <com.google.android.gms.common.SignInButton
+	    		android:id="@+id/google_login_button"
+	    		android:layout_width="match_parent"
+	    		android:layout_height="wrap_content"
+	    		android:layout_gravity="center_horizontal"
+	    		android:layout_marginTop="5dp"
+	    		android:onClick="inicioSesionGoogle" />
+              
+			
+	 	</LinearLayout>
+       
 
     </LinearLayout>
 
