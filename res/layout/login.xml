@@ -14,15 +14,14 @@
         android:paddingBottom="@dimen/pad_20dp"
         android:paddingLeft="@dimen/pad_15dp"
         android:paddingRight="@dimen/pad_15dp"
-        android:paddingTop="@dimen/pad_20dp" >
-
+        android:paddingTop="@dimen/pad_20dp" >"
         
         
         <ImageView
             android:id="@+id/logo_congreso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="40dp"
             android:layout_weight="0.20"
             android:src="@drawable/logo_congreso_320x119" />
         
@@ -31,7 +30,14 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="150dp" >
+            android:padding="50dp" >
+            
+            <TextView 
+	            android:id="@+id/textview_bienvenida"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/bienvenida"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
         
 	        <!-- Botón para el inicio de sesion pr facebook 
 	             IMPORTANTE: Para poder habilitar el boton es necesario:
@@ -46,7 +52,8 @@
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:layout_gravity="center_horizontal"
-			    android:layout_marginTop="40dp" /> 
+			    android:layout_marginTop="40dp"
+			    android:layout_marginBottom="5dp" /> 
 	        
 	        
 	        
@@ -55,11 +62,39 @@
 	    		android:layout_width="match_parent"
 	    		android:layout_height="wrap_content"
 	    		android:layout_gravity="center_horizontal"
-	    		android:layout_marginTop="5dp"
-	    		android:onClick="inicioSesionGoogle" />
+	    		android:layout_marginBottom="5dp" />
+	        
+	        
+	        
+	        <!-- ===========================LINEA SEPARADORA======================= -->
+             <View
+                 android:id="@+id/line1_login"     
+			     android:layout_width="fill_parent"
+			     android:layout_height="1dp"
+			     android:background="@android:color/black"
+			     android:layout_marginTop="50dp"
+			     android:layout_marginBottom="50dp" />
+             <!-- ==================================================================== -->
               
+              
+              <TextView 
+            	android:id="@+id/textview_bienvenida2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/bienvenida2"
+	            android:textAppearance="?android:attr/textAppearanceLarge"
+	            android:layout_marginBottom="20dp" />
+              
+              <Button
+             	android:id="@+id/btn_registro_login_activity"
+		        style="@style/btn_red_large"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"	         
+		        android:text="@string/registro" />
 			
 	 	</LinearLayout>
+	 	
+        
        
 
     </LinearLayout>

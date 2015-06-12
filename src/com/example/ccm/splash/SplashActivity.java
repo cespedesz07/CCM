@@ -9,9 +9,9 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.ImageView;
 
-import com.example.ccm.LoginActivity;
-import com.example.ccm.LoginEmailActivity;
 import com.example.ccm.R;
+import com.example.ccm.login.LoginActivity;
+import com.example.ccm.login.LoginEmailActivity;
 import com.facebook.FacebookSdk;
 
 
@@ -45,7 +45,7 @@ public class SplashActivity extends Activity {
 			@Override
 			public void run() {
 				//Cuando termine el Splash, se redirige a la actividad LoginActivity
-				Intent loginIntent = new Intent( SplashActivity.this, LoginActivity.class );
+				Intent loginIntent = new Intent( SplashActivity.this, LoginActivity.class );				
 				startActivity( loginIntent );
 				finish();
 			}			

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<previews>
+
+    <preview
+        name="landscape"
+        activity="com.example.ccm.RegistroActivity"
+        config="layout-ldltr-sw600dp-w600dp-h960dp-large-notlong-port-notnight-xhdpi-finger-keyssoft-nokeys-navhidden-nonav-1920x1200-v21"
+        device="Nexus 7"
+        devicestate="Portrait"
+        target="Android 5.0.1"
+        theme="@style/AppTheme" >
+    </preview>
+
+</previews>

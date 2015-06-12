@@ -20,7 +20,7 @@
             android:id="@+id/logo_congreso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/pad_80dp"
+            android:layout_marginBottom="40dp"
             android:layout_weight="0.20"
             android:src="@drawable/logo_congreso_320x119" />
         
@@ -46,7 +46,7 @@
             android:layout_marginTop="@dimen/pad_5dp"
             android:drawableLeft="@drawable/ic_pwd"
             android:ems="10"
-            android:hint="@string/documento"
+            android:hint="@string/num_documento"
             android:inputType="textPassword" />
 
         <LinearLayout

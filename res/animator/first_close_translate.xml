@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- Animación que corresponde al desplazamiento de la actividad que entra (la que abre con un Intent) 
+         (ver metodo LoginActivity.inicioRegistro() ) 
+         Extraido de: https://gist.github.com/kwent/5875749-->
+	<translate android:fromXDelta="100%"
+	          android:toXDelta="0%"
+	          android:duration="@android:integer/config_longAnimTime" />
+    
+</set>
+
