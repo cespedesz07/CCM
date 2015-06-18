@@ -102,7 +102,7 @@ public class LoginEmailActivity extends Activity implements OnClickListener, OnT
 		dialogCamposVacios.setCancelable( true );
 		
 		dialogEspera = new ProgressDialog( this );
-		dialogEspera.setMessage( getString(R.string.alert_espera) );
+		dialogEspera.setMessage( getString(R.string.alert_cargando) );
 		
 		
 	}

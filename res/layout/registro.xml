@@ -231,11 +231,12 @@
          
          
          <Button
-             android:id="@+id/btnRegistro_registroActivity"
+             android:id="@+id/btn_registro_registro_activity"
 	         style="@style/btn_red_large"
 	         android:layout_width="wrap_content"
 	         android:layout_height="wrap_content"	         
-	         android:text="@string/registro" />
+	         android:text="@string/registro"
+	         android:layout_gravity="center" />
         
 	</LinearLayout>
 	

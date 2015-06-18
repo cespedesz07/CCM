@@ -1,6 +1,13 @@
 package com.example.ccm.registro;
 
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -8,14 +15,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.example.ccm.R;
+import com.example.ccm.wsclient.RestClientTask;
 
 
 /**
@@ -25,7 +35,7 @@ import com.example.ccm.R;
  * @author Santiago Céspedes Zapata - cespedesz07@gmail.com
  *
  */
-public class RegistroActivity extends ActionBarActivity implements OnTouchListener {
+public class RegistroActivity extends ActionBarActivity implements OnTouchListener, OnClickListener {
 	
 	
 	
@@ -55,6 +65,20 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 		spinnerTipoDocumentoAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
 		spinnerTipoDocumento.setAdapter( spinnerTipoDocumentoAdapter );
 		
+		txtNumDocumento = (EditText) findViewById( R.id.txt_num_documento );
+		
+		txtNombre = (EditText) findViewById( R.id.txt_nombre );
+		
+		txtApellidos = (EditText) findViewById( R.id.txt_apellidos );
+		
+		radioGroupGenero = (RadioGroup) findViewById( R.id.radio_group_genero );
+		
+		pickerFechaNacimiento = (DatePicker) findViewById( R.id.picker_fecha_nacimiento );
+		
+		txtEmail = (EditText) findViewById( R.id.txt_email );
+		
+		txtTelefono = (EditText) findViewById( R.id.txt_telefono );
+		
 		spinnerPaisProcedencia = (Spinner) findViewById(R.id.spinner_pais_procedencia);
 		SpinnerArrayAdapter spinnerPaisProcedenciaAdapter = new SpinnerArrayAdapter( this, SpinnerArrayAdapter.PAIS_PROCEDENCIA );
 		spinnerPaisProcedenciaAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
@@ -65,10 +89,9 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 		spinnerInstitucionAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
 		spinnerInstitucion.setAdapter( spinnerInstitucionAdapter );
 		
-		btnRegistro = (Button) findViewById( R.id.btnRegistro_registroActivity );
+		btnRegistro = (Button) findViewById( R.id.btn_registro_registro_activity );
 		btnRegistro.setOnTouchListener( this );
-		
-		
+		btnRegistro.setOnClickListener( this );		
 	}
 	
 	
@@ -76,7 +99,7 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 	@Override
 	protected void onStart(){
 		super.onStart();
-		overridePendingTransition( R.animator.first_close_translate, R.animator.second_close_scale);
+		//overridePendingTransition( R.animator.first_close_translate, R.animator.second_close_scale);
 	}
 	
 	
@@ -135,4 +158,66 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 		}
 		return false;
 	}
+
+
+	
+	
+	//Método para capturar las pulsaciones de los botones. Provienen de la interfaz OnClickListener
+	@Override
+	public void onClick(View v) {
+		if ( v.getId() == R.id.btn_registro_registro_activity ){
+			guardarDatosFormulario();
+		}
+		
+	}
+	
+	private void guardarDatosFormulario(){
+		//String tipoDocumentoCampo = (  (String) spinnerTipoDocumento.getSelectedItem()  ).toString();
+		int numDocumentoCampo = Integer.valueOf( txtNumDocumento.getText().toString() ); 
+		String nombreCampo = txtNombre.getText().toString();
+		String apellidosCampo = txtApellidos.getText().toString();		
+		int indiceGeneroCampo = radioGroupGenero.getCheckedRadioButtonId();   //Si este valor retorna -1, es porque no se ha seleccionado ningun campo
+		String generoCampo = (  (RadioButton) radioGroupGenero.findViewById( indiceGeneroCampo )  ).getText().toString();		
+		String fechaNacimientoCampo = obtenerFechaCampo( pickerFechaNacimiento );
+		String emailCampo = txtEmail.getText().toString();		
+		String telefonoCampo = txtTelefono.getText().toString();		
+		//Codigo QR: Pendiente
+		int tipoDocumentoCampo = 1;		
+		String paisProcedenciaCampo = (  (String) spinnerPaisProcedencia.getSelectedItem()  ).toString();		
+		//String institucionCampo = (  (String) spinnerTipoDocumento.getSelectedItem()  ).toString();
+		int institucionCampo = 1;
+		int tipoPersonaCampo = 1;
+		
+		List<NameValuePair> parametros = new ArrayList<NameValuePair>();
+		parametros.add(  new BasicNameValuePair( "docPersona", String.valueOf(numDocumentoCampo) )  );
+		parametros.add(  new BasicNameValuePair( "nombre", nombreCampo )  );
+		parametros.add(  new BasicNameValuePair( "apellidos", apellidosCampo )  );
+		parametros.add(  new BasicNameValuePair( "genero", generoCampo )  );
+		parametros.add(  new BasicNameValuePair( "fecha_nacimiento", fechaNacimientoCampo )  );
+		parametros.add(  new BasicNameValuePair( "correo_electronico", emailCampo )  );
+		parametros.add(  new BasicNameValuePair( "telefono", telefonoCampo )  );
+		parametros.add(  new BasicNameValuePair( "codigo_qr", "" )  );
+		parametros.add(  new BasicNameValuePair( "tipo_doc_idtipo_doc", String.valueOf(tipoDocumentoCampo)  ) );
+		parametros.add(  new BasicNameValuePair( "pais_procedencia_idpais_procedencia", String.valueOf(tipoDocumentoCampo)  ) );
+		parametros.add(  new BasicNameValuePair( "institucion_idinstitucion", String.valueOf(tipoDocumentoCampo)  )  );
+		parametros.add(  new BasicNameValuePair( "tipo_persona_idtipo_persona", String.valueOf(tipoPersonaCampo)  )  );
+		
+		new RestClientTask( this ).execute( parametros );
+	}
+	
+	
+	
+	private static String obtenerFechaCampo( DatePicker datePicker ){
+		String fechaCapturada = "";		
+		int dia = datePicker.getDayOfMonth();
+		int mes = datePicker.getMonth();
+		int año = datePicker.getYear();		
+		Calendar calendar = Calendar.getInstance();
+		calendar.set( año, mes, dia );		
+		fechaCapturada = calendar.getTime().toString();
+		return fechaCapturada;
+	}
+	
+	
+	
 }

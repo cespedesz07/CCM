@@ -27,7 +27,8 @@
     <string name="registro">Registrar</string>
     <string name="login">Iniciar!</string>
     <string name="alert_ok">OK, Entendido!</string>
-    <string name="alert_espera">Espera un poco...</string>
+    <string name="alert_cargando">Cargando</string>
+    <string name="alert_guardando_usuario">Guardando Usuario</string>
     <string name="err_doc_vacio">Por favor digita el documento.</string>
     <string name="err_email_vacio">Por favor digita el correo electrónico.</string>
     <string name="err_campos_vacios">Por favor ingresa todos los campos.</string>
