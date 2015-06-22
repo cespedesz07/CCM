@@ -58,7 +58,7 @@
                  android:hint="@string/num_documento"
                  android:inputType="number"
                  android:layout_marginBottom="10dp"
-                 android:text="1053832644" />
+                 android:text="" />
                        
              
 			
@@ -72,7 +72,7 @@
                  android:inputType="textPersonName"
                  android:drawableLeft="@android:drawable/ic_menu_info_details"
                  android:layout_marginBottom="10dp"
-                 android:text="Santiago" />             
+                 android:text="" />             
 
              <EditText
                  android:id="@+id/txt_apellidos"
@@ -84,7 +84,7 @@
                  android:inputType="textPersonName"
                  android:drawableLeft="@android:drawable/ic_menu_info_details"
                  android:layout_marginBottom="10dp"
-                 android:text="Céspedes Zapata" />
+                 android:text="" />
              
              
              <TextView
@@ -132,7 +132,6 @@
              <!-- =================================================================== -->
              
              
-             
              <TextView
                  android:id="@+id/textview_fecha_nacimiento"
                  android:layout_below="@id/line1"
@@ -149,7 +148,9 @@
                  android:layout_marginBottom="10dp" />
              
              
-             <EditText
+             
+             
+          	<EditText
                  android:id="@+id/txt_email"
                  style="@style/editext_graybg"
                  android:layout_below="@id/picker_fecha_nacimiento"
@@ -158,8 +159,7 @@
                  android:hint="@string/email"
                  android:inputType="textEmailAddress"
                  android:drawableLeft="@android:drawable/ic_menu_add"
-                 android:layout_marginBottom="10dp"
-                 android:text="cespedesz@gmail.com" />
+                 android:layout_marginBottom="10dp" />
              
              <EditText
                  android:id="@+id/txt_telefono"
@@ -170,8 +170,14 @@
                  android:hint="@string/telefono"
                  android:inputType="phone"
                  android:drawableLeft="@android:drawable/ic_menu_call"
-                 android:layout_marginBottom="10dp"
-                 android:text="3153770534" />
+                 android:layout_marginBottom="10dp" />
+             
+             
+             
+             
+             
+             
+
              
              
              

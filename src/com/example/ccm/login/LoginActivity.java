@@ -1,14 +1,20 @@
 package com.example.ccm.login;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +24,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.ccm.R;
+import com.example.ccm.actionbar.CCMActionBarActivity;
 import com.example.ccm.registro.RegistroActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -45,7 +52,25 @@ import com.google.android.gms.plus.model.people.Person;
  * @author Santiago Céspedes Zapata
  *
  */
-public class LoginActivity extends ActionBarActivity implements OnClickListener, OnTouchListener, ConnectionCallbacks, OnConnectionFailedListener, FacebookCallback<LoginResult> {
+public class LoginActivity extends CCMActionBarActivity implements OnClickListener, OnTouchListener, ConnectionCallbacks, OnConnectionFailedListener, FacebookCallback<LoginResult> {
+	
+	
+	//Constantes que representan el tipo de response, utilizadas en el método inicioRegistro()
+	//De acuerdo al tipo de response, se insertan en un Bundle los parámetros que retorne la API
+	//respectiva, y se envian a la actividad RegistroActivity.java
+	private static final String FACEBOOK_RESPONSE = "facebookResponse";
+	private static final String GOOGLE_RESPONSE = "googleResponse";
+	private static final String TWITTER_RESPONSE = "twitterResponse";
+	private static final String NATIVE_RESPONSE = "nativeResponse";
+	
+	
+	//Variables que se van a extraer de la peciticion a Facebook con GraphApi
+	private static final String FB_NOMBRE = "first_name";
+	private static final String FB_APELLIDOS = "last_name";
+	private static final String FB_GENERO = "gender";
+	private static final String FB_FECHA_NACIMIENTO = "birthday";
+	private static final String FB_EMAIL = "email";
+	
 	
 	
 	//Permisos que se van a solicitar cuando se inicie sesion con Facebook
@@ -107,7 +132,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener,
         
         
         
-        //CONFIGUTACION PARA EL BOTON DE LOGIN DE GOOGLE
+        //CONFIGURACION PARA EL BOTON DE LOGIN DE GOOGLE
         googleLoginBtn = (SignInButton) findViewById( R.id.google_login_button );
         googleLoginBtn.setOnClickListener( this );
         
@@ -127,6 +152,10 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener,
 	    .addScope(Plus.SCOPE_PLUS_LOGIN)
 	    .build();
 	    
+	    //Se envia la variable googleApiClient a la clase padre CCMActionBarActivity.java
+	    setGoogleApiClient(googleApiClient);
+	   
+	    
 	    
 	    //Se verifica si ha iniciado sesion con la cuenta de Facebook
 	    if ( AccessToken.getCurrentAccessToken() != null ){
@@ -140,6 +169,27 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener,
     }
     
     
+    //Métdodo para verificar el estado de Internet
+    //IMPORTANTE: Para verificar la conexion a Internet es necerario agregar el siguiente permiso en el Manifest:
+    // <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    public boolean hayInternet(){
+    	 ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService( Context.CONNECTIVITY_SERVICE );
+ 	    NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+ 	    if ( netInfo == null ){
+ 	    	return false;
+ 	    }
+ 	    else if ( !netInfo.isConnected() ){
+ 	    	return false;
+ 	    }
+ 	    else if ( !netInfo.isAvailable() ){
+ 	    	return false;
+ 	    }
+ 	    else{
+ 	    	return true;
+ 	    }
+    } 
+    
+    
     
     
     
@@ -147,9 +197,8 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener,
     protected void onStart(){
     	super.onStart();
     	//Luego de que la actividad es Created, se conecta el usuario ya logueado a Google+
-    	
     	if ( facebookLoggedIn ){
-    		inicioRegistro();
+    		
     	}
     	
     	googleApiClient.connect();
@@ -174,30 +223,6 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener,
     protected void onDestroy(){
     	super.onDestroy();
     }
-    
-    
-    
-    
-    
-    //Método que captura los eventos de los botones cuando se les hace click 
-    @Override
-	public void onClick(View view){
-		switch ( view.getId() ){
-		case R.id.facebook_login_button:
-			LoginManager.getInstance().logInWithReadPermissions( this, Arrays.asList(FACEBOOK_PERMISSIONS) );
-			break;
-			
-		case R.id.google_login_button:
-			inicioSesionGoogle();
-			break;	
-		
-		case R.id.btn_registro_login_activity:
-			inicioRegistro();
-		default:
-			break;
-		}		
-	}
-    
     
     
     
@@ -242,8 +267,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener,
     	
     	//El siguiente código permite abrir el dialogo de inicio de sesion en facebook
     	//o capturar las credenciales en caso de que se tenga la App nativa de Facebook
-    	callbackManager.onActivityResult(requestCode, resultCode, data);
-    	
+    	callbackManager.onActivityResult(requestCode, resultCode, data);    	
     	
     	//PARA LA FUNCIONALIDAD DE GOOGLE: eL método startResolutionForResult() envia datos a onActivityResult()
     	//(en especial el REQUEST_CODE_SIGN_IN) para 
@@ -257,18 +281,102 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener,
 	        }
 		}
     }   
+     
     
-    
-    
-    
-    private void inicioRegistro(){
+    //Método que captura los datos del usuario del inicio de sesion en redes sociales
+    //y los envia a la actividad RegistroActivity.java
+    private void inicioRegistro( JSONObject jsonResponse, String responseType ){
     	//Se inician las animaciones de: 
     	//enterAnim (R.animator.first_close_translate): trasladar de derecha al centro la actividad a abrir (RegistroActivity.class)
     	//exitAnim: (R.animator.first_close_scale): Escalar o disminuir tamaño de la actividad saliente (LoginActivity.class)
-    	overridePendingTransition( R.animator.first_close_translate, R.animator.second_close_scale);
-    	Intent i = new Intent( LoginActivity.this, RegistroActivity.class );    	
+    	//overridePendingTransition( R.animator.first_close_translate, R.animator.second_close_scale);
+    	//Log.v( "json response", jsonResponse.toString() );
+    	Bundle bundleParams = new Bundle();
+    	if ( responseType.equals( FACEBOOK_RESPONSE ) ){
+    		try{
+    			bundleParams.putString( "nombre", jsonResponse.getString( FB_NOMBRE ) );
+    			bundleParams.putString( "apellidos", jsonResponse.getString( FB_APELLIDOS ) );
+    			bundleParams.putString( "genero",  procesarGenero( jsonResponse.getString(FB_GENERO) )   );
+    			bundleParams.putStringArray( "fecha_nacimiento", procesarFecha( jsonResponse.getString(FB_FECHA_NACIMIENTO) ) );
+    			bundleParams.putString( "correo_electronico", jsonResponse.getString( FB_EMAIL ) );
+    		}
+    		catch ( JSONException error ){
+    			Log.i( "JSONException", error.getMessage() );
+    		}
+    	}
+    	else if ( responseType.equals( GOOGLE_RESPONSE )  ){
+    		
+    	}
+    	else if ( responseType.equals( TWITTER_RESPONSE ) ){
+    		
+    	}
+    	else if ( responseType.equals( NATIVE_RESPONSE ) ){
+    		//SI es un inicio de sesion nativo, no se coloca ningun parametro en el Bundle,
+    		//por lo tanto este queda vacio
+    	}
+    	Intent i = new Intent( this, RegistroActivity.class );
+    	i.putExtras( bundleParams );
     	startActivity( i );
     }
+    
+    
+    private String procesarGenero( String generoEntrada ){
+    	if ( generoEntrada.toLowerCase().equals("male") ){
+    		return getResources().getString( R.string.genero_masculino );
+    	}
+    	else if ( generoEntrada.toLowerCase().equals("female") ){
+    		return getResources().getString( R.string.genero_femenino );
+    	}
+    	else{
+    		return generoEntrada.toLowerCase();
+    	}    	
+    }
+    
+    
+    private String[] procesarFecha( String fechaEntrada ){
+    	//Se parte la fecha de nacimiento, ya que el formato de entrada es 02\/15\/1994
+    	String[] fechaEntradaPartida = fechaEntrada.split( "\\/" );
+    	return fechaEntradaPartida;
+		/*
+		Calendar calendar = Calendar.getInstance();
+    	calendar.set( Integer.valueOf(fechaEntradaPartida[2]), Integer.valueOf(fechaEntradaPartida[0]), Integer.valueOf(fechaEntradaPartida[1]) );
+		SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/M/yyyy" );
+		return dateFormat.format( calendar.getTime() );
+		*/
+    }
+    
+    
+    
+    //Método que captura los eventos de los botones cuando se les hace click 
+    @Override
+	public void onClick(View view){
+    	if ( hayInternet() ){
+    		switch ( view.getId() ){
+    		case R.id.facebook_login_button:
+    			//Se procede a iniciar sesion por Facebook
+    			//VER EN LA PARTE INFERIOR, EL LA SECCIÓN Facebook Callback
+    			//onSuccess(), aqui se procesa el Click del Boton de Facebook
+    			//llamando al metodo inicioRegistro)(
+    			//LoginManager.getInstance().logInWithReadPermissions( this, Arrays.asList(FACEBOOK_PERMISSIONS) );
+    			break;
+    			
+    		case R.id.google_login_button:
+    			inicioSesionGoogle();
+    			break;	
+    		
+    		case R.id.btn_registro_login_activity:
+    			inicioRegistro( null, NATIVE_RESPONSE );
+    		default:
+    			break;
+    		}
+    	}
+    	else{
+    		new AlertDialog.Builder( this )
+			.setMessage( getResources().getString(R.string.alert_no_internet) )
+			.setPositiveButton( getResources().getString(R.string.alert_ok) , null)
+			.show();
+    	}		
+	}
     
     
     
@@ -293,29 +401,35 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener,
 	
 	
 	
-	
-	//=====================================================CALLBACKS=============================================
     
-	//--------------------------------------------------GOOGLE CALLBACK---------------------------------------
+    
+    
+    
+    
+    
+    
+    
+    
+	
+    
+    //===========================================================================================================
+	//=====================================================CALLBACKS=============================================
+    //===========================================================================================================
+    
+	//--------------------------------------------------GOOGLE CALLBACK------------------------------------------
 	@Override
 	public void onConnected(Bundle arg0) {
-		signedInUser = false;
-		Toast.makeText( this, "User is connected!", Toast.LENGTH_LONG).show();		
-		
+		signedInUser = false;		
 	    if ( Plus.PeopleApi.getCurrentPerson(googleApiClient) != null ){
-	    	Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
-	    	
+	    	Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);	    	
 	    	String info = String.format(
 	    			  "Display Name: %s \n"
 	    			+ "Gender: %d \n"
 	    			+ "Name: %s \n"
 	    			+ "Birthday: %s"
 	    			+ "Email: %s", currentPerson.getDisplayName(), currentPerson.getGender(),
-	    			currentPerson.getName(), currentPerson.getBirthday(), Plus.AccountApi.getAccountName(googleApiClient) );    	
-	    	
-	    }
-	    
-	    
+	    			currentPerson.getName(), currentPerson.getBirthday(), Plus.AccountApi.getAccountName(googleApiClient) );	
+	    }	    
 	}
 	
 	
@@ -353,24 +467,23 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener,
 	
 	
 	
-	//----------------------------------FACEBOOK CALLBACK--------------------------------------
+	//--------------------------------------------------FACEBOOK CALLBACK--------------------------------------
 	@Override
 	public void onSuccess(LoginResult result) {
-		Profile currentProfile = Profile.getCurrentProfile();
-		Toast.makeText(this, currentProfile.getName(), Toast.LENGTH_LONG ).show();
-		
+		//Profile currentProfile = Profile.getCurrentProfile();
 		//Se crea una peticion a Facebook, y que envie datos en formato JSON
 		GraphRequest request = GraphRequest.newMeRequest( result.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
 			@Override
 			//Cuando se complete el request a Facebook
 			public void onCompleted( JSONObject object, GraphResponse response ) {
 				JSONObject jsonResponse = response.getJSONObject();
-				Log.v( "LoginActivity", response.toString() );
-				inicioRegistro();				
+				//Log.v( "Log", response.toString() );
+				inicioRegistro( jsonResponse, FACEBOOK_RESPONSE );				
 			}			
 		});
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email,gender,birthday" );	//Se establecen los parametros a extraer del request
+        String graphApiFields = String.format( "%s,%s,%s,%s,%s", FB_NOMBRE, FB_APELLIDOS, FB_GENERO, FB_FECHA_NACIMIENTO, FB_EMAIL );
+        parameters.putString("fields", graphApiFields );					//Se establecen los parametros a extraer del request
         request.setParameters(parameters);									//(Estos parámetros se pueden consultar en: https://developers.facebook.com/docs/graph-api/reference/user)
         request.executeAsync();												//Se ejecuta el request y queda a la espera de la ejecucion del método onCompleted()
 	}

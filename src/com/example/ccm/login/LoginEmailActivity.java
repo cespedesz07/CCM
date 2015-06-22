@@ -149,7 +149,7 @@ public class LoginEmailActivity extends Activity implements OnClickListener, OnT
 		}		
 	}	
 	
-	
+	/*
 	private void login( String emailString, String documentoString ){
 		dialogEspera.dismiss();
 		ParseUser.logInInBackground( emailString, documentoString, new LogInCallback() {			
@@ -187,24 +187,6 @@ public class LoginEmailActivity extends Activity implements OnClickListener, OnT
 				}
 			}			
 		} );
-	}
-		
-	
-
-	
-	
-	/*
-	protected void inicializarActionBar(){
-		final ActionBar actionBar = getActionBar();
-		if ( actionBar != null ){
-			actionBar.setDisplayShowTitleEnabled( true );
-			actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_STANDARD );
-			actionBar.setDisplayUseLogoEnabled( true );
-			actionBar.setLogo( R.drawable.logo_app_100x80 );
-			//actionBar.setBackgroundDrawable(  getResources().getDrawable( R.drawable.actionbar_bg )  );
-			actionBar.setDisplayHomeAsUpEnabled( true );
-			actionBar.setHomeButtonEnabled( true );
-		}
 	}
 	*/
 	

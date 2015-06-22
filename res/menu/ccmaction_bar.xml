@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.ccm.CCMActionBarActivity" >
+
+    <item
+        android:id="@+id/action_acerca_de"
+        android:orderInCategory="100"
+        android:title="@string/action_acerca_de"
+        android:showAsAction="always"/>
+    
+    <item
+        android:id="@+id/action_salir"
+        android:orderInCategory="90"
+        android:title="@string/action_salir"
+        android:showAsAction="always"/>
+
+</menu>

@@ -1,6 +1,7 @@
 package com.example.ccm.registro;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -8,11 +9,9 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.app.AlertDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +24,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.example.ccm.R;
+import com.example.ccm.actionbar.CCMActionBarActivity;
 import com.example.ccm.wsclient.RestClientTask;
 
 
@@ -35,7 +35,7 @@ import com.example.ccm.wsclient.RestClientTask;
  * @author Santiago Céspedes Zapata - cespedesz07@gmail.com
  *
  */
-public class RegistroActivity extends ActionBarActivity implements OnTouchListener, OnClickListener {
+public class RegistroActivity extends CCMActionBarActivity implements OnTouchListener, OnClickListener {
 	
 	
 	
@@ -58,8 +58,6 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.registro);
 		
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
 		spinnerTipoDocumento = (Spinner) findViewById(R.id.spinner_tipo_documento);
 		SpinnerArrayAdapter spinnerTipoDocumentoAdapter = new SpinnerArrayAdapter( this, SpinnerArrayAdapter.TIPO_DOCUMENTO );
 		spinnerTipoDocumentoAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
@@ -73,11 +71,12 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 		
 		radioGroupGenero = (RadioGroup) findViewById( R.id.radio_group_genero );
 		
-		pickerFechaNacimiento = (DatePicker) findViewById( R.id.picker_fecha_nacimiento );
-		
 		txtEmail = (EditText) findViewById( R.id.txt_email );
 		
 		txtTelefono = (EditText) findViewById( R.id.txt_telefono );
+		
+		pickerFechaNacimiento = (DatePicker) findViewById( R.id.picker_fecha_nacimiento );		
+		
 		
 		spinnerPaisProcedencia = (Spinner) findViewById(R.id.spinner_pais_procedencia);
 		SpinnerArrayAdapter spinnerPaisProcedenciaAdapter = new SpinnerArrayAdapter( this, SpinnerArrayAdapter.PAIS_PROCEDENCIA );
@@ -91,7 +90,66 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 		
 		btnRegistro = (Button) findViewById( R.id.btn_registro_registro_activity );
 		btnRegistro.setOnTouchListener( this );
-		btnRegistro.setOnClickListener( this );		
+		btnRegistro.setOnClickListener( this );	
+		
+		
+		//Se capturan los datos proporcionados por el login con redes sociales
+		//a partir de bundleParams que envia LoginActivity.inicioRegistro();
+		Bundle bundleParamsLogin =  getIntent().getExtras();
+		//Si el Bundle no tiene parametros, es porque se realizó un response nativo (NATIVE_RESPONSE)
+		//es decir se hizo click en el boton "Registrar"
+		if ( bundleParamsLogin.isEmpty() ){
+			
+		}
+		else{
+			obtenerDatosLoginRedesSociales( bundleParamsLogin );
+			new AlertDialog.Builder(this)
+			.setMessage( getResources().getString(R.string.alert_registro_redes_sociales) )
+			.setPositiveButton(R.string.alert_ok, null)
+			.show();
+		}
+				
+	}	
+	
+	
+	
+	
+	//Método para capturar los datos proporcionados por las redes sociales
+	//en caso de que el usuario haya accedido a la app por estas opciones
+	//Este método es llamado 
+	private void obtenerDatosLoginRedesSociales( Bundle bundleParams ){
+		if ( !bundleParams.isEmpty() ){
+			txtNombre.setText(  bundleParams.getString( "nombre" )  );
+			txtNombre.setEnabled(false);		
+			
+			txtApellidos.setText(  bundleParams.getString( "apellidos" )  );
+			txtApellidos.setEnabled(false);
+			
+			boolean radioButtonGeneroChecked = false;
+			int numRadioButtons = radioGroupGenero.getChildCount();
+			for ( int i=0; i<numRadioButtons; i++ ){
+				RadioButton radioButton = (RadioButton) radioGroupGenero.getChildAt(i);
+				if (  radioButton.getText().equals( bundleParams.getString("genero") )   ){
+					radioButton.setChecked( true );		
+					radioButtonGeneroChecked = true;
+					break;
+				}
+			}
+			if ( radioButtonGeneroChecked ){
+				for ( int i=0; i<numRadioButtons; i++ ){
+					radioGroupGenero.getChildAt(i).setEnabled(false);
+				}
+			}
+			
+			
+			String[] fechaNacimientoPartida = bundleParams.getStringArray( "fecha_nacimiento" );
+			pickerFechaNacimiento.updateDate(  Integer.valueOf(fechaNacimientoPartida[2]) , Integer.valueOf(fechaNacimientoPartida[0]) - 1, Integer.valueOf(fechaNacimientoPartida[1])  );
+			pickerFechaNacimiento.setEnabled(false);
+			
+			bundleParams.getString( "correo_electronico" );
+			txtEmail.setText(  bundleParams.getString( "correo_electronico" )  );
+			txtNombre.setEnabled(false);
+		}
 	}
 	
 	
@@ -114,29 +172,6 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 	@Override
 	protected void onDestroy(){
 		super.onDestroy();
-	}
-	
-
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.registro, menu);		
-		return true;
-	}
-	
-	
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 	
 	
@@ -171,6 +206,12 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 		
 	}
 	
+	
+	//Método que captura los datos ingresados en el formulario de registro
+	//y los almacena en el WebService mediante el llamado a la clase RestClientTask().execute
+	// IMPORTANTE: para enviar los campos del formulario al WebService es necesario que los campos
+	// coincidan con los mismos de la base de datos, por eso en el List<NameValuePair> parametros
+	// las claves tienen el mismo nombre de los campos de la tabla Persona en la BD CCM_BD
 	private void guardarDatosFormulario(){
 		//String tipoDocumentoCampo = (  (String) spinnerTipoDocumento.getSelectedItem()  ).toString();
 		int numDocumentoCampo = Integer.valueOf( txtNumDocumento.getText().toString() ); 
@@ -181,7 +222,7 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 		String fechaNacimientoCampo = obtenerFechaCampo( pickerFechaNacimiento );
 		String emailCampo = txtEmail.getText().toString();		
 		String telefonoCampo = txtTelefono.getText().toString();		
-		//Codigo QR: Pendiente
+		String codigoQRCampo = "";
 		int tipoDocumentoCampo = 1;		
 		String paisProcedenciaCampo = (  (String) spinnerPaisProcedencia.getSelectedItem()  ).toString();		
 		//String institucionCampo = (  (String) spinnerTipoDocumento.getSelectedItem()  ).toString();
@@ -196,7 +237,7 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 		parametros.add(  new BasicNameValuePair( "fecha_nacimiento", fechaNacimientoCampo )  );
 		parametros.add(  new BasicNameValuePair( "correo_electronico", emailCampo )  );
 		parametros.add(  new BasicNameValuePair( "telefono", telefonoCampo )  );
-		parametros.add(  new BasicNameValuePair( "codigo_qr", "" )  );
+		parametros.add(  new BasicNameValuePair( "codigo_qr", codigoQRCampo )  );
 		parametros.add(  new BasicNameValuePair( "tipo_doc_idtipo_doc", String.valueOf(tipoDocumentoCampo)  ) );
 		parametros.add(  new BasicNameValuePair( "pais_procedencia_idpais_procedencia", String.valueOf(tipoDocumentoCampo)  ) );
 		parametros.add(  new BasicNameValuePair( "institucion_idinstitucion", String.valueOf(tipoDocumentoCampo)  )  );
@@ -213,10 +254,12 @@ public class RegistroActivity extends ActionBarActivity implements OnTouchListen
 		int mes = datePicker.getMonth();
 		int año = datePicker.getYear();		
 		Calendar calendar = Calendar.getInstance();
-		calendar.set( año, mes, dia );		
-		fechaCapturada = calendar.getTime().toString();
+		calendar.set( año, mes, dia );
+		SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/M/yyyy" );
+		fechaCapturada = dateFormat.format( calendar.getTime() );
 		return fechaCapturada;
 	}
+
 	
 	
 	

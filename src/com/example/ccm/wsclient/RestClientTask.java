@@ -68,6 +68,7 @@ public class RestClientTask extends AsyncTask<Object, Integer, Object>{
 	//Antes de ejecutar la consulta, muestra un ProgressDialog con el porcentaje del progreso
 	@Override
 	protected void onPreExecute(){
+		Log.i("Pre" , "pre");
 		progressDialog.setMessage( activity.getResources().getText( R.string.alert_guardando_usuario ) );
 		progressDialog.show();		
 	}
@@ -75,6 +76,7 @@ public class RestClientTask extends AsyncTask<Object, Integer, Object>{
 	
 	//Luego de ejecutar la consulta, 
 	protected void onPostExecute(){		
+		Log.i("Post" , "post");
 		if ( progressDialog.isShowing() ){
 			progressDialog.dismiss();
 		}
@@ -86,6 +88,7 @@ public class RestClientTask extends AsyncTask<Object, Integer, Object>{
 	//Consulta que se hace de fondo
 	protected Object doInBackground(Object... params){
 		//return consultarUsuarios( URL_WEBSERVICE );
+		Log.i("doInBack" , "doInBack");
 		List<NameValuePair> parametros = (List<NameValuePair>)params[0];
 		return ingresarPersona( parametros );
 	}
@@ -99,17 +102,22 @@ public class RestClientTask extends AsyncTask<Object, Integer, Object>{
 	
 	
 	
+	
+	
+	
+	
+	
+	//---------------------------Métodos para hacer consultas GET Y POST al WebService por medio del protocolo REST------------------------
+	
 	//Método para ingresar un usuario nuevo usando POST
 	public Object ingresarPersona( List<NameValuePair> parametros ){
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost( URL_WEBSERVICE );		
 			
 		try {
-			List<NameValuePair> paresNombreValor = new ArrayList<NameValuePair>();
 			httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
 			HttpResponse response = httpClient.execute( httpPost );
-			//msgFinal = EntityUtils.toString( response.getEntity() );
-			msgFinal = "ok";
+			msgFinal = String.valueOf( response.getStatusLine().getStatusCode() );
 			//Log.i("response", EntityUtils.toString( response.getAllHeaders()[0]. ) );
 			return true;
 		} 
@@ -125,7 +133,7 @@ public class RestClientTask extends AsyncTask<Object, Integer, Object>{
 		catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return true;
+		return false;
 		
 	}
 	
