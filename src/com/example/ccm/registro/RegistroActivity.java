@@ -16,16 +16,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.ccm.R;
 import com.example.ccm.actionbar.CCMActionBarActivity;
-import com.example.ccm.wsclient.RestClientTask;
+import com.example.ccm.restclient.RestClientTask;
+import com.example.ccm.restclient.SpinnerRestClientTask;
 
 
 /**
@@ -51,16 +55,21 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	private Spinner spinnerInstitucion;
 	private Button btnRegistro;
 	
-
 	
+	private SpinnerArrayAdapter spinnerTipoDocumentoAdapter;
+
+	//Se inicializan todos los widgets del formulario de Registro de Usuarios
+	// PARA OBTENER LOS DATOS DE COMPLETITUD DENTRO DE LOS SPINNERS:
+	// Se crean Adapters específicos (SpinnerArrayAdapter.java) enviando como parametros el Context y
+	// la tabla de completitud respectiva, para luego desplegar el Spinner con estos datos
+	// y finalmente proceder a la asignacion del SpinnerArrayAdapter en el Spinner respectivo
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.registro);
 		
 		spinnerTipoDocumento = (Spinner) findViewById(R.id.spinner_tipo_documento);
-		SpinnerArrayAdapter spinnerTipoDocumentoAdapter = new SpinnerArrayAdapter( this, SpinnerArrayAdapter.TIPO_DOCUMENTO );
-		spinnerTipoDocumentoAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
+		spinnerTipoDocumentoAdapter = new SpinnerArrayAdapter( RegistroActivity.this, SpinnerRestClientTask.TABLA_TIPO_DOC );
 		spinnerTipoDocumento.setAdapter( spinnerTipoDocumentoAdapter );
 		
 		txtNumDocumento = (EditText) findViewById( R.id.txt_num_documento );
@@ -75,17 +84,14 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		
 		txtTelefono = (EditText) findViewById( R.id.txt_telefono );
 		
-		pickerFechaNacimiento = (DatePicker) findViewById( R.id.picker_fecha_nacimiento );		
-		
+		pickerFechaNacimiento = (DatePicker) findViewById( R.id.picker_fecha_nacimiento );				
 		
 		spinnerPaisProcedencia = (Spinner) findViewById(R.id.spinner_pais_procedencia);
-		SpinnerArrayAdapter spinnerPaisProcedenciaAdapter = new SpinnerArrayAdapter( this, SpinnerArrayAdapter.PAIS_PROCEDENCIA );
-		spinnerPaisProcedenciaAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
+		SpinnerArrayAdapter spinnerPaisProcedenciaAdapter = new SpinnerArrayAdapter( RegistroActivity.this, SpinnerRestClientTask.TABLA_PAIS_PROCEDENCIA );
 		spinnerPaisProcedencia.setAdapter( spinnerPaisProcedenciaAdapter );
 		
 		spinnerInstitucion = (Spinner) findViewById(R.id.spinner_institucion);
-		SpinnerArrayAdapter spinnerInstitucionAdapter = new SpinnerArrayAdapter( this, SpinnerArrayAdapter.INSTITUCION );
-		spinnerInstitucionAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
+		SpinnerArrayAdapter spinnerInstitucionAdapter = new SpinnerArrayAdapter( RegistroActivity.this, SpinnerRestClientTask.TABLA_INSTITUCION );
 		spinnerInstitucion.setAdapter( spinnerInstitucionAdapter );
 		
 		btnRegistro = (Button) findViewById( R.id.btn_registro_registro_activity );
@@ -148,10 +154,9 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 			
 			bundleParams.getString( "correo_electronico" );
 			txtEmail.setText(  bundleParams.getString( "correo_electronico" )  );
-			txtNombre.setEnabled(false);
+			txtEmail.setEnabled( false );
 		}
-	}
-	
+	}	
 	
 	
 	@Override

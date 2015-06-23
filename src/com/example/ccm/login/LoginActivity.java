@@ -173,7 +173,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     //IMPORTANTE: Para verificar la conexion a Internet es necerario agregar el siguiente permiso en el Manifest:
     // <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     public boolean hayInternet(){
-    	 ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService( Context.CONNECTIVITY_SERVICE );
+    	ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService( Context.CONNECTIVITY_SERVICE );
  	    NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
  	    if ( netInfo == null ){
  	    	return false;
@@ -474,10 +474,12 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 		//Se crea una peticion a Facebook, y que envie datos en formato JSON
 		GraphRequest request = GraphRequest.newMeRequest( result.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
 			@Override
-			//Cuando se complete el request a Facebook
+			//Cuando se complete el request a Facebook se procesa
+			//la respuesta que entrega la API en formato JSON que es asi:
+			//
 			public void onCompleted( JSONObject object, GraphResponse response ) {
 				JSONObject jsonResponse = response.getJSONObject();
-				//Log.v( "Log", response.toString() );
+				Log.v( "Log", response.toString() );
 				inicioRegistro( jsonResponse, FACEBOOK_RESPONSE );				
 			}			
 		});

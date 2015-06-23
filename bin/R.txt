@@ -801,7 +801,7 @@ int string alert_cargando 0x7f08005b
 int string alert_guardando_usuario 0x7f08005c
 int string alert_no_internet 0x7f08005e
 int string alert_ok 0x7f08005a
-int string alert_registro_redes_sociales 0x7f08007a
+int string alert_registro_redes_sociales 0x7f08007b
 int string alert_sesion_cerrada 0x7f08005d
 int string apellidos 0x7f080070
 int string app_name 0x7f080054
@@ -891,11 +891,12 @@ int string pais_procedencia 0x7f080077
 int string parse_app_id 0x7f08004e
 int string parse_client_key 0x7f08004f
 int string registro 0x7f080058
+int string spinner_selecciona_opcion 0x7f080079
 int string store_picture_message 0x7f080001
 int string store_picture_title 0x7f080000
 int string telefono 0x7f080076
 int string tipo_documento 0x7f08006d
-int string title_activity_ccmaction_bar 0x7f080079
+int string title_activity_ccmaction_bar 0x7f08007a
 int string title_activity_login 0x7f080068
 int string title_activity_registro 0x7f080069
 int string title_activity_splash 0x7f080065

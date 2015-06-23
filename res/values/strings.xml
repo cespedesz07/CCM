@@ -55,6 +55,7 @@
     <string name="telefono">Teléfono</string>
     <string name="pais_procedencia">País de Procedencia: </string>
     <string name="institucion">Institución: </string>
+    <string name="spinner_selecciona_opcion">Selecciona una Opción...</string>
     <string name="title_activity_ccmaction_bar">CCMActionBarActivity</string>
     <string name="alert_registro_redes_sociales">Por favor rellena tu registro con los datos restantes.</string>
 

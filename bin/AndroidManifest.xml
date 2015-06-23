@@ -89,7 +89,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".registro.RegistroActivity"
-            android:label="@string/title_activity_registro" >
+            android:label="@string/title_activity_registro"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.ccm.actionbar.CCMActionBarActivity"
