@@ -39,14 +39,25 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 	
 	
 	//URLs correspondientes a las opciones que publica el WebService para su consumo
-	private static final String URL_TIPO_DOC_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/tipo-doc";
-	private static final String URL_PAIS_PROCEDENCIA_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/pais-procedencia";
-	private static final String URL_INSTITUCION_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/institucion";
+	private static final String URL_TIPO_DOC_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/rest/tipo-doc";
+	private static final String URL_PAIS_PROCEDENCIA_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/rest/pais-procedencia";
+	private static final String URL_INSTITUCION_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/rest/institucion";
 	
 	
+	//Nombres de las Tablas de COmpletitud (USADAS EN RegistroActivity.java y en esta actividad SpinnerRestClient.java)
 	public static final String TABLA_TIPO_DOC = "tipo_doc";
 	public static final String TABLA_PAIS_PROCEDENCIA = "pais_procedencia";
 	public static final String TABLA_INSTITUCION = "institucion";
+	
+	
+	//Nombres de los campos de las tablas de completitud para mostrar en los spinners
+	private static final String CAMPO_ID_TIPO_DOC = "idtipo_doc";
+	private static final String CAMPO_NOMBRE_TIPO_DOC = "tipo_documento";	
+	private static final String CAMPO_ID_PAIS_PROCEDENCIA = "idpais_procedencia";
+	private static final String CAMPO_NOMBRE_PAIS_PROCEDENCIA = "nombre";	
+	private static final String CAMPO_ID_INSTITUCION = "idinstitucion";
+	private static final String CAMPO_NOMBRE_INSTITUCION = "nombre";
+	
 	
 
 	
@@ -54,11 +65,13 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 	
 	private Context context;
 	private SpinnerArrayAdapter spinnerArrayAdapter;
-	private String nombreTablaCompletitud;				//Nombre de la tabla que se va a consultar
+	private String nombreTablaCompletitud;			//Nombre de la tabla que se va a consultar
 	private ProgressDialog progressDialog;
 	private AlertDialog.Builder alertDialog;
 	private String mensajeError;
 	
+	private String idKey;							//Llaves o keys a utilizar para extraer los values asociados a estas keys del JSONOBject (Método consultarDatosCompletitud())
+	private String nameKey;
 	
 	
 	
@@ -76,6 +89,9 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 		alertDialog = new AlertDialog.Builder( context );
 		alertDialog.setMessage( mensajeError );
 		alertDialog.setPositiveButton( context.getResources().getString(R.string.alert_ok) , null);
+		
+		idKey = "";
+		nameKey = "";
 	}
 	
 	
@@ -90,21 +106,25 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 	
 	//Luego de ejecutar la consulta en el metodo doInBackground()
 	//1) Se cierra la ventana de progreso actual
+	//
 	//2) Se verifica si el resultado no es nulo. Si no es nulo se agrega el arreglo 
 	//   al SpinnerArrayAdapter respectivo (enviado en el contructor)
+	//a) - IMPORTANTE: Para mostrar el item seleccionado del Spinner y que NO APAREZCA EN BLANCO LA SELECCION
+	//     ES NECESARIO NOTIFICAR DEL CAMBIO DEL DATA SET USADO EN EL SPINNER CON
+	//
 	//3) Si el resultado es nulo, es porque hubo un error en la consulta, entonces se muestra
 	//   un mensaje de error.
 	@Override
 	protected void onPostExecute( ArrayList<String> result ){
-		if ( progressDialog.isShowing() ){
+		if ( progressDialog.isShowing() ){	                	 //1)
 			progressDialog.dismiss();
 		}
-		if ( result != null ){
+		if ( result != null ){									//2)
 			this.spinnerArrayAdapter.addAll( result );
-			this.spinnerArrayAdapter.notifyDataSetInvalidated();
+			this.spinnerArrayAdapter.notifyDataSetChanged();	//a)
 		}
 		else{
-			alertDialog.setMessage( mensajeError );
+			alertDialog.setMessage( mensajeError );				//3)
 			alertDialog.show();
 		}
 	}	
@@ -135,12 +155,18 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 		//Se selecciona la url asociada con la tabla de completitud a consultar 
 		if ( nombreTablaCompletitud.equals( TABLA_TIPO_DOC ) ){
 			httpGet = new HttpGet( URL_TIPO_DOC_READ );
+			idKey = CAMPO_ID_TIPO_DOC;
+			nameKey = CAMPO_NOMBRE_TIPO_DOC;
 		}
 		else if ( nombreTablaCompletitud.equals( TABLA_PAIS_PROCEDENCIA ) ){
 			httpGet = new HttpGet( URL_PAIS_PROCEDENCIA_READ );
+			idKey = CAMPO_ID_PAIS_PROCEDENCIA;
+			nameKey = CAMPO_NOMBRE_PAIS_PROCEDENCIA;
 		}
 		else if ( nombreTablaCompletitud.equals( TABLA_INSTITUCION ) ){
 			httpGet = new HttpGet( URL_INSTITUCION_READ );
+			idKey = CAMPO_ID_INSTITUCION;
+			nameKey = CAMPO_NOMBRE_INSTITUCION;
 		}
 		
 		httpGet.setHeader( "Content-type", "application/json" );
@@ -155,7 +181,7 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 				textoResultado += String.format( "%s \n", linea );
 				linea = reader.readLine();
 			}	
-			//Log.v( "textoResultado", textoResultado );
+			Log.v( "textoResultado", textoResultado );
 			jsonArray = new JSONArray( textoResultado );
 		}
 		catch (ClientProtocolException error){
@@ -222,9 +248,10 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 				JSONObject jsonObjectElement = jsonArray.getJSONObject( i ); 		//Se captura el elemento JSONObject: 
 																					//{ "idtipo_doc":1, 
 																					//  "tipo_documento":"Cédula de Ciudadanía" }
-				JSONArray keys = jsonObjectElement.names();							//Se obtienen las llaves: ["idtipo_doc", "tipo_documento"]
-				String idValue = jsonObjectElement.getString( keys.getString(0) );	//Se obtiene el valor de la primer llave
-				String nameValue = jsonObjectElement.getString( keys.getString(1) );//Se obtiene el valor de la segunda llave
+				
+				
+				String idValue = jsonObjectElement.getString( idKey );	       	//Se obtiene el valor de la primer llave
+				String nameValue = jsonObjectElement.getString( nameKey );    	//Se obtiene el valor de la segunda llave
 				itemArrayList = String.format( "%s. %s", idValue, nameValue );
 				lista.add( itemArrayList );
 			}

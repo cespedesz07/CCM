@@ -14,7 +14,7 @@
         android:paddingBottom="@dimen/pad_20dp"
         android:paddingLeft="@dimen/pad_15dp"
         android:paddingRight="@dimen/pad_15dp"
-        android:paddingTop="@dimen/pad_20dp" >"
+        android:paddingTop="@dimen/pad_20dp" >
         
         
         <ImageView
@@ -39,7 +39,7 @@
 	            android:text="@string/bienvenida"
 	            android:textAppearance="?android:attr/textAppearanceLarge" />
         
-	        <!-- Botón para el inicio de sesion pr facebook 
+	        <!-- Botón para el inicio de sesion de facebook 
 	             IMPORTANTE: Para poder habilitar el boton es necesario:
 	             1) Registrar en el manifest la com.facebook.FacebookActivity
 	             2) Registrar algunos metadatos en el manifest: 
@@ -53,7 +53,7 @@
 			    android:layout_height="40dp"
 			    android:layout_gravity="center_horizontal"
 			    android:layout_marginTop="40dp"
-			    android:layout_marginBottom="5dp" /> 
+			    android:layout_marginBottom="15dp" /> 
 	        
 	        
 	        
@@ -62,7 +62,7 @@
 	    		android:layout_width="match_parent"
 	    		android:layout_height="wrap_content"
 	    		android:layout_gravity="center_horizontal"
-	    		android:layout_marginBottom="5dp" />
+	    		android:layout_marginBottom="15dp" />
 	        
 	        
 	        
@@ -77,20 +77,20 @@
              <!-- ==================================================================== -->
               
               
-              <TextView 
-            	android:id="@+id/textview_bienvenida2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="@string/bienvenida2"
-	            android:textAppearance="?android:attr/textAppearanceLarge"
-	            android:layout_marginBottom="20dp" />
+              <TextView
+                  android:id="@+id/textview_bienvenida2"
+	              android:layout_width="wrap_content"
+	              android:layout_height="wrap_content"
+	              android:text="@string/bienvenida2"
+	              android:textAppearance="?android:attr/textAppearanceLarge"
+	              android:layout_marginBottom="20dp" />
               
               <Button
-             	android:id="@+id/btn_registro_login_activity"
-		        style="@style/btn_red_large"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"	         
-		        android:text="@string/registro" />
+             	  android:id="@+id/btn_registro_login_activity"
+		          style="@style/btn_red_large"
+		          android:layout_width="wrap_content"
+		          android:layout_height="wrap_content"	         
+		          android:text="@string/registro" />
 			
 	 	</LinearLayout>
 	 	

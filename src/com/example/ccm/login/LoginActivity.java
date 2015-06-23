@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.IntentSender.SendIntentException;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -102,6 +103,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	//(usada principalmente luego de cargar el splash screen y evitar que se 
 	//inicie el login principal, es decir LoginActivity.java )
 	private boolean facebookLoggedIn;
+	private boolean googleLoggedIn;
 	
 	private LoginButton facebookLoginBtn;
 	private SignInButton googleLoginBtn;
@@ -157,12 +159,16 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	   
 	    
 	    
-	    //Se verifica si ha iniciado sesion con la cuenta de Facebook
+	    //Se verifica si ha iniciado sesion con alguna de las redes sociales
+	    facebookLoggedIn = false;
+	    googleLoggedIn = false;
+	    //Con Facebook
 	    if ( AccessToken.getCurrentAccessToken() != null ){
     		facebookLoggedIn = true;
     	}
-    	else{
-    		facebookLoggedIn = false;
+	    //COn Google
+    	else if ( googleApiClient.isConnected() ){
+    		googleLoggedIn = true;
     	}
 	    
 	    
@@ -200,8 +206,11 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     	if ( facebookLoggedIn ){
     		
     	}
+    	else if ( googleLoggedIn ){
+    		googleApiClient.connect();
+    	}
     	
-    	googleApiClient.connect();
+    	
     }
     
     
@@ -227,11 +236,23 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     
     
     public void inicioSesionGoogle(){
-    	//Si el usuario está conectandose a la app, se tienen que resolver  
+    	//Si el usuario está conectandose a la app, se tienen que resolver
+    	/*
 		if ( !googleApiClient.isConnecting() ){
 			signedInUser = true;
 			resolveSignInError();
 		}
+		*/
+    	if ( !googleApiClient.isConnected()  &&  connectionResult != null ){
+    		try {
+				connectionResult.startResolutionForResult(this, REQUEST_CODE_SIGN_IN);
+			} 
+    		catch (SendIntentException e) {
+				connectionResult = null;
+				googleApiClient.connect();	
+				e.printStackTrace();
+			}
+    	}
 	}
 	
     
@@ -261,7 +282,6 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     
     
     
-    @Override
     protected void onActivityResult( int requestCode, int resultCode, Intent data ){
     	super.onActivityResult(requestCode, resultCode, data);
     	
@@ -270,7 +290,8 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     	callbackManager.onActivityResult(requestCode, resultCode, data);    	
     	
     	//PARA LA FUNCIONALIDAD DE GOOGLE: eL método startResolutionForResult() envia datos a onActivityResult()
-    	//(en especial el REQUEST_CODE_SIGN_IN) para 
+    	//(en especial el REQUEST_CODE_SIGN_IN) para
+    	/*
 		if (requestCode == REQUEST_CODE_SIGN_IN ){
 			if (resultCode == RESULT_OK) {
 				signedInUser = false;
@@ -280,6 +301,11 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	        	googleApiClient.connect();
 	        }
 		}
+		*/
+    	if (requestCode == REQUEST_CODE_SIGN_IN  &&  resultCode == RESULT_OK) {
+    		connectionResult = null;
+    		googleApiClient.connect();
+    	}
     }   
      
     
@@ -419,7 +445,8 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	//--------------------------------------------------GOOGLE CALLBACK------------------------------------------
 	@Override
 	public void onConnected(Bundle arg0) {
-		signedInUser = false;		
+		/*
+		signedInUser = false;
 	    if ( Plus.PeopleApi.getCurrentPerson(googleApiClient) != null ){
 	    	Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);	    	
 	    	String info = String.format(
@@ -429,7 +456,10 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	    			+ "Birthday: %s"
 	    			+ "Email: %s", currentPerson.getDisplayName(), currentPerson.getGender(),
 	    			currentPerson.getName(), currentPerson.getBirthday(), Plus.AccountApi.getAccountName(googleApiClient) );	
-	    }	    
+	    }
+	    */	 
+		Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
+		Log.v( "current Person: ", currentPerson.getBirthday() + currentPerson.getName() );
 	}
 	
 	
@@ -443,6 +473,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	//Método que se llama cuando falla la conexion con Google
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
+		/*
 		Log.i( "onConnectionFailed", String.valueOf(result.getErrorCode()) );
 		//Si definitivamente la conexión no se puede establecer, 
 		//se muestra el Dialog del error y se detiene el método con return
@@ -458,6 +489,8 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 				resolveSignInError();
 			}
 		}
+		*/
+		connectionResult = result;
 				
 	}
 	

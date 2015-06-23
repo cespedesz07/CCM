@@ -4,7 +4,7 @@
     <string name="facebook_app_id">694373840674926</string>
     <!--
          Números asociados con la libreria Parse para su inicializacion
-	     (Ver mas info en la clase CCMApplication.java
+	     (Ver mas info en la clase CCMApplication.java
     -->
     <string name="parse_app_id">6iYB10BfMZCaWNOfccmsHEZjn6KZhPVVrNzyv9da</string>
     <string name="parse_client_key">t1LyLjDNlovPqTmhBZJvTjYzsUnYOQl7Qh7yodHs</string>
@@ -37,7 +37,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_registro">RegistroActivity</string>
     <string name="action_settings">Settings</string>
-    
+
     <!-- Strings asociados al CCMActionBarActivity.java -->
     <string name="action_acerca_de">Acerca De</string>
     <string name="action_salir">Salir</string>
@@ -58,5 +58,14 @@
     <string name="spinner_selecciona_opcion">Selecciona una Opción...</string>
     <string name="title_activity_ccmaction_bar">CCMActionBarActivity</string>
     <string name="alert_registro_redes_sociales">Por favor rellena tu registro con los datos restantes.</string>
+    <string name="title_activity_qr">QRActivity</string>
+    
+    <!-- Strings asociados al QRCodeActivity.java -->
+    <string name="codigo_qr_generado">Tu Código QR Generado es el siguiente: </string>
+    <string name="descripcion_codigo_qr">
+        Este código te identifica como participante durante la realización del evento,\n
+        y te permite acceder a los servicios de los almuerzos ofrecidos en el mismo 
+    </string>
+    <string name="siguiente">Siguiente</string>
 
 </resources>

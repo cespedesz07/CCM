@@ -50,7 +50,8 @@ public class CCMActionBarActivity extends ActionBarActivity {
 		else if ( id == R.id.action_salir ){
 			boolean haSalidoExitosamente = salir();
 			if ( haSalidoExitosamente ){
-				Intent i = new Intent( getApplicationContext(), LoginActivity.class );
+				Intent i = new Intent( this, LoginActivity.class );
+				finish();
 				startActivity( i );	
 			}
 			else{

@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import com.example.ccm.R;
 import com.example.ccm.actionbar.CCMActionBarActivity;
-import com.example.ccm.restclient.RestClientTask;
+import com.example.ccm.restclient.RegistroRestClientTask;
 import com.example.ccm.restclient.SpinnerRestClientTask;
 
 
@@ -71,6 +71,7 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		spinnerTipoDocumento = (Spinner) findViewById(R.id.spinner_tipo_documento);
 		spinnerTipoDocumentoAdapter = new SpinnerArrayAdapter( RegistroActivity.this, SpinnerRestClientTask.TABLA_TIPO_DOC );
 		spinnerTipoDocumento.setAdapter( spinnerTipoDocumentoAdapter );
+		//spinnerTipoDocumentoAdapter.notifyDataSetChanged();
 		
 		txtNumDocumento = (EditText) findViewById( R.id.txt_num_documento );
 		
@@ -218,21 +219,19 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	// coincidan con los mismos de la base de datos, por eso en el List<NameValuePair> parametros
 	// las claves tienen el mismo nombre de los campos de la tabla Persona en la BD CCM_BD
 	private void guardarDatosFormulario(){
-		//String tipoDocumentoCampo = (  (String) spinnerTipoDocumento.getSelectedItem()  ).toString();
 		int numDocumentoCampo = Integer.valueOf( txtNumDocumento.getText().toString() ); 
 		String nombreCampo = txtNombre.getText().toString();
 		String apellidosCampo = txtApellidos.getText().toString();		
-		int indiceGeneroCampo = radioGroupGenero.getCheckedRadioButtonId();   //Si este valor retorna -1, es porque no se ha seleccionado ningun campo
-		String generoCampo = (  (RadioButton) radioGroupGenero.findViewById( indiceGeneroCampo )  ).getText().toString();		
+			int indiceGeneroCampo = radioGroupGenero.getCheckedRadioButtonId();   //Si este valor retorna -1, es porque no se ha seleccionado ningun campo
+			String generoCampo = (  (RadioButton) radioGroupGenero.findViewById( indiceGeneroCampo )  ).getText().toString();		
 		String fechaNacimientoCampo = obtenerFechaCampo( pickerFechaNacimiento );
 		String emailCampo = txtEmail.getText().toString();		
 		String telefonoCampo = txtTelefono.getText().toString();		
 		String codigoQRCampo = "";
-		int tipoDocumentoCampo = 1;		
-		String paisProcedenciaCampo = (  (String) spinnerPaisProcedencia.getSelectedItem()  ).toString();		
-		//String institucionCampo = (  (String) spinnerTipoDocumento.getSelectedItem()  ).toString();
-		int institucionCampo = 1;
-		int tipoPersonaCampo = 1;
+		int tipoDocumentoCampo =   obtenerIdSpinner(  ((String) spinnerTipoDocumento.getSelectedItem()).toString()    );		
+		int paisProcedenciaCampo = obtenerIdSpinner(  ((String) spinnerPaisProcedencia.getSelectedItem()).toString()  );
+		int institucionCampo =     obtenerIdSpinner(  ((String) spinnerInstitucion.getSelectedItem()).toString()      );
+		int tipoPersonaCampo =     1;//obtenerIdSpinner(  ((String) spinner.getSelectedItem()).toString() ); ;
 		
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>();
 		parametros.add(  new BasicNameValuePair( "docPersona", String.valueOf(numDocumentoCampo) )  );
@@ -248,8 +247,15 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		parametros.add(  new BasicNameValuePair( "institucion_idinstitucion", String.valueOf(tipoDocumentoCampo)  )  );
 		parametros.add(  new BasicNameValuePair( "tipo_persona_idtipo_persona", String.valueOf(tipoPersonaCampo)  )  );
 		
-		new RestClientTask( this ).execute( parametros );
+		new RegistroRestClientTask( this ).execute( parametros );
 	}
+	
+	
+	
+	private int obtenerIdSpinner( String itemSeleccionado ){
+		return Integer.valueOf(  itemSeleccionado.split( "." )[0]  );
+	}
+	
 	
 	
 	
