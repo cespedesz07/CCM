@@ -16,16 +16,16 @@
     
     <!-- Estilo de fondo Gris para los EditText
          Este estilo captura como background un fondo gris
-         localizado en res/drawable 
-         <item name="android:paddingLeft">@dimen/pad_10dp</item>
-        <item name="android:paddingRight">@dimen/pad_10dp</item>
+         localizado en res/drawable
+         @dimen/registro_activity_edittext_padding_top
     -->    
+    
     <style name="editext_graybg" parent="android:Widget.EditText">
         <item name="android:background">@drawable/editext_bg_gray</item>
         <item name="android:ems">10</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>        
-        <item name="android:textSize">@dimen/txt_16sp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>        
+        <item name="android:textSize">@dimen/registro_activity_edittext_text_size</item>
     </style>
     
     

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/pad_20dp"
+        android:paddingLeft="@dimen/pad_15dp"
+        android:paddingRight="@dimen/pad_15dp"
+        android:paddingTop="@dimen/pad_20dp" >
+        
+        <ImageView
+            android:id="@+id/logo_congreso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/login_activity_logo_margin_top"
+            android:layout_gravity="center"
+            android:src="@drawable/logo_congreso_320x119" />
+
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:gravity="center"
+             android:orientation="vertical"
+             android:padding="@dimen/registro_activity_form_padding" >
+             
+                          
+             
+             <TextView
+                 android:id="@+id/textview_tipo_documento"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/tipo_documento"
+                 android:textAppearance="?android:attr/textAppearanceMedium"
+                 android:textSize="@dimen/registro_activity_txt"
+                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />             
+
+             <Spinner
+                 android:id="@+id/spinner_tipo_documento"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_toRightOf="@id/textview_tipo_documento"
+                 android:layout_marginBottom="@dimen/registro_activity_spinners_margin_bottom"
+                 android:gravity="end" />
+
+             <EditText
+                 android:id="@+id/txt_num_documento"
+                 style="@style/editext_graybg"
+                 android:layout_below="@id/spinner_tipo_documento"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"                 
+                 android:drawableLeft="@android:drawable/ic_menu_edit"
+                 android:hint="@string/num_documento"
+                 android:inputType="number"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
+                 android:text="1053813814" />
+                       
+             
+			
+             <EditText
+                 android:id="@+id/txt_nombre"
+                 style="@style/editext_graybg"
+                 android:layout_below="@id/txt_num_documento"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:hint="@string/nombre"
+                 android:inputType="textPersonName"
+                 android:drawableLeft="@android:drawable/ic_menu_info_details"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
+                 android:text="Lili Johana" />             
+
+             <EditText
+                 android:id="@+id/txt_apellidos"
+                 style="@style/editext_graybg"
+                 android:layout_below="@id/txt_nombre"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:hint="@string/apellidos"
+                 android:inputType="textPersonName"
+                 android:drawableLeft="@android:drawable/ic_menu_info_details"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
+                 android:text="Hincapié" />
+             
+             
+             <TextView
+                 android:id="@+id/textview_genero"
+                 android:layout_below="@id/txt_apellidos"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"                 
+                 android:text="@string/genero"
+                 android:textAppearance="?android:attr/textAppearanceMedium"
+                 android:textSize="@dimen/registro_activity_txt"
+                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />  
+             <RadioGroup
+                 android:id="@+id/radio_group_genero"
+                 android:layout_toRightOf="@id/textview_genero"
+                 android:layout_below="@id/txt_apellidos"
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:orientation="horizontal"
+                 android:gravity="right" >
+
+                 <RadioButton
+                     android:id="@+id/radio_masculino"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="@string/genero_masculino"
+                     android:textSize="@dimen/registro_activity_txt"
+                     android:layout_marginRight="@dimen/registro_activity_radio_button_margin_right"
+                      />
+
+                 <RadioButton
+                     android:id="@+id/radio_femenino"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="@string/genero_femenino"
+                     android:textSize="@dimen/registro_activity_txt"
+                     android:checked="true" />
+             </RadioGroup>
+
+             
+             
+             <!-- ==========================LINEA SEPARADORA=====================-->
+             <View
+                 android:id="@+id/line1"     
+			     android:layout_width="match_parent"
+			     android:layout_height="@dimen/registro_activity_line_heigth"
+			     android:background="@android:color/darker_gray"
+			     android:layout_below="@id/radio_group_genero"
+			     android:layout_marginTop="@dimen/registro_activity_line_margin_top"
+			     android:layout_marginBottom="@dimen/registro_activity_line_margin_bottom" />
+             <!-- =================================================================== -->
+             
+             
+             <TextView
+                 android:id="@+id/textview_fecha_nacimiento"
+                 android:layout_below="@id/line1"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"                 
+                 android:text="@string/fecha_nacimiento"
+                 android:textAppearance="?android:attr/textAppearanceMedium"
+                 android:textSize="@dimen/registro_activity_txt"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
+                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />  
+             <DatePicker
+                 android:id="@+id/picker_fecha_nacimiento"
+                 android:layout_below="@id/textview_fecha_nacimiento"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerHorizontal="true"
+                 android:calendarViewShown="true"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />
+             
+             
+             
+             
+          	<EditText
+                 android:id="@+id/txt_email"
+                 style="@style/editext_graybg"
+                 android:layout_below="@id/picker_fecha_nacimiento"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:hint="@string/email"
+                 android:inputType="textEmailAddress"
+                 android:drawableLeft="@android:drawable/ic_menu_add"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
+                 android:text="lijohincapieg@unal.edu.co" />
+             
+             <EditText
+                 android:id="@+id/txt_telefono"
+                 style="@style/editext_graybg"
+                 android:layout_below="@id/txt_email"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:hint="@string/telefono"
+                 android:inputType="phone"
+                 android:drawableLeft="@android:drawable/ic_menu_call"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
+                 android:text="300123456" />
+             
+             
+             
+             
+             
+             
+
+             
+             
+             
+             
+             <!-- ===========================LINEA SEPARADORA======================= -->
+             <View
+                 android:id="@+id/line2"     
+			     android:layout_width="match_parent"
+			     android:layout_height="@dimen/registro_activity_line_heigth"
+			     android:background="@android:color/darker_gray"
+			     android:layout_below="@id/txt_telefono"
+			     android:layout_marginTop="@dimen/registro_activity_line_margin_top"
+			     android:layout_marginBottom="@dimen/registro_activity_line_margin_bottom" />
+             <!-- ==================================================================== -->
+             
+             
+             
+             
+             <TextView
+                 android:id="@+id/textview_pais_procedencia"
+                 android:layout_below="@id/line2"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/pais_procedencia"
+                 android:drawableLeft="@android:drawable/ic_menu_mylocation"
+                 android:textAppearance="?android:attr/textAppearanceMedium"
+                 android:textSize="@dimen/registro_activity_txt"
+                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />             
+             <Spinner
+                 android:id="@+id/spinner_pais_procedencia"
+                 android:layout_below="@id/line2"
+                 android:layout_toRightOf="@id/textview_pais_procedencia"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_marginBottom="@dimen/registro_activity_spinners_margin_bottom"
+                 android:gravity="end" />
+             
+             
+             <TextView
+                 android:id="@+id/textview_institucion"
+                 android:layout_below="@id/spinner_pais_procedencia"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/institucion"
+                 android:textAppearance="?android:attr/textAppearanceMedium"
+                 android:textSize="@dimen/registro_activity_txt"
+                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />             
+
+             <Spinner
+                 android:id="@+id/spinner_institucion"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_toRightOf="@id/textview_institucion"
+                 android:layout_below="@id/spinner_pais_procedencia"
+                 android:layout_marginBottom="@dimen/registro_activity_spinners_margin_bottom"
+                 android:gravity="end" />
+             
+         </RelativeLayout>         
+         
+         
+         <Button
+             android:id="@+id/btn_registro_registro_activity"
+	         style="@style/btn_red_large"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"	         
+	         android:text="@string/registro"
+	         android:layout_gravity="center" />
+        
+	</LinearLayout>
+	
+    
+    
+</ScrollView>

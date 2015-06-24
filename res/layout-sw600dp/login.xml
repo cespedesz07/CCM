@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".registro.RegistroActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/pad_20dp"
+        android:paddingLeft="@dimen/pad_15dp"
+        android:paddingRight="@dimen/pad_15dp"
+        android:paddingTop="@dimen/pad_20dp" >
+        
+        
+        <ImageView
+            android:id="@+id/logo_congreso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/login_activity_logo_margin_top"
+            android:layout_weight="0.20"
+            android:src="@drawable/logo_congreso_320x119" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/login_activity_padding" >
+            
+            <TextView 
+	            android:id="@+id/textview_bienvenida"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:text="@string/bienvenida"
+	            android:textAppearance="?android:attr/textAppearanceLarge"
+	            android:textSize="@dimen/login_activity_txt"
+	            android:layout_marginTop="@dimen/login_activity_txt_margin_top"
+	            android:layout_marginBottom="@dimen/login_activity_txt_margin_bottom" />
+        
+	        <!-- Botón para el inicio de sesion de facebook 
+	             IMPORTANTE: Para poder habilitar el boton es necesario:
+	             1) Registrar en el manifest la com.facebook.FacebookActivity
+	             2) Registrar algunos metadatos en el manifest: 
+	             <meta-data
+	                 android:name="com.facebook.sdk.ApplicationId"   
+	            	android:value="@string/facebook_app_id"/>
+	      	-->
+	        <com.facebook.login.widget.LoginButton
+		    	android:id="@+id/facebook_login_button"
+			    android:layout_width="match_parent"
+			    android:layout_height="40dp"
+			    android:layout_gravity="center_horizontal"
+			    android:layout_marginTop="@dimen/login_activity_buttons_margin_top"
+			    android:layout_marginBottom="@dimen/login_activity_buttons_margin_bottom" /> 
+	        
+	        
+	        
+	        <com.google.android.gms.common.SignInButton
+	    		android:id="@+id/google_login_button"
+	    		android:layout_width="match_parent"
+	    		android:layout_height="wrap_content"
+	    		android:layout_gravity="center_horizontal"
+	    		android:layout_marginBottom="@dimen/login_activity_buttons_margin_bottom" />
+	        
+	        
+	        
+	        <!-- ===========================LINEA SEPARADORA======================= -->
+             <View
+                 android:id="@+id/line1_login"     
+			     android:layout_width="fill_parent"
+			     android:layout_height="@dimen/line_heigth"
+			     android:background="@android:color/black"
+			     android:layout_marginTop="@dimen/login_activity_line_margin_top"
+			     android:layout_marginBottom="@dimen/login_activity_line_margin_bottom" />
+             <!-- ==================================================================== -->
+              
+              
+              <TextView
+                  android:id="@+id/textview_bienvenida2"
+	              android:layout_width="wrap_content"
+	              android:layout_height="wrap_content"
+	              android:layout_gravity="center_horizontal"
+	              android:text="@string/bienvenida2"
+	              android:textAppearance="?android:attr/textAppearanceLarge"
+	              android:textSize="@dimen/login_activity_txt"
+	              android:layout_marginBottom="@dimen/login_activity_txt_margin_bottom" />
+              
+              <Button
+             	  android:id="@+id/btn_registro_login_activity"
+		          style="@style/btn_red_large"
+		          android:layout_width="wrap_content"
+		          android:layout_height="wrap_content"	         
+		          android:text="@string/registro" />
+			
+	 	</LinearLayout>
+	 	
+        
+       
+
+    </LinearLayout>
+
+</ScrollView>

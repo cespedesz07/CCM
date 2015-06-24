@@ -60,8 +60,7 @@
 	            android:id="@+id/codigo_qr"
 	            android:layout_below="@id/line1"
 	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="40dp" />
+	            android:layout_height="wrap_content" />
             
             
             

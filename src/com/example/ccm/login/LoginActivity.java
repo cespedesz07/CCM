@@ -202,6 +202,14 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     //Método que se ejecuta luego de que la actividad ha sido creada al llamar onCreate()
     protected void onStart(){
     	super.onStart();
+    	float density = getResources().getDisplayMetrics().density;
+    	// return 0.75 if it's LDPI
+    	// return 1.0 if it's MDPI
+    	// return 1.5 if it's HDPI
+    	// return 2.0 if it's XHDPI
+    	Toast.makeText(this, "Density Screen: " + String.valueOf(density), Toast.LENGTH_LONG).show();
+    	
+    	
     	//Luego de que la actividad es Created, se conecta el usuario ya logueado a Google+
     	if ( facebookLoggedIn ){
     		

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+   
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/pad_20dp"
+        android:paddingLeft="@dimen/pad_15dp"
+        android:paddingRight="@dimen/pad_15dp"
+        android:paddingTop="@dimen/pad_20dp" >
+        
+        
+        
+        <ImageView
+            android:id="@+id/logo_congreso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_weight="0.20"
+            android:src="@drawable/logo_congreso_320x119" />
+        
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="50dp" >
+            
+            
+            <TextView 
+	            android:id="@+id/textview_codigo_qr_generado"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/codigo_qr_generado"
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            
+            <!-- ===========================LINEA SEPARADORA======================= -->
+             <View
+                 android:id="@+id/line1"     
+			     android:layout_width="match_parent"
+			     android:layout_height="1dp"
+			     android:background="@android:color/darker_gray"
+			     android:layout_below="@id/textview_codigo_qr_generado"
+			     android:layout_marginTop="20dp"
+			     android:layout_marginBottom="20dp" />
+             <!-- ==================================================================== -->
+            
+            
+            <ImageView
+	            android:id="@+id/codigo_qr"
+	            android:layout_below="@id/line1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+            
+            
+            
+            <!-- ===========================LINEA SEPARADORA======================= -->
+             <View
+                 android:id="@+id/line2"     
+			     android:layout_width="match_parent"
+			     android:layout_height="1dp"
+			     android:background="@android:color/darker_gray"
+			     android:layout_below="@id/codigo_qr"
+			     android:layout_marginTop="20dp"
+			     android:layout_marginBottom="20dp" />
+             <!-- ==================================================================== -->
+            
+            <TextView 
+	            android:id="@+id/textview_descripcion_codigo_qr"
+	            android:layout_below="@id/line2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/descripcion_codigo_qr"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />            
+      	</LinearLayout>
+      	
+        
+        <Button
+             android:id="@+id/btn_siguiente"
+	         style="@style/btn_red_large"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"	         
+	         android:text="@string/siguiente"
+	         android:layout_gravity="center" />
+        
+     
+     </LinearLayout>
+        
+    
+    
+</ScrollView>

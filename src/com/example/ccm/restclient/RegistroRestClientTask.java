@@ -19,18 +19,20 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.example.ccm.R;
+import com.example.ccm.qrcode.QRCodeActivity;
 
 
 /*
- * Hilo Secundario que se encarga de procesar loas request y responses al WebService de Yii_CCM_WebService
+ * Hilo Secundario que se encarga de procesar la creación de un Usuario al WebService de Yii_CCM_WebService
  * IMPORTANTE: 
  * 
  * AsyncTask <Params, Progress, Result>
@@ -39,25 +41,43 @@ import com.example.ccm.R;
  * Result: Tipo de dato del resultado
  */
 
-public class RegistroRestClientTask extends AsyncTask<Object, Integer, Object>{		
-	
+public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{		
 	
 	
 	//URLs correspondientes a las opciones que publica el WebService para su consumo
 	private static final String URL_PERSONA_CREATE = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/rest/persona/create";
 	
 	
+	//Nombre de los campos de la tabla Persona para proceder al registro
+	//( se usan en RegistroActivity.guardarDatosFormulario() )
+	public static final String CAMPO_DOC_PERSONA = "docPersona";
+	public static final String CAMPO_NOMBRE_PERSONA = "nombre";
+	public static final String CAMPO_APELLIDOS_PERSONA = "apellidos";
+	public static final String CAMPO_GENERO_PERSONA = "genero";
+	public static final String CAMPO_FECHA_NACIMIENTO_PERSONA = "fecha_nacimiento";
+	public static final String CAMPO_CORREO_ELECTRONICO_PERSONA = "correo_electronico";
+	public static final String CAMPO_TELEFONO_PERSONA = "telefono";
+	public static final String CAMPO_CODIGO_QR_PERSONA = "codigo_qr";
+	public static final String CAMPO_TIPO_DOC_IDTIPO_DOC_PERSONA = "tipo_doc_idtipo_doc";
+	public static final String CAMPO_PAIS_PROCEDENCIA_IDPAIS_PROCEDENCIA_PERSONA = "pais_procedencia_idpais_procedencia";
+	public static final String CAMPO_INSTITUCION_IDINSTITUCION_PERSONA = "institucion_idinstitucion";
+	public static final String CAMPO_TIPO_PERSONA_IDTIPO_PERSONA_PERSONA = "tipo_persona_idtipo_persona";
+	
 	private Context context;
+	private String documentoPersona; 			//Se almacena el documento de la persona
+												//para enviar como parametros bundle a QRCodeActivity.java
+												//y generar el código QR
 	private ProgressDialog progressDialog;
 	private AlertDialog.Builder alertDialog;
-	private String msgFinal;
+	private String mensajeError;
 	
 	
 	
 	
 	public RegistroRestClientTask( Context context ){
 		this.context = context;
-		msgFinal = "";
+		this.documentoPersona = "";
+		this.mensajeError = "";
 		progressDialog = new ProgressDialog( context );
 		progressDialog.setCancelable(false);
 		progressDialog.setProgressStyle( ProgressDialog.STYLE_HORIZONTAL );
@@ -80,12 +100,22 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Object>{
 	
 	//Luego de ejecutar la consulta,
 	@Override
-	protected void onPostExecute( Object result ){
+	protected void onPostExecute( Boolean haCreadoUsuario ){
 		if ( progressDialog.isShowing() ){
 			progressDialog.dismiss();
 		}
-		alertDialog.setMessage( msgFinal );
-		alertDialog.show();
+		if ( !haCreadoUsuario ){
+			alertDialog.setMessage( mensajeError );
+			alertDialog.show();
+		}
+		else{
+			Bundle bundleParams = new Bundle();
+			bundleParams.putString( RegistroRestClientTask.CAMPO_DOC_PERSONA, this.documentoPersona );
+			Intent i = new Intent( context, QRCodeActivity.class );
+			i.putExtras( bundleParams );
+			context.startActivity( i );
+			
+		}
 	}
 	
 	
@@ -93,8 +123,9 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Object>{
 	//Consulta que se hace de fondo
 	//La estructura de llamado de este método es doInBackground( String nombre_metodo, Object params )
 	@Override
-	protected Object doInBackground(Object... params){
+	protected Boolean doInBackground(Object... params){
 		List<NameValuePair> parametros = (List<NameValuePair>)params[0];
+		this.documentoPersona = parametros.get(0).getValue();
 		return ingresarPersona( parametros );
 	}
 	
@@ -117,27 +148,30 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Object>{
 	//---------------------------Métodos para hacer consultas GET Y POST al WebService por medio del protocolo REST------------------------
 	
 	//Método para ingresar un usuario nuevo usando POST
-	public Object ingresarPersona( List<NameValuePair> parametros ){
+	public Boolean ingresarPersona( List<NameValuePair> parametros ){
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost( URL_PERSONA_CREATE );					
 		try {
 			httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
 			HttpResponse response = httpClient.execute( httpPost );
-			msgFinal = String.valueOf( response.getStatusLine().getStatusCode() );
-			Log.i("response", String.valueOf( response.getStatusLine().getStatusCode() ) );
+			Log.v("response", String.valueOf( response.getStatusLine().getStatusCode() ) );
 			return true;
 		} 
 		catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
+			mensajeError = e1.getMessage();
 		} 
 		catch (ClientProtocolException e2) {
 			e2.printStackTrace();
+			mensajeError = e2.getMessage();
 		} 
 		catch (IOException e3) {
 			e3.printStackTrace();
+			mensajeError = e3.getMessage();
 		}
 		catch (ParseException e) {
 			e.printStackTrace();
+			mensajeError = e.getMessage();
 		}
 		return false;
 		
@@ -176,22 +210,21 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Object>{
 				linea = reader.readLine();
 			}						
 			JSONObject jsonObject = new JSONObject( resultado );
-			msgFinal = "Datos Capturados OK";
+			Log.v( "OK: RegistroRestClientTask.consultarUsuarios()", "Datos Capturados Ok" );
 			return jsonObject.toString();			
 		}
 		catch (Exception error){
 			error.printStackTrace();
-			msgFinal = error.getMessage().toString();
+			mensajeError = error.getMessage().toString();
 			return resultado;
 		}		
 		finally{
 			if ( inputStream != null ){
 				try {
 					inputStream.close();
-				} catch (IOException e) {
-					msgFinal = e.getMessage().toString();
-					Log.i( "IOException: ", e.getMessage().toString() );
-					
+				} 
+				catch (IOException e) {
+					mensajeError = e.getMessage().toString();					
 				}
 			}
 		}

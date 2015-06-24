@@ -6,6 +6,8 @@ import android.widget.ImageView;
 
 import com.example.ccm.R;
 import com.example.ccm.actionbar.CCMActionBarActivity;
+import com.example.ccm.restclient.QRCodeHttpClientTask;
+import com.example.ccm.restclient.RegistroRestClientTask;
 
 
 /**
@@ -18,7 +20,7 @@ import com.example.ccm.actionbar.CCMActionBarActivity;
 public class QRCodeActivity extends CCMActionBarActivity {	
 	
 	
-	
+	private String documentoPersona;
 	private ImageView codigoQR;
 	private Button btnSiguiente;
 	
@@ -28,9 +30,12 @@ public class QRCodeActivity extends CCMActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.qrcode);
 		
-		codigoQR = (ImageView) findViewById( R.id.codigo_qr );
-		
+		codigoQR = (ImageView) findViewById( R.id.codigo_qr );		
 		btnSiguiente = (Button) findViewById( R.id.btn_siguiente);
+		
+		Bundle bundleParams = getIntent().getExtras();
+		documentoPersona = bundleParams.getString( RegistroRestClientTask.CAMPO_DOC_PERSONA );		
+		new QRCodeHttpClientTask(this, codigoQR).execute( documentoPersona );
 	}
 	
 	

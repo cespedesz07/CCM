@@ -10,6 +10,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.ccm.R;
 import com.example.ccm.actionbar.CCMActionBarActivity;
+import com.example.ccm.qrcode.QRCodeActivity;
 import com.example.ccm.restclient.RegistroRestClientTask;
 import com.example.ccm.restclient.SpinnerRestClientTask;
 
@@ -71,7 +73,6 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		spinnerTipoDocumento = (Spinner) findViewById(R.id.spinner_tipo_documento);
 		spinnerTipoDocumentoAdapter = new SpinnerArrayAdapter( RegistroActivity.this, SpinnerRestClientTask.TABLA_TIPO_DOC );
 		spinnerTipoDocumento.setAdapter( spinnerTipoDocumentoAdapter );
-		//spinnerTipoDocumentoAdapter.notifyDataSetChanged();
 		
 		txtNumDocumento = (EditText) findViewById( R.id.txt_num_documento );
 		
@@ -219,6 +220,7 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	// coincidan con los mismos de la base de datos, por eso en el List<NameValuePair> parametros
 	// las claves tienen el mismo nombre de los campos de la tabla Persona en la BD CCM_BD
 	private void guardarDatosFormulario(){
+		/*
 		int numDocumentoCampo = Integer.valueOf( txtNumDocumento.getText().toString() ); 
 		String nombreCampo = txtNombre.getText().toString();
 		String apellidosCampo = txtApellidos.getText().toString();		
@@ -234,20 +236,26 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		int tipoPersonaCampo =     1;//obtenerIdSpinner(  ((String) spinner.getSelectedItem()).toString() ); ;
 		
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>();
-		parametros.add(  new BasicNameValuePair( "docPersona", String.valueOf(numDocumentoCampo) )  );
-		parametros.add(  new BasicNameValuePair( "nombre", nombreCampo )  );
-		parametros.add(  new BasicNameValuePair( "apellidos", apellidosCampo )  );
-		parametros.add(  new BasicNameValuePair( "genero", generoCampo )  );
-		parametros.add(  new BasicNameValuePair( "fecha_nacimiento", fechaNacimientoCampo )  );
-		parametros.add(  new BasicNameValuePair( "correo_electronico", emailCampo )  );
-		parametros.add(  new BasicNameValuePair( "telefono", telefonoCampo )  );
-		parametros.add(  new BasicNameValuePair( "codigo_qr", codigoQRCampo )  );
-		parametros.add(  new BasicNameValuePair( "tipo_doc_idtipo_doc", String.valueOf(tipoDocumentoCampo)  ) );
-		parametros.add(  new BasicNameValuePair( "pais_procedencia_idpais_procedencia", String.valueOf(tipoDocumentoCampo)  ) );
-		parametros.add(  new BasicNameValuePair( "institucion_idinstitucion", String.valueOf(tipoDocumentoCampo)  )  );
-		parametros.add(  new BasicNameValuePair( "tipo_persona_idtipo_persona", String.valueOf(tipoPersonaCampo)  )  );
-		
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_DOC_PERSONA, String.valueOf(numDocumentoCampo) )  									);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_NOMBRE_PERSONA, nombreCampo )                     									);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_APELLIDOS_PERSONA, apellidosCampo )               									);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_GENERO_PERSONA, generoCampo )  														);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_FECHA_NACIMIENTO_PERSONA, fechaNacimientoCampo )  									);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_CORREO_ELECTRONICO_PERSONA, emailCampo )  											);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_TELEFONO_PERSONA, telefonoCampo )  													);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_CODIGO_QR_PERSONA, codigoQRCampo )  													);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_TIPO_DOC_IDTIPO_DOC_PERSONA, String.valueOf(tipoDocumentoCampo)  ) 					);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_PAIS_PROCEDENCIA_IDPAIS_PROCEDENCIA_PERSONA, String.valueOf(paisProcedenciaCampo)  ) 	);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_INSTITUCION_IDINSTITUCION_PERSONA, String.valueOf(institucionCampo)  )  				);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_TIPO_PERSONA_IDTIPO_PERSONA_PERSONA, String.valueOf(tipoPersonaCampo)  )  			);
+
 		new RegistroRestClientTask( this ).execute( parametros );
+		*/	
+		Intent i = new Intent(this, QRCodeActivity.class);
+		Bundle bundleParams = new Bundle();
+		bundleParams.putString( RegistroRestClientTask.CAMPO_DOC_PERSONA, "1053832644" );
+		i.putExtras( bundleParams );
+		startActivity( i );
 	}
 	
 	

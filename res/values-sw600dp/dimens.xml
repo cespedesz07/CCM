@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="pad_5dp">5dp</dimen>
+    <dimen name="pad_10dp">10dp</dimen>
+    <dimen name="pad_15dp">15dp</dimen>
+    <dimen name="pad_20dp">20dp</dimen>
+    <dimen name="pad_30dp">30dp</dimen>
+    <dimen name="pad_80dp">80dp</dimen>
+    <dimen name="pad_100dp">100dp</dimen>
+    <dimen name="pad_120dp">120dp</dimen>
+    <dimen name="pad_chat_item">45dp</dimen>
+    <dimen name="pad_chat_item1">10dp</dimen>
+    <dimen name="txt_7sp">7sp</dimen>
+    <dimen name="txt_12sp">12sp</dimen>
+    <dimen name="txt_13sp">13sp</dimen>
+    <dimen name="txt_14sp">14sp</dimen>
+    <dimen name="txt_15sp">15sp</dimen>
+    <dimen name="txt_16sp">16sp</dimen>
+    <dimen name="txt_18sp">18sp</dimen>
+    <dimen name="txt_20sp">20sp</dimen>
+    <dimen name="txt_30sp">30sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    
+    <!-- DIEMSIONES PARA LoginActivity.java -->
+    <dimen name="login_activity_padding">50dp</dimen>
+    <dimen name="login_activity_logo_margin_top">40dp</dimen>
+	<dimen name="login_activity_txt">20sp</dimen>
+	<dimen name="login_activity_txt_margin_top">40dp</dimen>
+	<dimen name="login_activity_txt_margin_bottom">25dp</dimen>
+	<dimen name="login_activity_buttons_margin_top">20dp</dimen>
+	<dimen name="login_activity_buttons_margin_bottom">20dp</dimen> 
+	<dimen name="line_heigth">1dp</dimen>
+	<dimen name="login_activity_line_margin_top">20dp</dimen>
+	<dimen name="login_activity_line_margin_bottom">20dp</dimen>
+	
+	<!-- DIEMSIONES PARA RegistroActivity.java -->
+	<dimen name="registro_activity_form_padding">50dp</dimen>
+	<dimen name="registro_activity_txt">20sp</dimen>
+	<dimen name="registro_activity_textview_padding_right">20dp</dimen>
+	<dimen name="registro_activity_widgets_margin_bottom">10dp</dimen>
+	<dimen name="registro_activity_radio_button_margin_right">30dp</dimen>
+	<dimen name="registro_activity_line_heigth">1dp</dimen>
+	<dimen name="registro_activity_line_margin_top">20dp</dimen>
+	<dimen name="registro_activity_line_margin_bottom">20dp</dimen>
+	<dimen name="registro_activity_edittext_padding_top">1dp</dimen>
+	<dimen name="registro_activity_edittext_padding_bottom">1dp</dimen>
+	<dimen name="registro_activity_edittext_text_size">16sp</dimen>
+	<dimen name="registro_activity_spinners_margin_bottom">25dp</dimen>
+	
+	
+</resources>
