@@ -2,19 +2,20 @@ package com.example.ccm.eventos;
 
 import java.util.ArrayList;
 
-import com.example.ccm.R;
-import com.example.ccm.R.id;
-import com.example.ccm.R.layout;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ListView;
 
-public class TabFragment extends Fragment {
-	
+import com.example.ccm.R;
+
+public class TabFragment extends Fragment implements OnItemSelectedListener {	
 	
 	
 	
@@ -22,21 +23,39 @@ public class TabFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		super.onCreateView(inflater, container, savedInstanceState);
 		
-		View vistaFragment = inflater.inflate( R.layout.lista_expandible_eventos, container, false );
-
-		ExpandableListView listaExpandibleEventos = (ExpandableListView) vistaFragment.findViewById( R.id.expandableListView );
+		View vistaFragment = inflater.inflate( R.layout.lista_eventos, container, false );
+		ListView listaEventos = (ListView) vistaFragment.findViewById( R.id.listview_lista_eventos );
 		
-		//Se definen los grupos y los contenidos child de cada grupo
-		ArrayList<String> eventos = new ArrayList<String>();
-		ArrayList<String[]> contenidoEventos = new ArrayList<String[]>();
-		for ( int i=0; i<20; i++ ){
-			eventos.add( String.format("Evento %d", i+1) );
-			contenidoEventos.add(  new String[]{ String.format("Descripción evento %d", i+1) }  );
-		}	
-		listaExpandibleEventos.setAdapter(  new ListaExpandibleEventosAdapter(getActivity(), inflater, eventos, contenidoEventos)  );
+		ArrayList<String[]> listaEventosPrueba = new ArrayList<String[]>();
+		listaEventosPrueba.add( new String[]{ "Nombre1", "Descripcion1" } );
+		listaEventosPrueba.add( new String[]{ "Nombre2", "Descripcion2" } );
+		listaEventosPrueba.add( new String[]{ "Nombre3", "Descripcion3" } );
+		listaEventosPrueba.add( new String[]{ "Nombre4", "Descripcion4" } );
+		listaEventosPrueba.add( new String[]{ "Nombre5", "Descripcion5" } );
+		listaEventosPrueba.add( new String[]{ "Nombre6", "Descripcion6" } );
 		
-		 
+		
+		listaEventos.setAdapter(  new ItemEventoAdapter(getActivity(), inflater, listaEventosPrueba)  );
 		return vistaFragment;
+		
+	}
+	
+	
+	
+	
+
+
+	
+	//====================================================== MÉTODOS DE OnItemSelectedListener===============================
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+		Log.v("pos" , String.valueOf(position) );
+	}
+
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		
 	}
 	
 	

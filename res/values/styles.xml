@@ -22,9 +22,7 @@
     
     <style name="editext_graybg" parent="android:Widget.EditText">
         <item name="android:background">@drawable/editext_bg_gray</item>
-        <item name="android:ems">10</item>
-        <item name="android:paddingTop">15dp</item>
-        <item name="android:paddingBottom">15dp</item>        
+        <item name="android:ems">10</item>      
         <item name="android:textSize">@dimen/registro_activity_edittext_text_size</item>
     </style>
     

@@ -41,7 +41,7 @@ public class QRCodeHttpClientTask extends AsyncTask<String, Integer, Bitmap> {
 	private static final String KEY_DATA = "data";
 	
 	private static final String KEY_COLOR = "color";
-	private static final String VALUE_COLOR = "ff0000";
+	private static final String VALUE_COLOR = "000000";
 	
 	private static final String KEY_SIZE = "size";
 	private static final String VALUE_SIZE = "220x220";
@@ -89,8 +89,8 @@ public class QRCodeHttpClientTask extends AsyncTask<String, Integer, Bitmap> {
 		}
 		if ( codigoQR != null ){
 			codigoQR_QRCodeActivity.setImageBitmap( codigoQR );
-			Animation QRCodeRotation = AnimationUtils.loadAnimation(context, R.animator.qrcode_rotation );
-			codigoQR_QRCodeActivity.startAnimation( QRCodeRotation );
+			Animation QRCodeFadeIn = AnimationUtils.loadAnimation(context, R.animator.qrcode_fade_in );
+			codigoQR_QRCodeActivity.startAnimation( QRCodeFadeIn );
 		}
 		else{
 			alertDialog.setMessage( mensajeError );

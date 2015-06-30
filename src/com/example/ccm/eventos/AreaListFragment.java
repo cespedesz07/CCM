@@ -37,6 +37,11 @@ public class AreaListFragment extends ListFragment {
 	 */
 	private int mActivatedPosition = ListView.INVALID_POSITION;
 
+	
+	
+	
+	
+	//=========================================== Interfaz Callback =============================================
 	/**
 	 * A callback interface that all activities containing this fragment must
 	 * implement. This mechanism allows activities to be notified of item
@@ -63,6 +68,11 @@ public class AreaListFragment extends ListFragment {
 	
 	
 	
+	
+	
+	
+	
+	
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
@@ -70,14 +80,15 @@ public class AreaListFragment extends ListFragment {
 	public AreaListFragment() {
 	}
 
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// TODO: replace with a real list adapter.
-		setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(), android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, DummyContent.ITEMS));
+		setListAdapter( new ArrayAdapter( getActivity(), android.R.layout.simple_list_item_activated_1, android.R.id.text1, DummyContent.ITEMS) );
 	}
+	
+	
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -89,6 +100,8 @@ public class AreaListFragment extends ListFragment {
 		}
 	}
 
+	
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -100,6 +113,8 @@ public class AreaListFragment extends ListFragment {
 
 		mCallbacks = (Callbacks) activity;
 	}
+	
+	
 
 	@Override
 	public void onDetach() {
@@ -112,13 +127,14 @@ public class AreaListFragment extends ListFragment {
 	
 	
 	
+	//Método que se invoca cuando se clickea un item de la lista
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
 		super.onListItemClick(listView, view, position, id);
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected( DummyContent.ITEMS.get(position).id );
+		mCallbacks.onItemSelected(  );
 	}
 
 	
@@ -131,6 +147,8 @@ public class AreaListFragment extends ListFragment {
 			outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
 		}
 	}
+	
+	
 
 	/**
 	 * Turns on activate-on-click mode. When this mode is on, list items will be
@@ -141,6 +159,8 @@ public class AreaListFragment extends ListFragment {
 		// give items the 'activated' state when touched.
 		getListView().setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
+	
+	
 
 	private void setActivatedPosition(int position) {
 		if (position == ListView.INVALID_POSITION) {

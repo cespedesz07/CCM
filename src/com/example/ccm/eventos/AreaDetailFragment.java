@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,7 +63,7 @@ public class AreaDetailFragment extends Fragment {
 	@Override 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
 		super.onCreateOptionsMenu(menu, menuInflater);
-		menuInflater.inflate(R.menu.menu, menu);
+		menuInflater.inflate(R.menu.ccmaction_bar, menu);
 	}
 	
 	
@@ -69,7 +71,7 @@ public class AreaDetailFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if ( id == R.id.cerrar_sesion ){
+		if ( id == R.id.action_salir ){
 			Toast.makeText(getActivity(), "Closing", Toast.LENGTH_SHORT).show();
 			return true;
 		}
@@ -86,11 +88,11 @@ public class AreaDetailFragment extends Fragment {
 		FragmentTabHost tabHost = (FragmentTabHost) vista.findViewById( android.R.id.tabhost );
 		tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 		
-		tabHost.addTab( tabHost.newTabSpec("Tab_Lun").setIndicator("Lunes"), TabFragment.class, null );
-		tabHost.addTab( tabHost.newTabSpec("Tab_Mar").setIndicator("Martes"), TabFragment.class, null );
-		tabHost.addTab( tabHost.newTabSpec("Tab_Mie").setIndicator("Miércoles"), TabFragment.class, null );
-		tabHost.addTab( tabHost.newTabSpec("Tab_Jue").setIndicator("Jueves"), TabFragment.class, null );
-		tabHost.addTab( tabHost.newTabSpec("Tab_Vie").setIndicator("Viernes"), TabFragment.class, null );
+		tabHost.addTab( tabHost.newTabSpec("Tab_Lun").setIndicator("Lun"), TabFragment.class, null );
+		tabHost.addTab( tabHost.newTabSpec("Tab_Mar").setIndicator("Mar"), TabFragment.class, null );
+		tabHost.addTab( tabHost.newTabSpec("Tab_Mie").setIndicator("Mie"), TabFragment.class, null );
+		tabHost.addTab( tabHost.newTabSpec("Tab_Jue").setIndicator("Jue"), TabFragment.class, null );
+		tabHost.addTab( tabHost.newTabSpec("Tab_Vie").setIndicator("Vie"), TabFragment.class, null );
 		
 		return vista;
 	}

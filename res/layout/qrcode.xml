@@ -23,7 +23,7 @@
             android:id="@+id/logo_congreso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/login_activity_logo_margin_top"
             android:layout_weight="0.20"
             android:src="@drawable/logo_congreso_320x119" />
         
@@ -33,7 +33,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="50dp" >
+            android:padding="@dimen/qr_code_activity_form_padding" >
             
             
             <TextView 
@@ -41,18 +41,19 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/codigo_qr_generado"
-	            android:textAppearance="?android:attr/textAppearanceMedium" />
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:textSize="@dimen/qr_code_activity_txt" />
             
             
             <!-- ===========================LINEA SEPARADORA======================= -->
              <View
                  android:id="@+id/line1"     
 			     android:layout_width="match_parent"
-			     android:layout_height="1dp"
+			     android:layout_height="@dimen/qr_code_activity_line_height"
 			     android:background="@android:color/darker_gray"
 			     android:layout_below="@id/textview_codigo_qr_generado"
-			     android:layout_marginTop="20dp"
-			     android:layout_marginBottom="20dp" />
+			     android:layout_marginTop="@dimen/qr_code_activity_line_margin_top"
+			     android:layout_marginBottom="@dimen/qr_code_activity_line_margin_bottom" />
              <!-- ==================================================================== -->
             
             
@@ -68,11 +69,11 @@
              <View
                  android:id="@+id/line2"     
 			     android:layout_width="match_parent"
-			     android:layout_height="1dp"
+			     android:layout_height="@dimen/qr_code_activity_line_height"
 			     android:background="@android:color/darker_gray"
 			     android:layout_below="@id/codigo_qr"
-			     android:layout_marginTop="20dp"
-			     android:layout_marginBottom="20dp" />
+			     android:layout_marginTop="@dimen/qr_code_activity_line_margin_top"
+			     android:layout_marginBottom="@dimen/qr_code_activity_line_margin_bottom" />
              <!-- ==================================================================== -->
             
             <TextView 
@@ -81,7 +82,8 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/descripcion_codigo_qr"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />            
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:textSize="@dimen/qr_code_activity_txt" />            
       	</LinearLayout>
       	
         

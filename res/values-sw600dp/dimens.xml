@@ -31,7 +31,7 @@
 	<dimen name="login_activity_txt_margin_bottom">25dp</dimen>
 	<dimen name="login_activity_buttons_margin_top">20dp</dimen>
 	<dimen name="login_activity_buttons_margin_bottom">20dp</dimen> 
-	<dimen name="line_heigth">1dp</dimen>
+	<dimen name="line_height">1dp</dimen>
 	<dimen name="login_activity_line_margin_top">20dp</dimen>
 	<dimen name="login_activity_line_margin_bottom">20dp</dimen>
 	
@@ -41,13 +41,28 @@
 	<dimen name="registro_activity_textview_padding_right">20dp</dimen>
 	<dimen name="registro_activity_widgets_margin_bottom">10dp</dimen>
 	<dimen name="registro_activity_radio_button_margin_right">30dp</dimen>
-	<dimen name="registro_activity_line_heigth">1dp</dimen>
+	<dimen name="registro_activity_line_height">1dp</dimen>
 	<dimen name="registro_activity_line_margin_top">20dp</dimen>
 	<dimen name="registro_activity_line_margin_bottom">20dp</dimen>
 	<dimen name="registro_activity_edittext_padding_top">1dp</dimen>
 	<dimen name="registro_activity_edittext_padding_bottom">1dp</dimen>
 	<dimen name="registro_activity_edittext_text_size">16sp</dimen>
-	<dimen name="registro_activity_spinners_margin_bottom">25dp</dimen>
+	<dimen name="registro_activity_spinners_margin_bottom">15dp</dimen>
+	<dimen name="registro_activity_spinners_padding_top">15dp</dimen>
+	<dimen name="registro_activity_spinners_padding_bottom">15dp</dimen>
+	
+	<!-- DIEMSIONES PARA QRCodeActivity.java -->
+	<dimen name="qr_code_activity_form_padding">50dp</dimen>
+	<dimen name="qr_code_activity_txt">20sp</dimen>
+	<dimen name="qr_code_activity_line_height">1dp</dimen>
+	<dimen name="qr_code_activity_line_margin_top">20dp</dimen>
+	<dimen name="qr_code_activity_line_margin_bottom">20dp</dimen>
+	
+	<!-- DIEMSIONES PARA item_evento.xml DESPLEGADO EN EL FRAGMENT TabFragment.java -->
+	<dimen name="item_evento_xml_padding">10dp</dimen>
+	<dimen name="item_evento_xml_textview_nombre_evento_margin_top">5dp</dimen>
+	<dimen name="item_evento_xml_textview_nombre_evento_margin_bottom">10dp</dimen>
+	
 	
 	
 </resources>

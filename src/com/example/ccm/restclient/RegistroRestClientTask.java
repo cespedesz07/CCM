@@ -31,7 +31,7 @@ import com.example.ccm.R;
 import com.example.ccm.qrcode.QRCodeActivity;
 
 
-/*
+/**
  * Hilo Secundario que se encarga de procesar la creación de un Usuario al WebService de Yii_CCM_WebService
  * IMPORTANTE: 
  * 
@@ -39,6 +39,8 @@ import com.example.ccm.qrcode.QRCodeActivity;
  * Params:Tipo de dato de los Parámetros de entrada
  * Progress: Progreso del Hilo
  * Result: Tipo de dato del resultado
+ * @author Santiago Céspedes Zapata - cespedesz07@gmail.com
+ *
  */
 
 public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{		

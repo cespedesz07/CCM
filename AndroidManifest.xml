@@ -40,21 +40,25 @@
         <!-- Actividades -->
         <!--
              IMPORTANTE:
-             Registro del AreaListActivity que corresponde a la lista de areas de la izquierda del dispositivo.
+             Registro del AreaListActivity.java que corresponde a la lista de areas de la izquierda del dispositivo.
              Es importante agregar como action el intent MENUITEMLISTACTIVITY
              y category un intent DEFAULT, con el fin de desplegar el patron master/detail
-             (AreaListActivity y AreaDetailActivity) luego de iniciar sesion desde LoginActivity o
-             LoginEmailActivity
+             desde una Actividad independiente.
+             La actividad que va a desplegar el patrón paster/detail debe tener el siguiente intent
+               Intent i = new Intent( RegistroActivity.this, AreaListActivity.class  );
+		       startActivity( i );	
+		     En el cual se está llamando a la actividad AreaListActivity.class como primera instancia
         -->
         <activity
             android:name=".eventos.AreaListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MENUITEMLISTACTIVITY" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".eventos.AreaDetailActivity"></activity>
+          
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/app_name"
@@ -80,8 +84,8 @@
         <!--
              MUY IMPORTANTE:
         	 SE REGISTRA LA FacebookActivity PARA PODER DESPLEGAR EL DIALOGO DE INICIO DE SESION EN
-        	 FACEBOOK CUANDO SE PRESIONA EL LoginButton (Ver LoginActivity.java)
-        -->
+        	 FACEBOOK CUANDO SE PRESIONA EL LoginButton (Ver LoginActivity.java)
+         -->
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"

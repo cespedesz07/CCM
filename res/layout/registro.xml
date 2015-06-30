@@ -39,13 +39,14 @@
                  android:text="@string/tipo_documento"
                  android:textAppearance="?android:attr/textAppearanceMedium"
                  android:textSize="@dimen/registro_activity_txt"
-                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />             
-
-             <Spinner
+                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />   
+           	 <Spinner
                  android:id="@+id/spinner_tipo_documento"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
                  android:layout_toRightOf="@id/textview_tipo_documento"
+                 android:paddingTop="@dimen/registro_activity_spinners_padding_top"
+                 android:paddingBottom="@dimen/registro_activity_spinners_padding_bottom"
                  android:layout_marginBottom="@dimen/registro_activity_spinners_margin_bottom"
                  android:gravity="end" />
 
@@ -57,7 +58,7 @@
                  android:layout_height="wrap_content"                 
                  android:drawableLeft="@android:drawable/ic_menu_edit"
                  android:hint="@string/num_documento"
-                 android:inputType="number"
+                 android:inputType="text"
                  android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
                  android:text="1053813814" />
                        
@@ -112,8 +113,7 @@
                      android:layout_height="wrap_content"
                      android:text="@string/genero_masculino"
                      android:textSize="@dimen/registro_activity_txt"
-                     android:layout_marginRight="@dimen/registro_activity_radio_button_margin_right"
-                      />
+                     android:layout_marginRight="@dimen/registro_activity_radio_button_margin_right" />
 
                  <RadioButton
                      android:id="@+id/radio_femenino"
@@ -224,6 +224,8 @@
                  android:layout_toRightOf="@id/textview_pais_procedencia"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
+                 android:paddingTop="@dimen/registro_activity_spinners_padding_top"
+                 android:paddingBottom="@dimen/registro_activity_spinners_padding_bottom"
                  android:layout_marginBottom="@dimen/registro_activity_spinners_margin_bottom"
                  android:gravity="end" />
              
@@ -244,7 +246,8 @@
                  android:layout_height="match_parent"
                  android:layout_toRightOf="@id/textview_institucion"
                  android:layout_below="@id/spinner_pais_procedencia"
-                 android:layout_marginBottom="@dimen/registro_activity_spinners_margin_bottom"
+                 android:paddingTop="@dimen/registro_activity_spinners_padding_top"
+                 android:paddingBottom="@dimen/registro_activity_spinners_padding_bottom"
                  android:gravity="end" />
              
          </RelativeLayout>         

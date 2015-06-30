@@ -17,21 +17,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Spinner;
 
 import com.example.ccm.R;
 import com.example.ccm.registro.SpinnerArrayAdapter;
-import com.google.android.gms.appdatasearch.GetRecentContextCall;
 
 /**
  * Hilo Secundario que se encarga de consultar los datos de completitud y cargarlos
- * a los spinner de RegistroActivity.java
+ * a los spinner de RegistroActivity.java, y a la Lista AreaListFragment.java del patrón 
+ * Master/Detail de selección de eventos
  * @author Santiago Céspedes Zapata - cespedesz07@gmail.com
  *
  */
@@ -44,7 +42,7 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 	private static final String URL_INSTITUCION_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/rest/institucion";
 	
 	
-	//Nombres de las Tablas de COmpletitud (USADAS EN RegistroActivity.java y en esta actividad SpinnerRestClient.java)
+	//Nombres de las Tablas de COmpletitud (USADAS EN RegistroActivity.java y en la presente actividad: SpinnerRestClient.java)
 	public static final String TABLA_TIPO_DOC = "tipo_doc";
 	public static final String TABLA_PAIS_PROCEDENCIA = "pais_procedencia";
 	public static final String TABLA_INSTITUCION = "institucion";
@@ -70,7 +68,7 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 	private AlertDialog.Builder alertDialog;
 	private String mensajeError;
 	
-	private String idKey;							//Llaves o keys a utilizar para extraer los values asociados a estas keys del JSONOBject (Método consultarDatosCompletitud())
+	private String idKey;							//Llaves o keys a utilizar para extraer los values asociados a estas keys del JSONObject (Método consultarDatosCompletitud())
 	private String nameKey;
 	
 	
@@ -259,7 +257,6 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 				error.printStackTrace();
 			}
 		}
-		return lista;
-		
+		return lista;		
 	}
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/item_evento_xml_padding"
+    android:background="@color/gray_light" >
+    
+    
+    <TextView
+        android:id="@+id/textview_nombre_evento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/item_evento_xml_textview_nombre_evento_size"
+        android:layout_marginTop="@dimen/item_evento_xml_textviews_margin_top"
+        android:layout_marginBottom="@dimen/item_evento_xml_textviews_margin_bottom"
+        android:text="Ponencia Magistral Teoria Combinatoria" />
+
+  	<TextView
+  	    android:id="@+id/textview_descripcion_evento"
+  	    android:layout_width="wrap_content"
+  	    android:layout_height="wrap_content"
+  	    android:gravity="left"
+  	    android:layout_below="@+id/textview_nombre_evento"
+  	    android:layout_marginBottom="@dimen/item_evento_xml_textviews_margin_bottom"
+  	    android:layout_marginTop="@dimen/item_evento_xml_textviews_margin_top"
+  	    android:layout_toLeftOf="@+id/checkbox_evento"
+  	    android:text="Ponencia dictada por el doctor Chochimilco de México, en la cual se mostrará la dinámica de los sistemas abstractos lineales mediante técnicas en R"
+  	    android:textAppearance="?android:attr/textAppearanceSmall"
+  	    android:textSize="@dimen/item_evento_xml_textviews_size" />
+    <CheckBox
+        android:id="@+id/checkbox_evento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/textview_descripcion_evento" />
+    
+    
+    <TextView 
+        android:id="@+id/textview_cupos_disponibles_evento"
+        android:layout_width="wrap_content"
+  	    android:layout_height="wrap_content"
+  	    android:layout_below="@id/textview_descripcion_evento"
+  	    android:textAppearance="?android:attr/textAppearanceLarge"
+  	    android:textSize="@dimen/item_evento_xml_textview_cupos_disponibles_size"
+  	    android:text="10 Cupos" />
+
+    <TextView
+        android:id="@+id/textview_hora_lugar_evento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textview_cupos_disponibles_evento"
+        android:layout_alignRight="@+id/checkbox_evento"
+        android:textSize="@dimen/item_evento_xml_textview_hora_evento_size"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="8:50 am - P202" />
+
+</RelativeLayout>

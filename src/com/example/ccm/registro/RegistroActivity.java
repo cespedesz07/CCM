@@ -29,6 +29,9 @@ import android.widget.Toast;
 
 import com.example.ccm.R;
 import com.example.ccm.actionbar.CCMActionBarActivity;
+import com.example.ccm.eventos.AreaDetailActivity;
+import com.example.ccm.eventos.AreaListActivity;
+import com.example.ccm.login.LoginEmailActivity;
 import com.example.ccm.qrcode.QRCodeActivity;
 import com.example.ccm.restclient.RegistroRestClientTask;
 import com.example.ccm.restclient.SpinnerRestClientTask;
@@ -251,11 +254,15 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 
 		new RegistroRestClientTask( this ).execute( parametros );
 		*/	
+		/*
 		Intent i = new Intent(this, QRCodeActivity.class);
 		Bundle bundleParams = new Bundle();
 		bundleParams.putString( RegistroRestClientTask.CAMPO_DOC_PERSONA, "1053832644" );
 		i.putExtras( bundleParams );
 		startActivity( i );
+		*/
+		Intent i = new Intent( RegistroActivity.this, AreaListActivity.class  );
+		startActivity( i );	
 	}
 	
 	

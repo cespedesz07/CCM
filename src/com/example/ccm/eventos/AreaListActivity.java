@@ -7,6 +7,7 @@ import com.example.ccm.R.layout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 
@@ -49,9 +50,13 @@ public class AreaListActivity extends FragmentActivity implements AreaListFragme
 			// 'activated' state when touched.
 			((AreaListFragment) getSupportFragmentManager().findFragmentById(R.id.area_list)).setActivateOnItemClick(true);
 		}
-
-		// TODO: If exposing deep links into your app, handle intents here.
 	}
+	
+	
+	
+	
+	
+	//========================================== MÉTODOS DEL CALLBACK AreaListFragment.Callback ==================================
 
 	/**
 	 * Callback method from {@link AreaListFragment.Callbacks} indicating that
@@ -59,27 +64,29 @@ public class AreaListActivity extends FragmentActivity implements AreaListFragme
 	 */
 	@Override
 	public void onItemSelected(String id) {
+		Log.v( "AreaListActivity Item Selected" , id);
 		if (mTwoPane) {
-			// In two-pane mode, show the detail view in this activity by
+			// In two-pane mode (TABLET VIEW), show the detail view in this activity by
 			// adding or replacing the detail fragment using a
 			// fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putString(AreaDetailFragment.ARG_ITEM_ID, id);
+			arguments.putString( AreaDetailFragment.ARG_ITEM_ID, id );
 			AreaDetailFragment fragment = new AreaDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().replace(R.id.area_detail_container, fragment).commit();
 
-		} else {
-			// In single-pane mode, simply start the detail activity
+		} 
+		else {
+			// In single-pane mode (DEVICE VIEW), simply start the detail activity
 			// for the selected item ID.
-			Intent detailIntent = new Intent(this, AreaDetailActivity.class);
-			detailIntent.putExtra(AreaDetailFragment.ARG_ITEM_ID, id);
+			Intent detailIntent = new Intent( this, AreaDetailActivity.class );
+			detailIntent.putExtra( AreaDetailFragment.ARG_ITEM_ID, id );
 			startActivity(detailIntent);
 		}
 	}
 	
 	public void onCreateOptionsMenu( Menu menu, MenuInflater menuInflater ){
-		menuInflater.inflate(R.menu.menu, menu);
+		menuInflater.inflate(R.menu.ccmaction_bar, menu);
 	}
 	
 }
