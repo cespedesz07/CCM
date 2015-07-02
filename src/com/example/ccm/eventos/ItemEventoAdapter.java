@@ -1,15 +1,21 @@
 package com.example.ccm.eventos;
 
 import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.example.ccm.R;
+import com.example.ccm.eventos.model.Evento;
+import com.example.ccm.eventos.model.Ubicacion;
 
 /**
  * Adapter encargado de desplegar o inflar la vista de cada uno de los item_evento.xml 
@@ -21,59 +27,68 @@ public class ItemEventoAdapter extends BaseAdapter {
 	
 	
 	
-	//Atributos que se traen de TabFragmentActivity.java
-	private Activity tabFragmentActivity;
-	private LayoutInflater tabFragmentInflater;
-	private ArrayList<String[]> listaEventosPrueba;
-	
+	private Context context;
+	private ArrayList<Object[]> result;
 	private TextView textViewNombreEvento;
 	private TextView textViewDescripcionEvento;
-	private CheckBox checkBoxEvento;
 	private TextView textViewCuposDisponiblesEvento;
-	private TextView textViewHoraLugarEvento;
+	private Spinner spinnerHoraLugarEvento;
 	
 	
 	
-	public ItemEventoAdapter( Activity tabFragmentActivity, LayoutInflater tabFragmentInflater, ArrayList<String[]> listaEventosPrueba ){
+	public ItemEventoAdapter( Context context, ArrayList<Object[]> result ){
 		super();
-		this.tabFragmentActivity = tabFragmentActivity;
-		this.tabFragmentInflater = tabFragmentInflater;
-		this.listaEventosPrueba = listaEventosPrueba;
+		this.context = context;
+		this.result = result;
 	}
 	
 	
+	@SuppressLint("ViewHolder")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = tabFragmentInflater.inflate( R.layout.item_evento, null, false );
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		View view = inflater.inflate( R.layout.item_evento, null, false );
 		
 		textViewNombreEvento = (TextView) view.findViewById( R.id.textview_nombre_evento );
 		textViewDescripcionEvento = (TextView) view.findViewById( R.id.textview_descripcion_evento );
-		checkBoxEvento = (CheckBox) view.findViewById( R.id.checkbox_evento );
 		textViewCuposDisponiblesEvento = (TextView) view.findViewById( R.id.textview_cupos_disponibles_evento );
-		textViewHoraLugarEvento = (TextView) view.findViewById( R.id.textview_hora_lugar_evento );		
+		spinnerHoraLugarEvento = (Spinner) view.findViewById( R.id.spinner_hora_lugar_evento );
 		
-		textViewNombreEvento.setText( listaEventosPrueba.get(position)[0] );
-		textViewDescripcionEvento.setText( listaEventosPrueba.get(position)[1] );
+		Object[] eventoUbicacion = result.get(position);
+		Evento evento = (Evento) eventoUbicacion[0];
+		ArrayList<Ubicacion> ubicaciones = (ArrayList<Ubicacion>) eventoUbicacion[1];
+		
+		ArrayList<String> horaLugarEventoString = new ArrayList<String>();
+		for ( Ubicacion u : ubicaciones ){
+			horaLugarEventoString.add( String.format("%s - %s", u.lugar, u.horaInicio) );
+		}
+		
+		textViewNombreEvento.setText( evento.nombre );
+		textViewDescripcionEvento.setText( evento.descripcion );
+		spinnerHoraLugarEvento.setAdapter( new ArrayAdapter(context, 
+				android.R.layout.simple_spinner_dropdown_item, 
+				horaLugarEventoString) 
+		);
 		
 		return view;		
 	}
-	
+
 
 	@Override
 	public int getCount() {
-		return this.listaEventosPrueba.size();
+		return result.size();
 	}
 
-	
+
 	@Override
-	public Object getItem(int pos) {
-		return this.listaEventosPrueba.get( pos );
+	public Object getItem(int position) {
+		return result.get(position);
 	}
 
-	
+
 	@Override
-	public long getItemId(int pos) {
-		return pos;
+	public long getItemId(int position) {
+		return position;
 	}
 
 	

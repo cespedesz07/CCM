@@ -64,7 +64,7 @@ public class AreaListActivity extends FragmentActivity implements AreaListFragme
 	 */
 	@Override
 	public void onItemSelected(String id) {
-		Log.v( "AreaListActivity Item Selected" , id);
+		//Log.v( "AreaListActivity Item Selected", id);
 		if (mTwoPane) {
 			// In two-pane mode (TABLET VIEW), show the detail view in this activity by
 			// adding or replacing the detail fragment using a

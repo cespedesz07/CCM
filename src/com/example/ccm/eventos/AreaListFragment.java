@@ -1,5 +1,7 @@
 package com.example.ccm.eventos;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -8,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.ccm.dummy.DummyContent;
+import com.example.ccm.restclient.AreaListFragmentAsyncResponse;
+import com.example.ccm.restclient.AreaListFragmentRestClientTask;
 
 /**
  * A list fragment representing a list of Areas. This fragment also supports
@@ -18,7 +22,7 @@ import com.example.ccm.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class AreaListFragment extends ListFragment {
+public class AreaListFragment extends ListFragment{
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -36,9 +40,6 @@ public class AreaListFragment extends ListFragment {
 	 * The current activated item position. Only used on tablets.
 	 */
 	private int mActivatedPosition = ListView.INVALID_POSITION;
-
-	
-	
 	
 	
 	//=========================================== Interfaz Callback =============================================
@@ -63,13 +64,6 @@ public class AreaListFragment extends ListFragment {
 		public void onItemSelected(String id) {
 		}
 	};
-
-	
-	
-	
-	
-	
-	
 	
 	
 	
@@ -77,7 +71,7 @@ public class AreaListFragment extends ListFragment {
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
 	 */
-	public AreaListFragment() {
+	public AreaListFragment() {		
 	}
 
 	
@@ -86,6 +80,8 @@ public class AreaListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setListAdapter( new ArrayAdapter( getActivity(), android.R.layout.simple_list_item_activated_1, android.R.id.text1, DummyContent.ITEMS) );
+		//setListAdapter( new AreaListFragmentArrayAdapter( getActivity() ) );
+		
 	}
 	
 	
@@ -123,20 +119,7 @@ public class AreaListFragment extends ListFragment {
 		// Reset the active callbacks interface to the dummy implementation.
 		mCallbacks = sDummyCallbacks;
 	}
-
 	
-	
-	
-	//Método que se invoca cuando se clickea un item de la lista
-	@Override
-	public void onListItemClick(ListView listView, View view, int position, long id) {
-		super.onListItemClick(listView, view, position, id);
-
-		// Notify the active callbacks interface (the activity, if the
-		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected( DummyContent.ITEMS.get(position).id );
-	}
-
 	
 	
 	@Override
@@ -170,5 +153,17 @@ public class AreaListFragment extends ListFragment {
 		}
 
 		mActivatedPosition = position;
+	}
+
+	
+	
+	//Método que se invoca cuando se clickea un item de la lista
+	@Override
+	public void onListItemClick(ListView listView, View view, int position, long id) {
+		super.onListItemClick(listView, view, position, id);
+
+		// Notify the active callbacks interface (the activity, if the
+		// fragment is attached to one) that an item has been selected.
+		mCallbacks.onItemSelected( DummyContent.ITEMS.get(position).id );
 	}
 }

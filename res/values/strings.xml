@@ -67,5 +67,12 @@
         y te permite acceder a los servicios de los almuerzos ofrecidos en el mismo.
     </string>
     <string name="siguiente">Siguiente</string>
+    
+    <!-- String correspondientes a las pestañas o Tabs de Dias -->
+    <string name="tab_lun">Lun</string>
+    <string name="tab_mar">Mar</string>
+    <string name="tab_mie">Mie</string>
+    <string name="tab_jue">Jue</string>
+    <string name="tab_vie">Vie</string>
 
 </resources>

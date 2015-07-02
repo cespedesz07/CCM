@@ -25,6 +25,9 @@ public class AreaDetailActivity extends ActionBarActivity implements ActionBar.T
 	private ViewPagerAdapter viewPagerAdapter;
 	private ViewPager viewPager;
 	
+	//Nombre del Tab actual devuelto por OnTabSelected()
+	private String nombreTabSeleccionado;
+	
 	
 
 	@SuppressWarnings("deprecation")
@@ -55,30 +58,34 @@ public class AreaDetailActivity extends ActionBarActivity implements ActionBar.T
 		*/
 		setContentView( R.layout.view_pager );
 		
+	
+		String idTipoAreaActual = getIntent().getStringExtra( AreaDetailFragment.ARG_ITEM_ID );
+		Log.v( "AreaDetailActivity.idTipoAreaActual", idTipoAreaActual );
+		
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_TABS );
 		
 		//Adaptador que retorna el fragment seleccionado
-		viewPagerAdapter = new ViewPagerAdapter( getSupportFragmentManager() );
+		viewPagerAdapter = new ViewPagerAdapter( this, idTipoAreaActual, getSupportFragmentManager() );
 		
 		viewPager = (ViewPager) findViewById( R.id.view_pager );
 		viewPager.setAdapter( viewPagerAdapter );
 		
 		//Se agrega el Listener para controlar los eventos de cambio de tabs
-		viewPager.setOnPageChangeListener( new  ViewPager.SimpleOnPageChangeListener(){
+		//Este listener es IMPORTANTE, de no haberlo al cambiar entre tabs no se actualza
+		//la tab seleccionada en el actionbar
+		viewPager.setOnPageChangeListener( new ViewPager.SimpleOnPageChangeListener(){
 			@Override
 			public void onPageSelected( int position ){
 				actionBar.setSelectedNavigationItem( position );
-				//Log.v( "Área ", String.valueOf(  );
-				Log.v( "Dia: ", String.valueOf( actionBar.getTabAt(position).getText()  ) );
 			}
 		});
 		
-		actionBar.addTab( actionBar.newTab().setText("Lun").setTabListener(this) );
-		actionBar.addTab( actionBar.newTab().setText("Mar").setTabListener(this) );
-		actionBar.addTab( actionBar.newTab().setText("Mie").setTabListener(this) );
-		actionBar.addTab( actionBar.newTab().setText("Jue").setTabListener(this) );
-		actionBar.addTab( actionBar.newTab().setText("Vie").setTabListener(this) );
+		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_lun )  ).setTabListener(this).setTag("Monday")    );
+		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_mar )  ).setTabListener(this).setTag("Tuesday")   );
+		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_mie )  ).setTabListener(this).setTag("Wednesday") );
+		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_jue )  ).setTabListener(this).setTag("Thursday")  );
+		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_vie )  ).setTabListener(this).setTag("Friday")    );
 	}
 	
 	
@@ -106,6 +113,7 @@ public class AreaDetailActivity extends ActionBarActivity implements ActionBar.T
 	//Método que se ejecuta para desplegar el Tab seleccionado en el ViewPager
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction fragmentTransaction) {
+		nombreTabSeleccionado = String.valueOf( tab.getText() );
 		viewPager.setCurrentItem( tab.getPosition() );
 	}
 

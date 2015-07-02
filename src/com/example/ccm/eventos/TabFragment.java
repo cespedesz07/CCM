@@ -1,21 +1,30 @@
 package com.example.ccm.eventos;
 
-import java.util.ArrayList;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 
 import com.example.ccm.R;
+import com.example.ccm.restclient.EventosRestClientTask;
 
-public class TabFragment extends Fragment implements OnItemSelectedListener {	
+public class TabFragment extends Fragment implements OnItemSelectedListener, OnItemClickListener {	
+	
+	
+	private String idTipoAreaActual; 
+	private String pageTitle;
+	
+	
+	public TabFragment( String idTipoAreaActual, String pageTitle ){
+		this.idTipoAreaActual = idTipoAreaActual;
+		this.pageTitle = pageTitle;
+	}
 	
 	
 	
@@ -25,17 +34,12 @@ public class TabFragment extends Fragment implements OnItemSelectedListener {
 		
 		View vistaFragment = inflater.inflate( R.layout.lista_eventos, container, false );
 		ListView listaEventos = (ListView) vistaFragment.findViewById( R.id.listview_lista_eventos );
+		listaEventos.setOnItemClickListener( this );
+		listaEventos.setOnItemSelectedListener( this );
 		
-		ArrayList<String[]> listaEventosPrueba = new ArrayList<String[]>();
-		listaEventosPrueba.add( new String[]{ "Nombre1", "Descripcion1" } );
-		listaEventosPrueba.add( new String[]{ "Nombre2", "Descripcion2" } );
-		listaEventosPrueba.add( new String[]{ "Nombre3", "Descripcion3" } );
-		listaEventosPrueba.add( new String[]{ "Nombre4", "Descripcion4" } );
-		listaEventosPrueba.add( new String[]{ "Nombre5", "Descripcion5" } );
-		listaEventosPrueba.add( new String[]{ "Nombre6", "Descripcion6" } );
+		EventosRestClientTask eventosRestClientTask = new EventosRestClientTask( getActivity(), listaEventos );
+		eventosRestClientTask.execute( idTipoAreaActual, pageTitle );
 		
-		
-		listaEventos.setAdapter(  new ItemEventoAdapter(getActivity(), inflater, listaEventosPrueba)  );
 		return vistaFragment;
 		
 	}
@@ -49,7 +53,7 @@ public class TabFragment extends Fragment implements OnItemSelectedListener {
 	//====================================================== MÉTODOS DE OnItemSelectedListener===============================
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		Log.v("pos" , String.valueOf(position) );
+		Log.v("Selected: " , String.valueOf(position) );
 	}
 
 
@@ -57,8 +61,28 @@ public class TabFragment extends Fragment implements OnItemSelectedListener {
 	public void onNothingSelected(AdapterView<?> parent) {
 		
 	}
-	
-	
 
+
+	//====================================================== MÉTODOS DE OnItemClickListener==================================
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		Log.v("Clicked: " , String.valueOf(position) );
+	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

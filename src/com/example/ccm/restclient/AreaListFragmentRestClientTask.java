@@ -35,7 +35,7 @@ import android.util.Log;
  * @author Santiago Céspedes Zapata - cespedesz07@gmail.com
  *
  */
-public class AreaListFragmentRestClientTask extends AsyncTask<String, Integer, ArrayList<String>> {
+public class AreaListFragmentRestClientTask extends AsyncTask<String, Integer, ArrayList<String>>{
 	
 	
 	//URL que conecta a los datos de completitud de tipo_area
@@ -51,9 +51,7 @@ public class AreaListFragmentRestClientTask extends AsyncTask<String, Integer, A
 	private AlertDialog.Builder alertDialog;
 	private String mensajeError;
 	
-	private String idKey;							//Llaves o keys a utilizar para extraer los values asociados a estas keys del JSONOBject (Método consultarDatosCompletitud())
-	private String nameKey;
-	
+	public AreaListFragmentAsyncResponse delegate = null;
 	
 	
 	public AreaListFragmentRestClientTask( Context context ) {
@@ -68,9 +66,6 @@ public class AreaListFragmentRestClientTask extends AsyncTask<String, Integer, A
 		alertDialog = new AlertDialog.Builder( context );
 		alertDialog.setMessage( mensajeError );
 		alertDialog.setPositiveButton( context.getResources().getString(R.string.alert_ok) , null);
-		
-		idKey = "";
-		nameKey = "";
 	}
 	
 	
@@ -89,6 +84,7 @@ public class AreaListFragmentRestClientTask extends AsyncTask<String, Integer, A
 		if ( progressDialog.isShowing() ){
 			progressDialog.dismiss();
 		}
+		/*
 		if ( result != null ){
 			
 		}
@@ -96,6 +92,8 @@ public class AreaListFragmentRestClientTask extends AsyncTask<String, Integer, A
 			alertDialog.setMessage( mensajeError );
 			alertDialog.show();
 		}
+		*/
+		delegate.processFinish(result);
 	}	
 	
 	
