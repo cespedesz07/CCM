@@ -39,7 +39,7 @@ public class AreaListFragmentRestClientTask extends AsyncTask<String, Integer, A
 	
 	
 	//URL que conecta a los datos de completitud de tipo_area
-	private static final String URL_TIPO_AREA_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/rest/tipo-area";
+	private static final String URL_TIPO_AREA_READ = "http://ccm2015.specializedti.com/web/index.php/rest/tipo-area";
 	
 	
 	//Nombre del campo asociado al nombre del tipo de área

@@ -48,35 +48,6 @@ public class QRCodeActivity extends CCMActionBarActivity implements OnClickListe
 		documentoPersona = bundleParams.getString( RegistroRestClientTask.CAMPO_DOC_PERSONA );		
 		new QRCodeHttpClientTask(this, codigoQR).execute( documentoPersona );
 	}
-	
-	
-	
-	@Override
-	protected void onStart(){
-		super.onStart();
-	}
-	
-	
-	
-	@Override
-	protected void onResume(){
-		super.onResume();
-	}
-	
-	
-	
-	@Override
-	protected void onPause(){
-		super.onPause();
-	}
-	
-	
-	
-	@Override
-	protected void onStop(){
-		super.onDestroy();
-	}
-
 
 
 	//Método para capturar el presionado del botón y cabiar el fondo del mismo

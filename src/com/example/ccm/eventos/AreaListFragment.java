@@ -71,7 +71,7 @@ public class AreaListFragment extends ListFragment{
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
 	 */
-	public AreaListFragment() {		
+	public AreaListFragment() {
 	}
 
 	

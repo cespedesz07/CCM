@@ -47,10 +47,10 @@
     <string name="num_documento">No. Documento</string>
     <string name="nombre">Nombre</string>
     <string name="apellidos">Apellidos</string>
-    <string name="genero">Género</string>
+    <string name="genero">Género: </string>
     <string name="genero_masculino">Masculino</string>
     <string name="genero_femenino">Femenino</string>
-    <string name="fecha_nacimiento">Fecha de Nacimiento</string>
+    <string name="fecha_nacimiento">Fecha de Nacimiento: </string>
     <string name="email">email@dominio.com</string>
     <string name="telefono">Teléfono</string>
     <string name="pais_procedencia">País de Procedencia: </string>
@@ -74,5 +74,9 @@
     <string name="tab_mie">Mie</string>
     <string name="tab_jue">Jue</string>
     <string name="tab_vie">Vie</string>
+    
+    <!-- String correspondientes a UbicacionesMultiSelectSpinner.java -->
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
 
 </resources>

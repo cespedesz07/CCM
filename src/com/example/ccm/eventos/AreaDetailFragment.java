@@ -1,19 +1,21 @@
 package com.example.ccm.eventos;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBar.TabListener;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.ccm.R;
 import com.example.ccm.dummy.DummyContent;
@@ -23,7 +25,9 @@ import com.example.ccm.dummy.DummyContent;
  * contained in a {@link AreaListActivity} in two-pane mode (on tablets) or a
  * {@link AreaDetailActivity} on handsets.
  */
-public class AreaDetailFragment extends Fragment {
+@SuppressWarnings("deprecation")
+@SuppressLint("NewApi")
+public class AreaDetailFragment extends Fragment implements ActionBar.TabListener {
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -40,9 +44,13 @@ public class AreaDetailFragment extends Fragment {
 	 * fragment (e.g. upon screen orientation changes).
 	 */
 	
+	private ViewPagerAdapter viewPagerAdapter;
+	private ViewPager viewPager;
 	
 	
-	public AreaDetailFragment() {
+	private final ActionBar actionBar;
+	public AreaDetailFragment( ActionBar actionBar ) {
+		this.actionBar = actionBar;
 	}
 	
 	
@@ -52,12 +60,14 @@ public class AreaDetailFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu( true );
+		/*
 		if (getArguments().containsKey(ARG_ITEM_ID)) {
 			// Load the dummy content specified by the fragment
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
 			mItem = DummyContent.ITEM_MAP.get( getArguments().getString(ARG_ITEM_ID) );
 		}
+		*/
 	}
 	
 	@Override 
@@ -68,23 +78,12 @@ public class AreaDetailFragment extends Fragment {
 	
 	
 	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if ( id == R.id.action_salir ){
-			Toast.makeText(getActivity(), "Closing", Toast.LENGTH_SHORT).show();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	
-	
-	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View vista = inflater.inflate( R.layout.view_pager, container, false );
+		/*
 		View vista = inflater.inflate( R.layout.tabhost, container, false );
-		
 		FragmentTabHost tabHost = (FragmentTabHost) vista.findViewById( android.R.id.tabhost );
 		tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 		
@@ -93,7 +92,33 @@ public class AreaDetailFragment extends Fragment {
 		tabHost.addTab( tabHost.newTabSpec("Tab_Mie").setIndicator("Mie"), TabFragment.class, null );
 		tabHost.addTab( tabHost.newTabSpec("Tab_Jue").setIndicator("Jue"), TabFragment.class, null );
 		tabHost.addTab( tabHost.newTabSpec("Tab_Vie").setIndicator("Vie"), TabFragment.class, null );
+		*/
+		String idTipoAreaActual = getArguments().getString( AreaDetailFragment.ARG_ITEM_ID );
 		
+		actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_TABS );
+		
+		//Adaptador que retorna el fragment seleccionado
+		viewPagerAdapter = new ViewPagerAdapter( getActivity().getApplicationContext(), idTipoAreaActual, getChildFragmentManager() );
+		
+		viewPager = (ViewPager) vista.findViewById( R.id.view_pager );
+		viewPager.setAdapter( viewPagerAdapter );
+		
+		//Se agrega el Listener para controlar los eventos de cambio de tabs
+		//Este listener es IMPORTANTE, de no haberlo al cambiar entre tabs no se actualza
+		//la tab seleccionada en el actionbar
+		viewPager.setOnPageChangeListener( new ViewPager.SimpleOnPageChangeListener(){
+			@Override
+			public void onPageSelected( int position ){
+				actionBar.setSelectedNavigationItem( position );
+			}
+		});
+		if ( actionBar.getTabCount() == 0 ){
+			actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_lun )  ).setTabListener(this).setTag("Monday")    );
+			actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_mar )  ).setTabListener(this).setTag("Tuesday")   );
+			actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_mie )  ).setTabListener(this).setTag("Wednesday") );
+			actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_jue )  ).setTabListener(this).setTag("Thursday")  );
+			actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_vie )  ).setTabListener(this).setTag("Friday")    );
+		}
 		return vista;
 	}
 	
@@ -103,4 +128,27 @@ public class AreaDetailFragment extends Fragment {
 	public void onDestroyView(){
 		super.onDestroyView();
 	}
+
+
+
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {		
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		viewPager.setCurrentItem( tab.getPosition() );		
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {		
+	}
+	
+	
+	
+	//=============================================== MÉTODOS DE ActionBar.TabListener =============================================
 }

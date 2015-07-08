@@ -31,8 +31,7 @@ public class SpinnerArrayAdapter extends ArrayAdapter<String> {
 	
 	
 	public SpinnerArrayAdapter(Context context, String nombreTablaCompletitud) {
-		//super( context, android.R.layout.simple_spinner_item );
-		super( context, android.R.layout.simple_spinner_item, obtenerDatosPrueba() );
+		super( context, android.R.layout.simple_spinner_item );
 		setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
 		
 		//Se consultan los datos de completitud al WebService enviando como parámetros:
@@ -40,20 +39,9 @@ public class SpinnerArrayAdapter extends ArrayAdapter<String> {
 		//2) El Spinner actual (HAY 3 INSTANCIAS DE SPINNERS ADAPTERS, uno para tipo_doc, pais_procedencia, institucion),
 		//   al enviar SpinnerArrayAdapter.this se esá haciendo referencia a un SpinnerArrayAdapter específico de los 3 instanciados
 		//3) El nombre de la tabla de completitud (traido desde RegistroActivity.java)
-		/*
+
 		SpinnerRestClientTask spinnerRestClientTask = new SpinnerRestClientTask(context, SpinnerArrayAdapter.this, nombreTablaCompletitud);
 		spinnerRestClientTask.execute();
-		*/
-	}
-	
-	
-	private static ArrayList<String> obtenerDatosPrueba(){
-		ArrayList<String> prueba = new ArrayList<String>();
-		prueba.add( "Iem1" );
-		prueba.add( "Iem2" );
-		prueba.add( "Iem3" );
-		prueba.add( "Iem4" );
-		return prueba;
 	}
 }
 

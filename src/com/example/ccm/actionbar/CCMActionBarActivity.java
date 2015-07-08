@@ -7,9 +7,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ccm.R;
 import com.example.ccm.login.LoginActivity;
+import com.example.ccm.preferences.CCMPreferences;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -43,25 +45,27 @@ public class CCMActionBarActivity extends ActionBarActivity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_acerca_de) {
-			return true;
-		}
-		else if ( id == R.id.action_salir ){
-			boolean haSalidoExitosamente = salir();
-			if ( haSalidoExitosamente ){
-				Intent i = new Intent( this, LoginActivity.class );
-				finish();
-				startActivity( i );	
-			}
-			else{
-				new AlertDialog.Builder( this )
-				.setMessage( getResources().getString(R.string.alert_sesion_cerrada) )
-				.setPositiveButton( getResources().getString(R.string.alert_ok) , null)
-				.show();
-			}
-		}
-		return super.onOptionsItemSelected(item);
+		switch( item.getItemId() ){		
+			case R.id.action_acerca_de:
+				Toast.makeText( this, new CCMPreferences( this ).obtenerPreferencias(), Toast.LENGTH_LONG ).show(); 
+				return true;
+			case R.id.action_salir:
+				boolean haSalidoExitosamente = salir();
+				if ( haSalidoExitosamente ){
+					Intent i = new Intent( this, LoginActivity.class );
+					finish();
+					startActivity( i );	
+				}
+				else{
+					new AlertDialog.Builder( this )
+					.setMessage( getResources().getString(R.string.alert_sesion_cerrada) )
+					.setPositiveButton( getResources().getString(R.string.alert_ok) , null)
+					.show();
+				}
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}		
 	}
 	
 	

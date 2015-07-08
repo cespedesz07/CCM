@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -17,6 +18,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
@@ -47,7 +51,8 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 	
 	
 	//URLs correspondientes a las opciones que publica el WebService para su consumo
-	private static final String URL_PERSONA_CREATE = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/rest/persona/create";
+	//private static final String URL_PERSONA_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona/create";
+	private static final String URL_PERSONA_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/create";
 	
 	
 	//Nombre de los campos de la tabla Persona para proceder al registro
@@ -56,14 +61,18 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 	public static final String CAMPO_NOMBRE_PERSONA = "nombre";
 	public static final String CAMPO_APELLIDOS_PERSONA = "apellidos";
 	public static final String CAMPO_GENERO_PERSONA = "genero";
-	public static final String CAMPO_FECHA_NACIMIENTO_PERSONA = "fecha_nacimiento";
 	public static final String CAMPO_CORREO_ELECTRONICO_PERSONA = "correo_electronico";
 	public static final String CAMPO_TELEFONO_PERSONA = "telefono";
 	public static final String CAMPO_CODIGO_QR_PERSONA = "codigo_qr";
+	public static final String CAMPO_FECHA_NACIMIENTO_PERSONA = "fecha_nacimiento";
+	public static final String CAMPO_ASISTIO_PERSONA = "asistio";
 	public static final String CAMPO_TIPO_DOC_IDTIPO_DOC_PERSONA = "tipo_doc_idtipo_doc";
 	public static final String CAMPO_PAIS_PROCEDENCIA_IDPAIS_PROCEDENCIA_PERSONA = "pais_procedencia_idpais_procedencia";
 	public static final String CAMPO_INSTITUCION_IDINSTITUCION_PERSONA = "institucion_idinstitucion";
 	public static final String CAMPO_TIPO_PERSONA_IDTIPO_PERSONA_PERSONA = "tipo_persona_idtipo_persona";
+	
+	//Valor por defecto de las personas que se se registraron
+	public static final String VALOR_ASISTIO_NO = "NO";
 	
 	private Context context;
 	private String documentoPersona; 			//Se almacena el documento de la persona
@@ -82,7 +91,7 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 		this.mensajeError = "";
 		progressDialog = new ProgressDialog( context );
 		progressDialog.setCancelable(false);
-		progressDialog.setProgressStyle( ProgressDialog.STYLE_HORIZONTAL );
+		progressDialog.setProgressStyle( ProgressDialog.STYLE_SPINNER );
 		progressDialog.setMessage( context.getResources().getText( R.string.alert_cargando ) );
 		
 		alertDialog = new AlertDialog.Builder( context );
@@ -115,8 +124,7 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 			bundleParams.putString( RegistroRestClientTask.CAMPO_DOC_PERSONA, this.documentoPersona );
 			Intent i = new Intent( context, QRCodeActivity.class );
 			i.putExtras( bundleParams );
-			context.startActivity( i );
-			
+			context.startActivity( i );			
 		}
 	}
 	
@@ -156,7 +164,7 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 		try {
 			httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
 			HttpResponse response = httpClient.execute( httpPost );
-			Log.v("response", String.valueOf( response.getStatusLine().getStatusCode() ) );
+			//Log.v("response", String.valueOf( response.getStatusLine().getStatusCode() ) );
 			return true;
 		} 
 		catch (UnsupportedEncodingException e1) {
@@ -175,63 +183,70 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 			e.printStackTrace();
 			mensajeError = e.getMessage();
 		}
-		return false;
-		
+		return false;		
 	}
 	
-	
-	
-	
-	//Método que hace una peticion GET al servicio web
-	public String consultarUsuarios(String urlWebService){
+	/*
+	public boolean existePersona( String numDocumento ){
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet( urlWebService );				//EL METODO DEL SERVICIO WEB REQUIERE UNA PETICION GET AL SERVICIO WEB
-																	//EN EL SERVICIO WEB, EL MÉTODO WEBTIENE LA SIGUIENTE SIGNATURE
-																	/*
-																	 * @GET
-																	 * @Path("{from}/{to}")
-																	 * @Produces({"application/xml", "application/json"})
-																	 */
-																	
-		httpGet.setHeader( "Content-type", "application/json" );	//Se establece la captura del contenido del servicio web en formato JSON
+		HttpPost httpPost = new HttpPost( URL_EVENTOS_UBICACION_READ );
+		//httpPost.setHeader( "Content-type", "application/json" );      //AL ENVIAR Content-type AL WEB SERVICE, ESTE DEVUELVE UN ERROR DICIENDO QUE SE DESCONOCEN LOS PARAMETROS
+		                                                                 //POST: idtipo_area y dia, UNA ALTERNATIVA SERIA COLOCAR Accept: application/json
 		
+		String textoResultado = "";
+		JSONArray jsonArray = null;		
 		InputStream inputStream = null;
-		String resultado = "";
+		
+		//Log.v( "parametros: ", idTipoArea + ", " + dia );
+		List<NameValuePair> parametros = new ArrayList<NameValuePair>();
+		parametros.add( new BasicNameValuePair(KEY_IDTIPO_AREA, idTipoArea) );
+		parametros.add( new BasicNameValuePair(KEY_DIA, dia) );
 		
 		try{
-			HttpResponse response = httpClient.execute( httpGet );	//Se ejecuta la peticion GET
-			
-			HttpEntity entity = response.getEntity();               			
-			inputStream = entity.getContent();						//Se obtiene el contenido de la respuesta del servicio web
-			
-			//Se hace una lectura del contenido de la peticion get al Web Service
+			httpPost.setEntity( new UrlEncodedFormEntity(parametros) );
+			HttpResponse response = httpClient.execute( httpPost );
+			HttpEntity entity = response.getEntity();
+			inputStream = entity.getContent();
 			BufferedReader reader = new BufferedReader( new InputStreamReader(inputStream, "UTF-8") );
 			String linea = reader.readLine();
 			while ( linea != null ){
-				resultado += linea;
+				textoResultado += String.format( "%s \n", linea );
 				linea = reader.readLine();
-			}						
-			JSONObject jsonObject = new JSONObject( resultado );
-			Log.v( "OK: RegistroRestClientTask.consultarUsuarios()", "Datos Capturados Ok" );
-			return jsonObject.toString();			
+			}
+			//Log.i( "EventosUbicacionJSON", textoResultado );
+			jsonArray = new JSONArray( textoResultado );
 		}
-		catch (Exception error){
+		catch (UnsupportedEncodingException error){
 			error.printStackTrace();
-			mensajeError = error.getMessage().toString();
-			return resultado;
-		}		
+			mensajeError = "UnsupportedEncodingException: " + error.getMessage(); 
+		}
+		catch (ClientProtocolException error){
+			error.printStackTrace();
+			mensajeError = "ClientProtocolException: " + error.getMessage();
+		}
+ 		catch (IOException error){
+ 			error.printStackTrace();
+ 			mensajeError = "IOException: " + error.getMessage();
+ 		}
+		catch (JSONException error){
+			error.printStackTrace();
+			mensajeError = "JSONException: " + error.getMessage();
+		}
 		finally{
 			if ( inputStream != null ){
 				try {
 					inputStream.close();
 				} 
-				catch (IOException e) {
-					mensajeError = e.getMessage().toString();					
+				catch (IOException error) {
+					Log.i( "IOException finally: ", error.getMessage() );
+					mensajeError = error.getMessage();
 				}
 			}
 		}
-		
+		ArrayList<Object[]> resultado = procesarJSONArray( jsonArray );
+		return resultado;
 	}
+	*/
 	
 	
 

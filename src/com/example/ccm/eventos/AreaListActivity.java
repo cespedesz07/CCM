@@ -4,9 +4,12 @@ import com.example.ccm.R;
 import com.example.ccm.R.id;
 import com.example.ccm.R.layout;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,13 +29,14 @@ import android.view.MenuInflater;
  * This activity also implements the required {@link AreaListFragment.Callbacks}
  * interface to listen for item selections.
  */
-public class AreaListActivity extends FragmentActivity implements AreaListFragment.Callbacks {
+public class AreaListActivity extends ActionBarActivity implements AreaListFragment.Callbacks {
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
 	 * device.
 	 */
 	private boolean mTwoPane;
+	private ActionBar actionBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class AreaListActivity extends FragmentActivity implements AreaListFragme
 			// 'activated' state when touched.
 			((AreaListFragment) getSupportFragmentManager().findFragmentById(R.id.area_list)).setActivateOnItemClick(true);
 		}
+		actionBar = getSupportActionBar();
 	}
 	
 	
@@ -62,16 +67,16 @@ public class AreaListActivity extends FragmentActivity implements AreaListFragme
 	 * Callback method from {@link AreaListFragment.Callbacks} indicating that
 	 * the item with the given ID was selected.
 	 */
+	@SuppressLint("NewApi")
 	@Override
 	public void onItemSelected(String id) {
 		//Log.v( "AreaListActivity Item Selected", id);
 		if (mTwoPane) {
 			// In two-pane mode (TABLET VIEW), show the detail view in this activity by
-			// adding or replacing the detail fragment using a
-			// fragment transaction.
+			// adding or replacing the detail fragment using a fragment transaction.
+			AreaDetailFragment fragment = new AreaDetailFragment( this.actionBar );
 			Bundle arguments = new Bundle();
 			arguments.putString( AreaDetailFragment.ARG_ITEM_ID, id );
-			AreaDetailFragment fragment = new AreaDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().replace(R.id.area_detail_container, fragment).commit();
 

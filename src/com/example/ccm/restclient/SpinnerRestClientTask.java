@@ -37,9 +37,15 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 	
 	
 	//URLs correspondientes a las opciones que publica el WebService para su consumo
-	private static final String URL_TIPO_DOC_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/rest/tipo-doc";
-	private static final String URL_PAIS_PROCEDENCIA_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/rest/pais-procedencia";
-	private static final String URL_INSTITUCION_READ = "http://192.168.173.1/Yii_CCM_WebService/web/index.php/rest/institucion";
+	/*
+	private static final String URL_TIPO_DOC_READ = "http://ccm2015.specializedti.com/index.php/rest/tipo-doc";
+	private static final String URL_PAIS_PROCEDENCIA_READ = "http://ccm2015.specializedti.com/index.php/rest/pais-procedencia";
+	private static final String URL_INSTITUCION_READ = "http://ccm2015.specializedti.com/index.php/rest/institucion";
+	*/
+	private static final String URL_TIPO_DOC_READ = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/tipo-doc";
+	private static final String URL_PAIS_PROCEDENCIA_READ = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/pais-procedencia";
+	private static final String URL_INSTITUCION_READ = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/institucion";
+	
 	
 	
 	//Nombres de las Tablas de COmpletitud (USADAS EN RegistroActivity.java y en la presente actividad: SpinnerRestClient.java)
@@ -108,7 +114,7 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 	//2) Se verifica si el resultado no es nulo. Si no es nulo se agrega el arreglo 
 	//   al SpinnerArrayAdapter respectivo (enviado en el contructor)
 	//a) - IMPORTANTE: Para mostrar el item seleccionado del Spinner y que NO APAREZCA EN BLANCO LA SELECCION
-	//     ES NECESARIO NOTIFICAR DEL CAMBIO DEL DATA SET USADO EN EL SPINNER CON
+	//     ES NECESARIO NOTIFICAR DEL CAMBIO DEL DATA SET USADO EN EL SPINNER CON spinnerArrayAdapter.notifyDataSetChanged();
 	//
 	//3) Si el resultado es nulo, es porque hubo un error en la consulta, entonces se muestra
 	//   un mensaje de error.
@@ -179,7 +185,7 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 				textoResultado += String.format( "%s \n", linea );
 				linea = reader.readLine();
 			}	
-			Log.v( "textoResultado", textoResultado );
+			//Log.i( "textoResultado", textoResultado );
 			jsonArray = new JSONArray( textoResultado );
 		}
 		catch (ClientProtocolException error){

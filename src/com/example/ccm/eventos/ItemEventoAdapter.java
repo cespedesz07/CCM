@@ -32,7 +32,8 @@ public class ItemEventoAdapter extends BaseAdapter {
 	private TextView textViewNombreEvento;
 	private TextView textViewDescripcionEvento;
 	private TextView textViewCuposDisponiblesEvento;
-	private Spinner spinnerHoraLugarEvento;
+	//private Spinner spinnerHoraLugarEvento;
+	private UbicacionesMultiSelectSpinner multiSelectSpinnerHoraLugarEvento;
 	
 	
 	
@@ -43,6 +44,7 @@ public class ItemEventoAdapter extends BaseAdapter {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@SuppressLint("ViewHolder")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -52,23 +54,29 @@ public class ItemEventoAdapter extends BaseAdapter {
 		textViewNombreEvento = (TextView) view.findViewById( R.id.textview_nombre_evento );
 		textViewDescripcionEvento = (TextView) view.findViewById( R.id.textview_descripcion_evento );
 		textViewCuposDisponiblesEvento = (TextView) view.findViewById( R.id.textview_cupos_disponibles_evento );
-		spinnerHoraLugarEvento = (Spinner) view.findViewById( R.id.spinner_hora_lugar_evento );
+		//spinnerHoraLugarEvento = (Spinner) view.findViewById( R.id.spinner_hora_lugar_evento );
+		multiSelectSpinnerHoraLugarEvento = (UbicacionesMultiSelectSpinner) view.findViewById( R.id.multi_select_spinner_hora_lugar_evento );
 		
 		Object[] eventoUbicacion = result.get(position);
 		Evento evento = (Evento) eventoUbicacion[0];
 		ArrayList<Ubicacion> ubicaciones = (ArrayList<Ubicacion>) eventoUbicacion[1];
 		
+		ArrayList< ArrayList<String> > ubicacionesExtraidas = new ArrayList< ArrayList<String> >();
+		ArrayList<String> idsUbicaciones = new ArrayList<String>();
 		ArrayList<String> horaLugarEventoString = new ArrayList<String>();
 		for ( Ubicacion u : ubicaciones ){
-			horaLugarEventoString.add( String.format("%s - %s", u.lugar, u.horaInicio) );
+			idsUbicaciones.add( u.idUbicacion );
+			horaLugarEventoString.add( String.format("%s  -  %s", u.horaInicio, u.lugar) );
 		}
+		ubicacionesExtraidas.add( idsUbicaciones );
+		ubicacionesExtraidas.add( horaLugarEventoString );
 		
 		textViewNombreEvento.setText( evento.nombre );
 		textViewDescripcionEvento.setText( evento.descripcion );
-		spinnerHoraLugarEvento.setAdapter( new ArrayAdapter(context, 
-				android.R.layout.simple_spinner_dropdown_item, 
-				horaLugarEventoString) 
-		);
+		//spinnerHoraLugarEvento.setAdapter(  new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, horaLugarEventoString) 	);
+		multiSelectSpinnerHoraLugarEvento.setDialogTitle( evento.nombre );
+		multiSelectSpinnerHoraLugarEvento.setDialogTitle( evento.nombre );
+		multiSelectSpinnerHoraLugarEvento.setItems( ubicacionesExtraidas );
 		
 		return view;		
 	}

@@ -27,7 +27,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 	// el primer y el segundo tab, cuando se mueve al segundo tab, se invoca getItem() para cargar el tercero
 	@Override
 	public Fragment getItem(int position) {
-		Log.v( "ViewPagerAdapter.getItem()" , String.valueOf(getPageTitle(position)) );
+		//Log.v( "ViewPagerAdapter.getItem()" , String.valueOf(getPageTitle(position)) );
 		String pageTitle = String.valueOf( getPageTitle( position ) );
 		return new TabFragment( idTipoAreaActual, pageTitle );
 	}

@@ -1,5 +1,6 @@
 package com.example.ccm.eventos;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,9 +13,11 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 
 import com.example.ccm.R;
-import com.example.ccm.restclient.EventosRestClientTask;
+import com.example.ccm.restclient.CargaEventosRestClientTask;
 
-public class TabFragment extends Fragment implements OnItemSelectedListener, OnItemClickListener {	
+
+
+public class TabFragment extends Fragment{	
 	
 	
 	private String idTipoAreaActual; 
@@ -34,39 +37,12 @@ public class TabFragment extends Fragment implements OnItemSelectedListener, OnI
 		
 		View vistaFragment = inflater.inflate( R.layout.lista_eventos, container, false );
 		ListView listaEventos = (ListView) vistaFragment.findViewById( R.id.listview_lista_eventos );
-		listaEventos.setOnItemClickListener( this );
-		listaEventos.setOnItemSelectedListener( this );
 		
-		EventosRestClientTask eventosRestClientTask = new EventosRestClientTask( getActivity(), listaEventos );
-		eventosRestClientTask.execute( idTipoAreaActual, pageTitle );
+		CargaEventosRestClientTask cargaEventosRestClientTask = new CargaEventosRestClientTask( getActivity(), listaEventos );
+		cargaEventosRestClientTask.execute( idTipoAreaActual, pageTitle );
 		
 		return vistaFragment;
 		
-	}
-	
-	
-	
-	
-
-
-	
-	//====================================================== MÉTODOS DE OnItemSelectedListener===============================
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		Log.v("Selected: " , String.valueOf(position) );
-	}
-
-
-	@Override
-	public void onNothingSelected(AdapterView<?> parent) {
-		
-	}
-
-
-	//====================================================== MÉTODOS DE OnItemClickListener==================================
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Log.v("Clicked: " , String.valueOf(position) );
 	}
 	
 }

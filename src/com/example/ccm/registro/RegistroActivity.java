@@ -13,25 +13,25 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.ccm.R;
 import com.example.ccm.actionbar.CCMActionBarActivity;
-import com.example.ccm.eventos.AreaDetailActivity;
 import com.example.ccm.eventos.AreaListActivity;
-import com.example.ccm.login.LoginEmailActivity;
+import com.example.ccm.login.LoginActivity;
+import com.example.ccm.preferences.CCMPreferences;
 import com.example.ccm.qrcode.QRCodeActivity;
 import com.example.ccm.restclient.RegistroRestClientTask;
 import com.example.ccm.restclient.SpinnerRestClientTask;
@@ -47,21 +47,32 @@ import com.example.ccm.restclient.SpinnerRestClientTask;
 public class RegistroActivity extends CCMActionBarActivity implements OnTouchListener, OnClickListener {
 	
 	
+	private static final String FORMATO_FECHA = "yyyy-mm-dd";
 	
+	
+	private ImageView logoCongreso;
+	private TextView textViewTipoDocumento;
 	private Spinner spinnerTipoDocumento;
 	private EditText txtNumDocumento;
 	private EditText txtNombre;
 	private EditText txtApellidos;
+	private TextView textViewGenero;
 	private RadioGroup radioGroupGenero;
-	private DatePicker pickerFechaNacimiento;
 	private EditText txtEmail;
 	private EditText txtTelefono;
+	private TextView textViewPaisProcedencia;
 	private Spinner spinnerPaisProcedencia;
+	private TextView textViewInstitucion;
 	private Spinner spinnerInstitucion;
-	private Button btnRegistro;
-	
+	private TextView textViewFechaNacimiento;
+	private DatePicker pickerFechaNacimiento;
+	private View line2;
+	private Button btnRegistro;	
 	
 	private SpinnerArrayAdapter spinnerTipoDocumentoAdapter;
+	
+	private String responseType;
+	
 
 	//Se inicializan todos los widgets del formulario de Registro de Usuarios
 	// PARA OBTENER LOS DATOS DE COMPLETITUD DENTRO DE LOS SPINNERS:
@@ -73,6 +84,10 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.registro);
 		
+		logoCongreso = (ImageView) findViewById( R.id.logo_congreso );
+		
+		textViewTipoDocumento = (TextView) findViewById( R.id.textview_tipo_documento );
+		
 		spinnerTipoDocumento = (Spinner) findViewById(R.id.spinner_tipo_documento);
 		spinnerTipoDocumentoAdapter = new SpinnerArrayAdapter( RegistroActivity.this, SpinnerRestClientTask.TABLA_TIPO_DOC );
 		spinnerTipoDocumento.setAdapter( spinnerTipoDocumentoAdapter );
@@ -83,21 +98,31 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		
 		txtApellidos = (EditText) findViewById( R.id.txt_apellidos );
 		
+		textViewGenero = (TextView) findViewById( R.id.textview_genero );
+		
 		radioGroupGenero = (RadioGroup) findViewById( R.id.radio_group_genero );
 		
 		txtEmail = (EditText) findViewById( R.id.txt_email );
 		
 		txtTelefono = (EditText) findViewById( R.id.txt_telefono );
 		
-		pickerFechaNacimiento = (DatePicker) findViewById( R.id.picker_fecha_nacimiento );				
+		textViewPaisProcedencia = (TextView) findViewById( R.id.textview_pais_procedencia );
 		
 		spinnerPaisProcedencia = (Spinner) findViewById(R.id.spinner_pais_procedencia);
 		SpinnerArrayAdapter spinnerPaisProcedenciaAdapter = new SpinnerArrayAdapter( RegistroActivity.this, SpinnerRestClientTask.TABLA_PAIS_PROCEDENCIA );
 		spinnerPaisProcedencia.setAdapter( spinnerPaisProcedenciaAdapter );
 		
+		textViewInstitucion = (TextView) findViewById( R.id.textview_institucion );
+		
 		spinnerInstitucion = (Spinner) findViewById(R.id.spinner_institucion);
 		SpinnerArrayAdapter spinnerInstitucionAdapter = new SpinnerArrayAdapter( RegistroActivity.this, SpinnerRestClientTask.TABLA_INSTITUCION );
 		spinnerInstitucion.setAdapter( spinnerInstitucionAdapter );
+		
+		textViewFechaNacimiento = (TextView) findViewById( R.id.textview_fecha_nacimiento );
+		
+		pickerFechaNacimiento = (DatePicker) findViewById( R.id.picker_fecha_nacimiento );				
+		
+		line2 = findViewById( R.id.line2 );
 		
 		btnRegistro = (Button) findViewById( R.id.btn_registro_registro_activity );
 		btnRegistro.setOnTouchListener( this );
@@ -113,11 +138,14 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 			
 		}
 		else{
-			obtenerDatosLoginRedesSociales( bundleParamsLogin );
-			new AlertDialog.Builder(this)
-			.setMessage( getResources().getString(R.string.alert_registro_redes_sociales) )
-			.setPositiveButton(R.string.alert_ok, null)
-			.show();
+			this.responseType = bundleParamsLogin.getString( CCMPreferences.CAMPO_LOGIN_TYPE );
+			if ( !this.responseType.equals( LoginActivity.NATIVE_RESPONSE ) ){
+				obtenerDatosLoginRedesSociales( bundleParamsLogin );
+				new AlertDialog.Builder(this)
+				.setMessage( getResources().getString(R.string.alert_registro_redes_sociales) )
+				.setPositiveButton(R.string.alert_ok, null)
+				.show();
+			}
 		}
 				
 	}	
@@ -129,38 +157,34 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	//en caso de que el usuario haya accedido a la app por estas opciones
 	//Este método es llamado 
 	private void obtenerDatosLoginRedesSociales( Bundle bundleParams ){
-		if ( !bundleParams.isEmpty() ){
-			txtNombre.setText(  bundleParams.getString( "nombre" )  );
-			txtNombre.setEnabled(false);		
-			
-			txtApellidos.setText(  bundleParams.getString( "apellidos" )  );
-			txtApellidos.setEnabled(false);
-			
-			boolean radioButtonGeneroChecked = false;
-			int numRadioButtons = radioGroupGenero.getChildCount();
-			for ( int i=0; i<numRadioButtons; i++ ){
-				RadioButton radioButton = (RadioButton) radioGroupGenero.getChildAt(i);
-				if (  radioButton.getText().equals( bundleParams.getString("genero") )   ){
-					radioButton.setChecked( true );		
-					radioButtonGeneroChecked = true;
-					break;
-				}
+		txtNombre.setText(  bundleParams.getString( RegistroRestClientTask.CAMPO_NOMBRE_PERSONA )  );
+		txtNombre.setEnabled(false);		
+		
+		txtApellidos.setText(  bundleParams.getString( RegistroRestClientTask.CAMPO_APELLIDOS_PERSONA )  );
+		txtApellidos.setEnabled(false);
+		
+		boolean radioButtonGeneroChecked = false;
+		int numRadioButtons = radioGroupGenero.getChildCount();
+		for ( int i=0; i<numRadioButtons; i++ ){
+			RadioButton radioButton = (RadioButton) radioGroupGenero.getChildAt(i);
+			if (  radioButton.getText().equals( bundleParams.getString(RegistroRestClientTask.CAMPO_GENERO_PERSONA) )   ){
+				radioButton.setChecked( true );		
+				radioButtonGeneroChecked = true;
+				break;
 			}
-			if ( radioButtonGeneroChecked ){
-				for ( int i=0; i<numRadioButtons; i++ ){
-					radioGroupGenero.getChildAt(i).setEnabled(false);
-				}
-			}
-			
-			
-			String[] fechaNacimientoPartida = bundleParams.getStringArray( "fecha_nacimiento" );
-			pickerFechaNacimiento.updateDate(  Integer.valueOf(fechaNacimientoPartida[2]) , Integer.valueOf(fechaNacimientoPartida[0]) - 1, Integer.valueOf(fechaNacimientoPartida[1])  );
-			pickerFechaNacimiento.setEnabled(false);
-			
-			bundleParams.getString( "correo_electronico" );
-			txtEmail.setText(  bundleParams.getString( "correo_electronico" )  );
-			txtEmail.setEnabled( false );
 		}
+		if ( radioButtonGeneroChecked ){
+			for ( int i=0; i<numRadioButtons; i++ ){
+				radioGroupGenero.getChildAt(i).setEnabled(false);
+			}
+		}
+		
+		String[] fechaNacimientoPartida = bundleParams.getStringArray( RegistroRestClientTask.CAMPO_FECHA_NACIMIENTO_PERSONA );
+		pickerFechaNacimiento.updateDate(  Integer.valueOf(fechaNacimientoPartida[2]) , Integer.valueOf(fechaNacimientoPartida[0]) - 1, Integer.valueOf(fechaNacimientoPartida[1])  );
+		pickerFechaNacimiento.setEnabled(false);
+		
+		txtEmail.setText(  bundleParams.getString( RegistroRestClientTask.CAMPO_CORREO_ELECTRONICO_PERSONA )  );
+		txtEmail.setEnabled( false );
 	}	
 	
 	
@@ -223,52 +247,48 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	// coincidan con los mismos de la base de datos, por eso en el List<NameValuePair> parametros
 	// las claves tienen el mismo nombre de los campos de la tabla Persona en la BD CCM_BD
 	private void guardarDatosFormulario(){
-		/*
-		int numDocumentoCampo = Integer.valueOf( txtNumDocumento.getText().toString() ); 
+		String numDocumentoCampo = txtNumDocumento.getText().toString(); 
 		String nombreCampo = txtNombre.getText().toString();
 		String apellidosCampo = txtApellidos.getText().toString();		
 			int indiceGeneroCampo = radioGroupGenero.getCheckedRadioButtonId();   //Si este valor retorna -1, es porque no se ha seleccionado ningun campo
 			String generoCampo = (  (RadioButton) radioGroupGenero.findViewById( indiceGeneroCampo )  ).getText().toString();		
-		String fechaNacimientoCampo = obtenerFechaCampo( pickerFechaNacimiento );
 		String emailCampo = txtEmail.getText().toString();		
 		String telefonoCampo = txtTelefono.getText().toString();		
-		String codigoQRCampo = "";
+		String codigoQRCampo = null;
+		String fechaNacimientoCampo = obtenerFechaCampo( pickerFechaNacimiento );
+		String asistioCampo = RegistroRestClientTask.VALOR_ASISTIO_NO;
 		int tipoDocumentoCampo =   obtenerIdSpinner(  ((String) spinnerTipoDocumento.getSelectedItem()).toString()    );		
 		int paisProcedenciaCampo = obtenerIdSpinner(  ((String) spinnerPaisProcedencia.getSelectedItem()).toString()  );
 		int institucionCampo =     obtenerIdSpinner(  ((String) spinnerInstitucion.getSelectedItem()).toString()      );
-		int tipoPersonaCampo =     1;//obtenerIdSpinner(  ((String) spinner.getSelectedItem()).toString() ); ;
 		
 		List<NameValuePair> parametros = new ArrayList<NameValuePair>();
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_DOC_PERSONA, String.valueOf(numDocumentoCampo) )  									);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_NOMBRE_PERSONA, nombreCampo )                     									);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_APELLIDOS_PERSONA, apellidosCampo )               									);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_GENERO_PERSONA, generoCampo )  														);
-		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_FECHA_NACIMIENTO_PERSONA, fechaNacimientoCampo )  									);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_CORREO_ELECTRONICO_PERSONA, emailCampo )  											);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_TELEFONO_PERSONA, telefonoCampo )  													);
-		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_CODIGO_QR_PERSONA, codigoQRCampo )  													);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_TIPO_DOC_IDTIPO_DOC_PERSONA, String.valueOf(tipoDocumentoCampo)  ) 					);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_PAIS_PROCEDENCIA_IDPAIS_PROCEDENCIA_PERSONA, String.valueOf(paisProcedenciaCampo)  ) 	);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_INSTITUCION_IDINSTITUCION_PERSONA, String.valueOf(institucionCampo)  )  				);
-		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_TIPO_PERSONA_IDTIPO_PERSONA_PERSONA, String.valueOf(tipoPersonaCampo)  )  			);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_CODIGO_QR_PERSONA, codigoQRCampo )  													);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_FECHA_NACIMIENTO_PERSONA, fechaNacimientoCampo )  									);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_ASISTIO_PERSONA, asistioCampo )            	        								);		
 
+
+		//Se almacena el documento, el nombre y apellidos de la persona y el tipo de login (facebookResponse, googleResponse, nativeResponse)
+		CCMPreferences pref = new CCMPreferences( RegistroActivity.this );
+		pref.guardarDocPersona( String.valueOf(numDocumentoCampo) );
+		pref.guardarNombreApellidosPersona( nombreCampo, apellidosCampo );
+		pref.guardarTipoResponse( this.responseType );
+		
 		new RegistroRestClientTask( this ).execute( parametros );
-		*/	
-		/*
-		Intent i = new Intent(this, QRCodeActivity.class);
-		Bundle bundleParams = new Bundle();
-		bundleParams.putString( RegistroRestClientTask.CAMPO_DOC_PERSONA, "1053832644" );
-		i.putExtras( bundleParams );
-		startActivity( i );
-		*/
-		Intent i = new Intent( RegistroActivity.this, AreaListActivity.class  );
-		startActivity( i );	
 	}
 	
 	
 	
 	private int obtenerIdSpinner( String itemSeleccionado ){
-		return Integer.valueOf(  itemSeleccionado.split( "." )[0]  );
+		return Integer.valueOf(  itemSeleccionado.split( "\\." )[0]  );
 	}
 	
 	
@@ -277,12 +297,10 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	private static String obtenerFechaCampo( DatePicker datePicker ){
 		String fechaCapturada = "";		
 		int dia = datePicker.getDayOfMonth();
-		int mes = datePicker.getMonth();
-		int año = datePicker.getYear();		
-		Calendar calendar = Calendar.getInstance();
-		calendar.set( año, mes, dia );
-		SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/M/yyyy" );
-		fechaCapturada = dateFormat.format( calendar.getTime() );
+		int mes = datePicker.getMonth() + 1;
+		int año = datePicker.getYear();
+		fechaCapturada = año + "-" + mes + "-" + dia;
+		//Log.v( "Fecha Capturada: ", fechaCapturada );
 		return fechaCapturada;
 	}
 

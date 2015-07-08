@@ -1,10 +1,19 @@
 package com.example.ccm.eventos;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+/*
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
+import android.app.FragmentTransaction;
+*/
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBar.TabListener;
+import android.support.v4.app.FragmentTransaction;
+
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -19,48 +28,40 @@ import com.example.ccm.R;
  * This activity is mostly just a 'shell' activity containing nothing more than
  * a {@link AreaDetailFragment}.
  */
+@SuppressLint("NewApi")
+@SuppressWarnings("deprecation")
 public class AreaDetailActivity extends ActionBarActivity implements ActionBar.TabListener {
 	
 	
 	private ViewPagerAdapter viewPagerAdapter;
 	private ViewPager viewPager;
 	
-	//Nombre del Tab actual devuelto por OnTabSelected()
-	private String nombreTabSeleccionado;
-	
 	
 
+	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		/*
+		super.onCreate(savedInstanceState);		
+		// savedInstanceState es != a null cuando hay un fragment
+		// guardado de configuraciones anteriores a esta actividad
+		// (e.g cuando se rota la pantalla de portrait a landscape)
+		// en este caso, el fragment será re-añadido automáticamente
+		// a su container, de manera que no se tenga que añadir manualmente
 		setContentView(R.layout.activity_area_detail);
-
-		// savedInstanceState is non-null when there is fragment state
-		// saved from previous configurations of this activity
-		// (e.g. when rotating the screen from portrait to landscape).
-		// In this case, the fragment will automatically be re-added
-		// to its container so we don't need to manually add it.
-		// For more information, see the Fragments API guide at:
-		//
-		// http://developer.android.com/guide/components/fragments.html
-		//
 		if (savedInstanceState == null) {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
 			arguments.putString(AreaDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(AreaDetailFragment.ARG_ITEM_ID));
-			AreaDetailFragment fragment = new AreaDetailFragment();
+			AreaDetailFragment fragment = new AreaDetailFragment( getSupportActionBar() );
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.area_detail_container, fragment).commit();
 		}
-		*/
+		/*
 		setContentView( R.layout.view_pager );
-		
-	
 		String idTipoAreaActual = getIntent().getStringExtra( AreaDetailFragment.ARG_ITEM_ID );
-		Log.v( "AreaDetailActivity.idTipoAreaActual", idTipoAreaActual );
+		//Log.v( "AreaDetailActivity.idTipoAreaActual", idTipoAreaActual );
 		
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_TABS );
@@ -86,6 +87,7 @@ public class AreaDetailActivity extends ActionBarActivity implements ActionBar.T
 		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_mie )  ).setTabListener(this).setTag("Wednesday") );
 		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_jue )  ).setTabListener(this).setTag("Thursday")  );
 		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_vie )  ).setTabListener(this).setTag("Friday")    );
+		*/
 	}
 	
 	
@@ -113,7 +115,6 @@ public class AreaDetailActivity extends ActionBarActivity implements ActionBar.T
 	//Método que se ejecuta para desplegar el Tab seleccionado en el ViewPager
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction fragmentTransaction) {
-		nombreTabSeleccionado = String.valueOf( tab.getText() );
 		viewPager.setCurrentItem( tab.getPosition() );
 	}
 

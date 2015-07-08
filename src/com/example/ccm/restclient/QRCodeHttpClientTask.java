@@ -128,7 +128,7 @@ public class QRCodeHttpClientTask extends AsyncTask<String, Integer, Bitmap> {
 			InputStream responseContent = response.getEntity().getContent();
 			codigoQR = BitmapFactory.decodeStream( responseContent );
 			mensajeError = String.valueOf( response.getStatusLine().getStatusCode() );
-			Log.i("response", String.valueOf( response.getStatusLine().getStatusCode() ) );
+			//Log.i("response", String.valueOf( response.getStatusLine().getStatusCode() ) );
 		} 
 		catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();

@@ -26,7 +26,11 @@ import android.widget.Toast;
 
 import com.example.ccm.R;
 import com.example.ccm.actionbar.CCMActionBarActivity;
+import com.example.ccm.eventos.AreaListActivity;
+import com.example.ccm.preferences.CCMPreferences;
+import com.example.ccm.qrcode.QRCodeActivity;
 import com.example.ccm.registro.RegistroActivity;
+import com.example.ccm.restclient.RegistroRestClientTask;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -59,10 +63,10 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	//Constantes que representan el tipo de response, utilizadas en el método inicioRegistro()
 	//De acuerdo al tipo de response, se insertan en un Bundle los parámetros que retorne la API
 	//respectiva, y se envian a la actividad RegistroActivity.java
-	private static final String FACEBOOK_RESPONSE = "facebookResponse";
-	private static final String GOOGLE_RESPONSE = "googleResponse";
-	private static final String TWITTER_RESPONSE = "twitterResponse";
-	private static final String NATIVE_RESPONSE = "nativeResponse";
+	public static final String FACEBOOK_RESPONSE = "facebookResponse";
+	public static final String GOOGLE_RESPONSE = "googleResponse";
+	public static final String TWITTER_RESPONSE = "twitterResponse";
+	public static final String NATIVE_RESPONSE = "nativeResponse";
 	
 	
 	//Variables que se van a extraer de la peciticion a Facebook con GraphApi
@@ -88,7 +92,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	//Atributos de la Api de Google
 	private GoogleApiClient googleApiClient;	
 	
-    //Guarda los resultados de la conexion del callback onCOnnectionFaield
+    //Guarda los resultados de la conexion del callback onCOnnectionFailed
 	//de manera que se puedan resolver cuando el usuario hace click en el boton de inicio de sesion    
 	private ConnectionResult connectionResult;
 	
@@ -104,6 +108,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	//inicie el login principal, es decir LoginActivity.java )
 	private boolean facebookLoggedIn;
 	private boolean googleLoggedIn;
+	private boolean nativeLoggedIn;
 	
 	private LoginButton facebookLoginBtn;
 	private SignInButton googleLoginBtn;
@@ -162,6 +167,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	    //Se verifica si ha iniciado sesion con alguna de las redes sociales
 	    facebookLoggedIn = false;
 	    googleLoggedIn = false;
+	    nativeLoggedIn = false;
 	    //Con Facebook
 	    if ( AccessToken.getCurrentAccessToken() != null ){
     		facebookLoggedIn = true;
@@ -169,6 +175,10 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	    //COn Google
     	else if ( googleApiClient.isConnected() ){
     		googleLoggedIn = true;
+    	}
+	    //COn inicio de sesion nativo
+    	else if ( new CCMPreferences( LoginActivity.this ).obtenerTipoResponse().equals( NATIVE_RESPONSE ) ){
+    		nativeLoggedIn = true;
     	}
 	    
 	    
@@ -202,13 +212,12 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     //Método que se ejecuta luego de que la actividad ha sido creada al llamar onCreate()
     protected void onStart(){
     	super.onStart();
-    	float density = getResources().getDisplayMetrics().density;
+    	//float density = getResources().getDisplayMetrics().density;
     	// return 0.75 if it's LDPI
     	// return 1.0 if it's MDPI
     	// return 1.5 if it's HDPI
     	// return 2.0 if it's XHDPI
-    	Toast.makeText(this, "Density Screen: " + String.valueOf(density), Toast.LENGTH_LONG).show();
-    	
+    	//Toast.makeText(this, "Density Screen: " + String.valueOf(density), Toast.LENGTH_LONG).show();   	
     	
     	//Luego de que la actividad es Created, se conecta el usuario ya logueado a Google+
     	if ( facebookLoggedIn ){
@@ -216,6 +225,10 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     	}
     	else if ( googleLoggedIn ){
     		googleApiClient.connect();
+    	}
+    	else if ( nativeLoggedIn ){
+    		Intent i = new Intent( this, AreaListActivity.class );
+			startActivity( i );
     	}
     	
     	
@@ -328,11 +341,11 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     	Bundle bundleParams = new Bundle();
     	if ( responseType.equals( FACEBOOK_RESPONSE ) ){
     		try{
-    			bundleParams.putString( "nombre", jsonResponse.getString( FB_NOMBRE ) );
-    			bundleParams.putString( "apellidos", jsonResponse.getString( FB_APELLIDOS ) );
-    			bundleParams.putString( "genero",  procesarGenero( jsonResponse.getString(FB_GENERO) )   );
-    			bundleParams.putStringArray( "fecha_nacimiento", procesarFecha( jsonResponse.getString(FB_FECHA_NACIMIENTO) ) );
-    			bundleParams.putString( "correo_electronico", jsonResponse.getString( FB_EMAIL ) );
+    			bundleParams.putString( RegistroRestClientTask.CAMPO_NOMBRE_PERSONA, jsonResponse.getString( FB_NOMBRE ) );
+    			bundleParams.putString( RegistroRestClientTask.CAMPO_APELLIDOS_PERSONA, jsonResponse.getString( FB_APELLIDOS ) );
+    			bundleParams.putString( RegistroRestClientTask.CAMPO_GENERO_PERSONA,  procesarGenero( jsonResponse.getString(FB_GENERO) )   );
+    			bundleParams.putStringArray( RegistroRestClientTask.CAMPO_FECHA_NACIMIENTO_PERSONA, procesarFecha( jsonResponse.getString(FB_FECHA_NACIMIENTO) ) );
+    			bundleParams.putString( RegistroRestClientTask.CAMPO_CORREO_ELECTRONICO_PERSONA, jsonResponse.getString( FB_EMAIL ) );
     		}
     		catch ( JSONException error ){
     			Log.i( "JSONException", error.getMessage() );
@@ -348,6 +361,8 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     		//SI es un inicio de sesion nativo, no se coloca ningun parametro en el Bundle,
     		//por lo tanto este queda vacio
     	}
+    	bundleParams.putString( CCMPreferences.CAMPO_LOGIN_TYPE, responseType );
+    	
     	Intent i = new Intent( this, RegistroActivity.class );
     	i.putExtras( bundleParams );
     	startActivity( i );
@@ -400,6 +415,10 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     		
     		case R.id.btn_registro_login_activity:
     			inicioRegistro( null, NATIVE_RESPONSE );
+    			/*
+    			Intent i = new Intent( this, AreaListActivity.class );
+    			startActivity( i );
+    			*/
     		default:
     			break;
     		}
@@ -545,7 +564,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	@Override
 	public void onError(FacebookException error) {
 		Log.i("Facebook Callback onError(): ", error.getMessage() );		 
-		Toast.makeText(this, "No hay conexión a Internet. Por favor verifica la configuración Wifi", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "Facebook Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
 	}
     
 }
