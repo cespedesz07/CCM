@@ -23,6 +23,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.ccm.R;
+import com.example.ccm.preferences.CCMPreferences;
 
 /**
  * Hilo usado para procesar la consulta de aquellos 
@@ -37,11 +38,11 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 	
 	
 	//URL que conecta a los datos de eventos y ubicaciones
-	private static final String URL_PERSONA_UBICACION_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/create";
-	//private static final String URL_PERSONA_UBICACION_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/create";
+	//private static final String URL_PERSONA_UBICACION_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/create";
+	private static final String URL_PERSONA_UBICACION_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/create";
 	
-	private static final String URL_PERSONA_UBICACION_DELETE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/create";
-	//private static final String URL_PERSONA_UBICACION_DELETE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/delete";
+	//private static final String URL_PERSONA_UBICACION_DELETE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/remove";
+	private static final String URL_PERSONA_UBICACION_DELETE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/remove";
 	
 	
 	//Llaves o campos asociados a los parametros POST enviados al WebService 
@@ -98,7 +99,7 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 			progressDialog.dismiss();
 		}
 		if ( result ){
-			Toast.makeText( this.context, "Ubicaciones Guardadas Exitosamente", Toast.LENGTH_SHORT).show();
+			Toast.makeText( this.context, this.context.getResources().getString(R.string.ubicaciones_sync_ok), Toast.LENGTH_SHORT).show();
 		}
 		else{
 			alertDialog.setMessage( mensajeError );
@@ -119,15 +120,9 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 		}		
 		return false;
 	}
+
 	
-	
-	
-	/*
-	public void agregarRegistrosPersonaUbicacion( ArrayList<String[]> registrosPersonaUbicacion ){
-		this.registrosPersonaUbicacion = registrosPersonaUbicacion;
-	}
-	*/
-	public void agregarRegistroPersonaUbicacion( String[] registroPersonaUbicacion ){
+	public void setRegistroPersonaUbicacion( String[] registroPersonaUbicacion ){
 		this.registroPersonaUbicacion = registroPersonaUbicacion;
 	}
 	
@@ -140,21 +135,20 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 	public boolean crearRegistroPersonaUbicacion( String[] registro ){
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost( URL_PERSONA_UBICACION_CREATE );					
-		try {
-			List<NameValuePair> parametros;
-			//for ( String[] registro : registrosPersonaUbicacion ){
-				 parametros = new ArrayList<NameValuePair>();
-				 parametros.add(  new BasicNameValuePair( CAMPO_UBICACION_IDUBICACION, registro[0] )  );
-				 parametros.add(  new BasicNameValuePair( CAMPO_PERSONA_DOCPERSONA, registro[1] )  );
-				 parametros.add(  new BasicNameValuePair( CAMPO_TIPO_PERSONA_IDTIPO_PERSONA, registro[2] )  );
-				 httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
-				 HttpResponse response = httpClient.execute( httpPost );
-				 int statusCode = response.getStatusLine().getStatusCode();
-				 if ( statusCode != 200  && statusCode != 201  ){
-					 mensajeError = String.valueOf( statusCode );
-					 return false;
-				 }				 
-			//}			
+		try{			
+			List<NameValuePair> parametros;			
+			parametros = new ArrayList<NameValuePair>();
+			parametros.add(  new BasicNameValuePair( CAMPO_PERSONA_DOCPERSONA, registro[0] )  );
+			parametros.add(  new BasicNameValuePair( CAMPO_UBICACION_IDUBICACION, registro[1] )  );			
+			parametros.add(  new BasicNameValuePair( CAMPO_TIPO_PERSONA_IDTIPO_PERSONA, registro[2] )  );
+			httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
+			HttpResponse response = httpClient.execute( httpPost );
+			int statusCode = response.getStatusLine().getStatusCode();
+			if ( statusCode != 200  && statusCode != 201  ){
+				 mensajeError = String.valueOf( statusCode );
+				 return false;
+			}
+			new CCMPreferences(context).sincronizarRegistroUbicacion(registro[1], CCMPreferences.CREAR_PERSONA_UBICACION);
 			return true;
 		} 
 		catch (UnsupportedEncodingException e1) {
@@ -177,20 +171,23 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 	}
 	
 	
+	//-------------------------------------------------------------------------------------------------
 	public boolean borrarRegistroPersonaUbicacion( String[] registro ){
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost( URL_PERSONA_UBICACION_CREATE );					
-		try {
-			List<NameValuePair> parametros;
-			//for ( String[] registro : registrosPersonaUbicacion ){
-				 parametros = new ArrayList<NameValuePair>();
-				 parametros.add( new BasicNameValuePair(CAMPO_PERSONA_DOCPERSONA, registro[0] ) );
-				 parametros.add( new BasicNameValuePair(CAMPO_PERSONA_DOCPERSONA, registro[1] ) );
-				 parametros.add( new BasicNameValuePair(CAMPO_PERSONA_DOCPERSONA, registro[2] ) );
-				 httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
-				 HttpResponse response = httpClient.execute( httpPost );
-				 Log.v("Guardado Eventos response", String.valueOf( response.getStatusLine().getStatusCode() ) );
-			//}			
+		HttpPost httpPost = new HttpPost( URL_PERSONA_UBICACION_DELETE );					
+		try{			
+			List<NameValuePair> parametros;			
+			parametros = new ArrayList<NameValuePair>();
+			parametros.add(  new BasicNameValuePair( CAMPO_PERSONA_DOCPERSONA, registro[0] )  );
+			parametros.add(  new BasicNameValuePair( CAMPO_UBICACION_IDUBICACION, registro[1] )  );			
+			httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
+			HttpResponse response = httpClient.execute( httpPost );
+			int statusCode = response.getStatusLine().getStatusCode();
+			if ( statusCode != 200  && statusCode != 201  ){
+				 mensajeError = String.valueOf( statusCode );
+				 return false;
+			}
+			new CCMPreferences(context).sincronizarRegistroUbicacion(registro[1], CCMPreferences.BORRAR_PERSONA_UBICACION);
 			return true;
 		} 
 		catch (UnsupportedEncodingException e1) {

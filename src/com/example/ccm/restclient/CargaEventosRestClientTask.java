@@ -50,8 +50,8 @@ public class CargaEventosRestClientTask extends AsyncTask< String, Integer, Arra
 	
 	
 	//URL que conecta a los datos de eventos y ubicaciones
-	private static final String URL_EVENTOS_UBICACION_READ = "http://ccm2015.specializedti.com/index.php/rest/evento/sql";
-	//private static final String URL_EVENTOS_UBICACION_READ = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/evento/sql";
+	//private static final String URL_EVENTOS_UBICACION_READ = "http://ccm2015.specializedti.com/index.php/rest/evento/sql";
+	private static final String URL_EVENTOS_UBICACION_READ = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/evento/sql";
 	
 	
 	//Llaves o campos asociados a los parametros POST enviados al WebService

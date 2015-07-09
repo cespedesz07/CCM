@@ -20,17 +20,21 @@ public class CCMActionBarActivity extends ActionBarActivity {
 	
 	
 	private GoogleApiClient googleApiClient;
+	private CCMPreferences preferences;
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled( true );
-		actionBar.setDisplayShowHomeEnabled( true );
-		actionBar.setHomeButtonEnabled( true );
+		//actionBar.setDisplayHomeAsUpEnabled( true );
+		//actionBar.setDisplayShowHomeEnabled( true );
+		//actionBar.setHomeButtonEnabled( true );
 		//actionBar.setBackgroundDrawable(  getResources().getDrawable( R.drawable.actionbar_bg )  );
+		this.preferences = new CCMPreferences( getApplicationContext() );
 	}
+	
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -38,6 +42,8 @@ public class CCMActionBarActivity extends ActionBarActivity {
 		getMenuInflater().inflate(R.menu.ccmaction_bar, menu);
 		return true;
 	}
+	
+	
 
 	
 	@Override
@@ -52,6 +58,7 @@ public class CCMActionBarActivity extends ActionBarActivity {
 			case R.id.action_salir:
 				boolean haSalidoExitosamente = salir();
 				if ( haSalidoExitosamente ){
+					preferences.vaciar();
 					Intent i = new Intent( this, LoginActivity.class );
 					finish();
 					startActivity( i );	
@@ -80,7 +87,7 @@ public class CCMActionBarActivity extends ActionBarActivity {
 	
 	//Métodos del ActionBar
 	//Método para cerrar sesion en la cuenta que esté abierta
-	public boolean salir(){
+	public boolean salir(){		
 		//Para cerrar sesion en Facebook
 		if ( AccessToken.getCurrentAccessToken() != null ){
 			LoginManager.getInstance().logOut();
@@ -88,14 +95,15 @@ public class CCMActionBarActivity extends ActionBarActivity {
 		}
 		//Para cerra sesion en Google+
 		//IMPORTANTE: la variable googleApiClient está en la Actividad hijo LoginActivity.java
-		else if ( googleApiClient.isConnected() ){
-			googleApiClient.disconnect();
+		else if ( googleApiClient != null ){
+			if ( googleApiClient.isConnected() ){
+				googleApiClient.disconnect();
+				return true;
+			}
+		}
+		else if ( preferences.obtenerTipoResponse().equals( LoginActivity.NATIVE_RESPONSE ) ){
 			return true;
 		}
-		
-		//Se elimina todo de las preferencias
-		CCMPreferences preferences = new CCMPreferences( getApplicationContext() );
-		preferences.vaciar();
 		return false;
 	}
 	

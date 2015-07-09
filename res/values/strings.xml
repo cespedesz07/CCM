@@ -82,5 +82,8 @@
     <!-- String correspondientes a UbicacionesMultiSelectSpinner.java -->
     <string name="guardar">Guardar</string>
     <string name="cancelar">Cancelar</string>
+    
+    <!-- String correspondientes a GuardadoEventosUbicRestClientTask.java -->
+    <string name="ubicaciones_sync_ok">Ubicaciones sincronizadas exitosamente!</string>
 
 </resources>

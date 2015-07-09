@@ -10,8 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.ccm.dummy.DummyContent;
-import com.example.ccm.restclient.AreaListFragmentAsyncResponse;
-import com.example.ccm.restclient.AreaListFragmentRestClientTask;
 
 /**
  * A list fragment representing a list of Areas. This fragment also supports

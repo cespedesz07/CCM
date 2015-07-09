@@ -70,12 +70,6 @@ public class AreaDetailFragment extends Fragment implements ActionBar.TabListene
 		*/
 	}
 	
-	@Override 
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
-		super.onCreateOptionsMenu(menu, menuInflater);
-		menuInflater.inflate(R.menu.ccmaction_bar, menu);
-	}
-	
 	
 	
 	

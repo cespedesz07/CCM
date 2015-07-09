@@ -6,5 +6,7 @@
 	android:layout_height="wrap_content"
 	android:layout_gravity="top"
 	android:drawSelectorOnTop="true"
-	android:scrollbars="vertical" >        
+	android:scrollbars="vertical"
+	android:divider="@android:color/transparent"
+	android:dividerHeight="10.0sp" >        
 </ListView>

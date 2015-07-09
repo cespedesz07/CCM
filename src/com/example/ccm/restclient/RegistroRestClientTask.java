@@ -52,10 +52,11 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 	
 	
 	//URLs correspondientes a las opciones que publica el WebService para su consumo
-	private static final String URL_PERSONA_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona/create";
-	//private static final String URL_PERSONA_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/create";
+	//private static final String URL_PERSONA_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona/create";
+	private static final String URL_PERSONA_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/create";
 	
-	private static final String URL_PERSONA_EXIST = "http://ccm2015.specializedti.com/index.php/rest/persona/exist";
+	//private static final String URL_PERSONA_EXIST = "http://ccm2015.specializedti.com/index.php/rest/persona/exist";
+	private static final String URL_PERSONA_EXIST = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/exist";
 	
 	//Nombre de los campos de la tabla Persona para proceder al registro
 	//( se usan en RegistroActivity.guardarDatosFormulario() )

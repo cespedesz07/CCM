@@ -37,7 +37,6 @@ public class TabFragment extends Fragment{
 		
 		View vistaFragment = inflater.inflate( R.layout.lista_eventos, container, false );
 		ListView listaEventos = (ListView) vistaFragment.findViewById( R.id.listview_lista_eventos );
-		
 		CargaEventosRestClientTask cargaEventosRestClientTask = new CargaEventosRestClientTask( getActivity(), listaEventos );
 		cargaEventosRestClientTask.execute( idTipoAreaActual, pageTitle );
 		

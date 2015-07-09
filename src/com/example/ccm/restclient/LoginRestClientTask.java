@@ -54,7 +54,8 @@ import com.example.ccm.registro.RegistroActivity;
 public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{		
 	
 	
-	private static final String URL_PERSONA_EXIST = "http://ccm2015.specializedti.com/index.php/rest/persona/exist";
+	//private static final String URL_PERSONA_EXIST = "http://ccm2015.specializedti.com/index.php/rest/persona/exist";
+	private static final String URL_PERSONA_EXIST = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/exist";
 	
 	public static final String EXISTE_PERSONA = "existePersona";
 	public static final String LOGIN_PERSONA = "loginPersona";

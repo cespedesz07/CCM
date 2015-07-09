@@ -91,8 +91,4 @@ public class AreaListActivity extends CCMActionBarActivity implements AreaListFr
 		}
 	}
 	
-	public void onCreateOptionsMenu( Menu menu, MenuInflater menuInflater ){
-		menuInflater.inflate(R.menu.ccmaction_bar, menu);
-	}
-	
 }

@@ -4,19 +4,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.example.ccm.R;
-import com.example.ccm.preferences.CCMPreferences;
-import com.example.ccm.restclient.GuardadoEventosUbicRestClientTask;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiChoiceClickListener, OnClickListener {
+import com.example.ccm.R;
+import com.example.ccm.preferences.CCMPreferences;
+import com.example.ccm.restclient.GuardadoEventosUbicRestClientTask;
+
+public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiChoiceClickListener {
 	
 	
 	private static final String ITEM_NO_ASISTIRE_DEFAULT = "No Asistiré";
@@ -24,6 +26,7 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	
 	private Context context;
 	private ArrayAdapter<String> adapter;
+	private View itemView;
 	private List<String> idItems;
 	private String[] items;	
 	private boolean[] selectedItems;	
@@ -32,7 +35,7 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	
 	
 
-	public UbicacionesMultiSelectSpinner(Context context, AttributeSet attrs) {
+	public UbicacionesMultiSelectSpinner(Context context, AttributeSet attrs ) {
 		super(context, attrs);
 		this.context = context;
 		this.adapter = new ArrayAdapter<String>( context, android.R.layout.simple_spinner_dropdown_item );
@@ -40,8 +43,13 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	}
 	
 	
+	public void setParentView( View parentView ){
+		this.itemView = parentView;
+	}
 	
 	
+	
+	//Metodo para asignar los Items que serán mostrados con su respectivo CheckBox
 	public void setItems( ArrayList< ArrayList<String> > items ){
 		this.idItems = items.get(0);
 		this.items = items.get(1).toArray( new String[idItems.size()] );
@@ -53,17 +61,18 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	}
 	
 	
-	
+	//Método para asignar el Título del Diálogo que se despliega al dar 
+	//click en el Spinner ( EL díálogo se muestra en performClick() )
 	public void setDialogTitle( String dialogTitle ){
 		this.dialogTitle = dialogTitle;
 	}
 	
 	
-	
-	public void setSelectedItems( List<String> selection ){
-		for ( String selectedItem : selection ){
+	//Método para asignar los items que tendran los checkboxes marcados
+	public void setSelectedItems( List<String> idSelectedItems ){
+		for ( String id : idSelectedItems ){
 			for ( int i=0; i<items.length; i++ ){
-				if (  items[i].equals( selectedItem )  ){
+				if (  idItems.get(i).equals( id )  ){
 					selectedItems[i] = true;
 				}
 			}
@@ -74,20 +83,23 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	}
 	
 	
-	
+	//Método para mostrar en el spinner el numero de items seleccionados
+	//del dialogo desplegado en performClick()
 	public String getSelectedItemsString(){
 		int count = countSelectedItems(selectedItems);
 		if ( count == 0 ){
+			this.itemView.setBackgroundResource( R.drawable.list_item_unselected );
 			return ITEM_NO_ASISTIRE_DEFAULT;
 		}
 		else if ( count >= 1 ){
+			this.itemView.setBackgroundResource( R.drawable.list_item_selected );
 			return String.format( ITEM_ASISTIRE, count );
 		}
 		return "";
 	}
 	
 	
-	
+	//Cuenta el número de items seleccionados
 	public int countSelectedItems( boolean[] selectedItems ){
 		int count = 0;
 		for ( boolean selectedItem : selectedItems ){
@@ -99,6 +111,7 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	}
 	
 	
+	//Obtiene el ID de las ubicaciones que han sido seleccionadas
 	private ArrayList<String> getIdSelectedItems(){
 		ArrayList<String> idSelectedItems = new ArrayList<String>();
 		for ( int i=0; i<items.length; i++ ){
@@ -108,6 +121,7 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 		}
 		return idSelectedItems;
 	}
+	
 	
 	//Método que captura las ubicaciones a las cuales va a asistir la persona
 	//mediante el siguiente formato: [idUbicacion, docPersona, tipoPersona]
@@ -171,14 +185,16 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 		selectedItems[which] = isChecked;
 		String docPersona = new CCMPreferences( this.context ).obtenerDocPersona();
 		String tipoPersona = "4";
-		String[] registro = { idItems.get(which), docPersona, tipoPersona };
+		String[] registro = { docPersona, idItems.get(which), tipoPersona };
 		GuardadoEventosUbicRestClientTask guardadoEventosUbicRestClientTask = new GuardadoEventosUbicRestClientTask( context );
 		if ( isChecked ){
-			guardadoEventosUbicRestClientTask.agregarRegistroPersonaUbicacion( registro );
+			//Log.v( "a ingresar: " , Arrays.toString(registro));
+			guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
 			guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.CREAR_PERSONA_UBICACION );
 		}
 		else{
-			guardadoEventosUbicRestClientTask.agregarRegistroPersonaUbicacion( registro );
+			//Log.v( "a eliminar: " , Arrays.toString(registro));
+			guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
 			guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.BORRAR_PERSONA_UBICACION );
 		}
 		adapter.clear();

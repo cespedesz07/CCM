@@ -32,7 +32,7 @@ public class SpinnerArrayAdapter extends ArrayAdapter<String> {
 	
 	public SpinnerArrayAdapter(Context context, String nombreTablaCompletitud) {
 		super( context, android.R.layout.simple_spinner_item );
-		setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
+		setDropDownViewResource( android.R.layout.simple_spinner_item );
 		
 		//Se consultan los datos de completitud al WebService enviando como parámetros:
 		//1) El contexto (traido desde RegistroActivity.java)
