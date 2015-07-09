@@ -13,12 +13,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBar.TabListener;
 import android.support.v4.app.FragmentTransaction;
-
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 
 import com.example.ccm.R;
+import com.example.ccm.actionbar.CCMActionBarActivity;
 
 /**
  * An activity representing a single Area detail screen. This activity is only
@@ -30,7 +30,7 @@ import com.example.ccm.R;
  */
 @SuppressLint("NewApi")
 @SuppressWarnings("deprecation")
-public class AreaDetailActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class AreaDetailActivity extends CCMActionBarActivity implements ActionBar.TabListener {
 	
 	
 	private ViewPagerAdapter viewPagerAdapter;
@@ -88,15 +88,6 @@ public class AreaDetailActivity extends ActionBarActivity implements ActionBar.T
 		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_jue )  ).setTabListener(this).setTag("Thursday")  );
 		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_vie )  ).setTabListener(this).setTag("Friday")    );
 		*/
-	}
-	
-	
-	
-	@Override
-	public boolean onCreateOptionsMenu( Menu menu ){
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.ccmaction_bar, menu);
-		return true;
 	}
 
 	

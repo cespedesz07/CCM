@@ -33,6 +33,7 @@ import com.example.ccm.eventos.AreaListActivity;
 import com.example.ccm.login.LoginActivity;
 import com.example.ccm.preferences.CCMPreferences;
 import com.example.ccm.qrcode.QRCodeActivity;
+import com.example.ccm.restclient.LoginRestClientTask;
 import com.example.ccm.restclient.RegistroRestClientTask;
 import com.example.ccm.restclient.SpinnerRestClientTask;
 
@@ -235,7 +236,14 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	@Override
 	public void onClick(View v) {
 		if ( v.getId() == R.id.btn_registro_registro_activity ){
-			guardarDatosFormulario();
+			String numDocumentoCampo = txtNumDocumento.getText().toString();
+			String correoCampo = txtNumDocumento.getText().toString();
+			String tipoResponse = this.responseType;
+			String[] params = { numDocumentoCampo, correoCampo, tipoResponse };
+			LoginRestClientTask loginRestClientTask = new LoginRestClientTask( this, RegistroActivity.this );
+			loginRestClientTask.setParams( params );
+			loginRestClientTask.setMetodo( LoginRestClientTask.EXISTE_PERSONA );
+			loginRestClientTask.execute();
 		}
 		
 	}
@@ -246,7 +254,7 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	// IMPORTANTE: para enviar los campos del formulario al WebService es necesario que los campos
 	// coincidan con los mismos de la base de datos, por eso en el List<NameValuePair> parametros
 	// las claves tienen el mismo nombre de los campos de la tabla Persona en la BD CCM_BD
-	private void guardarDatosFormulario(){
+	public void guardarDatosFormulario(){
 		String numDocumentoCampo = txtNumDocumento.getText().toString(); 
 		String nombreCampo = txtNombre.getText().toString();
 		String apellidosCampo = txtApellidos.getText().toString();		
@@ -271,15 +279,20 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_TIPO_DOC_IDTIPO_DOC_PERSONA, String.valueOf(tipoDocumentoCampo)  ) 					);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_PAIS_PROCEDENCIA_IDPAIS_PROCEDENCIA_PERSONA, String.valueOf(paisProcedenciaCampo)  ) 	);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_INSTITUCION_IDINSTITUCION_PERSONA, String.valueOf(institucionCampo)  )  				);
-		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_CODIGO_QR_PERSONA, codigoQRCampo )  													);
+		//parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_CODIGO_QR_PERSONA, codigoQRCampo )  													);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_FECHA_NACIMIENTO_PERSONA, fechaNacimientoCampo )  									);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_ASISTIO_PERSONA, asistioCampo )            	        								);		
 
+		String params = "";
+		for ( NameValuePair pair : parametros ){
+			params += pair.getName() + ": " + pair.getValue() + "\n";
+		}
+		//Log.i( "Params: ", params );
 
-		//Se almacena el documento, el nombre y apellidos de la persona y el tipo de login (facebookResponse, googleResponse, nativeResponse)
+		//Se almacena el documento, correo y el tipo de login (facebookResponse, googleResponse, nativeResponse)
 		CCMPreferences pref = new CCMPreferences( RegistroActivity.this );
 		pref.guardarDocPersona( String.valueOf(numDocumentoCampo) );
-		pref.guardarNombreApellidosPersona( nombreCampo, apellidosCampo );
+		pref.guardarEmailPersona( emailCampo );
 		pref.guardarTipoResponse( this.responseType );
 		
 		new RegistroRestClientTask( this ).execute( parametros );

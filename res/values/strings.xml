@@ -19,7 +19,7 @@
     <string name="bienvenida2">Ó regístrate: </string>
     <string name="contrasena">Contraseña</string>
     <string name="registro">Registrar</string>
-    <string name="login">Iniciar!</string>
+    <string name="login">Iniciar Sesion</string>
     <string name="alert_ok">OK, Entendido!</string>
     <string name="alert_cargando">Cargando</string>
     <string name="alert_guardando_usuario">Guardando Usuario...</string>
@@ -41,6 +41,10 @@
     <!-- Strings asociados al CCMActionBarActivity.java -->
     <string name="action_acerca_de">Acerca De</string>
     <string name="action_salir">Salir</string>
+    
+    <!-- Strings Asociados con la actividad LoginNativoActivity.java -->
+    <string name="alert_existe_persona">El usuario ya existe, intenta de nuevo.</string>
+    <string name="alert_no_existe_persona">El usuario no existe, intenta de nuevo.</string>
 
     <!-- Strings Asociados con la actividad RegistroActivity.java (Actuan como hints o placeholders) -->
     <string name="tipo_documento">Tipo de Documento: </string>

@@ -5,14 +5,11 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.example.ccm.R;
 import com.example.ccm.login.LoginActivity;
-import com.example.ccm.login.LoginEmailActivity;
-import com.facebook.FacebookSdk;
 
 
 /**

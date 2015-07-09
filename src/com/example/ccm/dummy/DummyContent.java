@@ -27,10 +27,10 @@ public class DummyContent {
 		// Add 3 sample items.
 		addItem(new DummyItem("1", "Álgebra, Combinatoria, Teoría Números"));
 		addItem(new DummyItem("2", "Análisis y Ecuaciones Diferenciales"));
-		addItem(new DummyItem("3", "Educación, Hist, Filosofia de las Matemáticas"));
+		addItem(new DummyItem("3", "Educación, Hist, Filosofía de las Matemáticas"));
 		addItem(new DummyItem("4", "Geometría y Topología"));
 		addItem(new DummyItem("5", "Lógica"));
-		addItem(new DummyItem("6", "Matemáticas Aplicadas"));
+		addItem(new DummyItem("6", "Matemática Aplicada"));
 	}
 
 	private static void addItem(DummyItem item) {

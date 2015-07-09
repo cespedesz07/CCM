@@ -37,11 +37,11 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 	
 	
 	//URL que conecta a los datos de eventos y ubicaciones
-	//private static final String URL_PERSONA_UBICACION_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/create";
-	private static final String URL_PERSONA_UBICACION_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/create";
+	private static final String URL_PERSONA_UBICACION_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/create";
+	//private static final String URL_PERSONA_UBICACION_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/create";
 	
-	//private static final String URL_PERSONA_UBICACION_DELETE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/create";
-	private static final String URL_PERSONA_UBICACION_DELETE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/delete";
+	private static final String URL_PERSONA_UBICACION_DELETE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/create";
+	//private static final String URL_PERSONA_UBICACION_DELETE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/delete";
 	
 	
 	//Llaves o campos asociados a los parametros POST enviados al WebService 
@@ -63,7 +63,8 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 	private ProgressDialog progressDialog;
 	private AlertDialog.Builder alertDialog;
 	private String mensajeError;
-	private ArrayList<String[]> registrosPersonaUbicacion;
+	//private ArrayList<String[]> registrosPersonaUbicacion;
+	private String[] registroPersonaUbicacion;
 	
 	
 	
@@ -100,9 +101,6 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 			Toast.makeText( this.context, "Ubicaciones Guardadas Exitosamente", Toast.LENGTH_SHORT).show();
 		}
 		else{
-			if ( mensajeError.length() == 0 ){
-				mensajeError = "Resultado Vacio";
-			}
 			alertDialog.setMessage( mensajeError );
 			alertDialog.show();
 		}
@@ -114,19 +112,23 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 	protected Boolean doInBackground( String... params ) {
 		String metodoEjecutar = params[0];
 		if ( metodoEjecutar.equals( CREAR_PERSONA_UBICACION ) ){
-			return crearRegistrosPersonaUbicacion(registrosPersonaUbicacion);
+			return crearRegistroPersonaUbicacion(registroPersonaUbicacion);
 		}
 		else if ( metodoEjecutar.equals( BORRAR_PERSONA_UBICACION ) ){
-			return borrarRegistrosPersonaUbicacion(registrosPersonaUbicacion);
+			return borrarRegistroPersonaUbicacion(registroPersonaUbicacion);
 		}		
 		return false;
 	}
 	
 	
 	
-	
+	/*
 	public void agregarRegistrosPersonaUbicacion( ArrayList<String[]> registrosPersonaUbicacion ){
 		this.registrosPersonaUbicacion = registrosPersonaUbicacion;
+	}
+	*/
+	public void agregarRegistroPersonaUbicacion( String[] registroPersonaUbicacion ){
+		this.registroPersonaUbicacion = registroPersonaUbicacion;
 	}
 	
 	
@@ -135,20 +137,24 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 	
 	
 	//-------------------------------------------------------------------------------------------------
-	public boolean crearRegistrosPersonaUbicacion( ArrayList<String[]> registrosPersonaUbicacion ){
+	public boolean crearRegistroPersonaUbicacion( String[] registro ){
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost( URL_PERSONA_UBICACION_CREATE );					
 		try {
 			List<NameValuePair> parametros;
-			for ( String[] registro : registrosPersonaUbicacion ){
+			//for ( String[] registro : registrosPersonaUbicacion ){
 				 parametros = new ArrayList<NameValuePair>();
 				 parametros.add(  new BasicNameValuePair( CAMPO_UBICACION_IDUBICACION, registro[0] )  );
 				 parametros.add(  new BasicNameValuePair( CAMPO_PERSONA_DOCPERSONA, registro[1] )  );
 				 parametros.add(  new BasicNameValuePair( CAMPO_TIPO_PERSONA_IDTIPO_PERSONA, registro[2] )  );
 				 httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
 				 HttpResponse response = httpClient.execute( httpPost );
-				 Log.v("Guardado Eventos response", String.valueOf( response.getStatusLine().getStatusCode() ) );
-			}			
+				 int statusCode = response.getStatusLine().getStatusCode();
+				 if ( statusCode != 200  && statusCode != 201  ){
+					 mensajeError = String.valueOf( statusCode );
+					 return false;
+				 }				 
+			//}			
 			return true;
 		} 
 		catch (UnsupportedEncodingException e1) {
@@ -171,12 +177,12 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 	}
 	
 	
-	public boolean borrarRegistrosPersonaUbicacion( ArrayList<String[]> registrosPersonaUbicacion ){
+	public boolean borrarRegistroPersonaUbicacion( String[] registro ){
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost( URL_PERSONA_UBICACION_CREATE );					
 		try {
 			List<NameValuePair> parametros;
-			for ( String[] registro : registrosPersonaUbicacion ){
+			//for ( String[] registro : registrosPersonaUbicacion ){
 				 parametros = new ArrayList<NameValuePair>();
 				 parametros.add( new BasicNameValuePair(CAMPO_PERSONA_DOCPERSONA, registro[0] ) );
 				 parametros.add( new BasicNameValuePair(CAMPO_PERSONA_DOCPERSONA, registro[1] ) );
@@ -184,7 +190,7 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 				 httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
 				 HttpResponse response = httpClient.execute( httpPost );
 				 Log.v("Guardado Eventos response", String.valueOf( response.getStatusLine().getStatusCode() ) );
-			}			
+			//}			
 			return true;
 		} 
 		catch (UnsupportedEncodingException e1) {

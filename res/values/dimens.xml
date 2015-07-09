@@ -25,11 +25,13 @@
     
     <!-- DIEMSIONES PARA LoginActivity.java -->
     <dimen name="line_heigth">1dp</dimen>
-    <dimen name="login_activity_padding">15dp</dimen>
+    <dimen name="login_activity_padding">10dp</dimen>
     <dimen name="login_activity_logo_margin_top">20dp</dimen>
 	<dimen name="login_activity_txt">15sp</dimen>
 	<dimen name="login_activity_txt_margin_top">40dp</dimen>
 	<dimen name="login_activity_txt_margin_bottom">10dp</dimen>
+	<dimen name="login_activity_buttons_margin_left">5dp</dimen>
+	<dimen name="login_activity_buttons_margin_right">5dp</dimen>
 	<dimen name="login_activity_buttons_margin_top">15dp</dimen>
 	<dimen name="login_activity_buttons_margin_bottom">15dp</dimen> 
 	<dimen name="login_activity_line_margin_top">20dp</dimen>

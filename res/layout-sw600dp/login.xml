@@ -89,18 +89,31 @@
 	              android:text="@string/bienvenida2"
 	              android:textAppearance="?android:attr/textAppearanceLarge"
 	              android:textSize="@dimen/login_activity_txt"
-	              android:layout_marginBottom="@dimen/login_activity_txt_margin_bottom" />
+	              android:layout_marginTop="@dimen/login_activity_buttons_margin_top"
+			      android:layout_marginBottom="@dimen/login_activity_buttons_margin_bottom" />
               
-              <Button
-             	  android:id="@+id/btn_registro_login_activity"
-		          style="@style/btn_red_large"
-		          android:layout_width="wrap_content"
-		          android:layout_height="wrap_content"	         
-		          android:text="@string/registro" />
+              <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+	            <Button
+	                android:id="@+id/btn_registro_login_activity"
+	                style="@style/btn_red_large"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:text="@string/registro" />	
+	            <Button
+	                android:id="@+id/btn_login_login_activity"
+	                style="@style/btn_red_large"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="@dimen/login_activity_buttons_margin_left"
+	                android:layout_weight="1"
+	                android:text="@string/login" />
+	        </LinearLayout>
 			
-	 	</LinearLayout>
-	 	
-        
+	 	</LinearLayout>        
        
 
     </LinearLayout>

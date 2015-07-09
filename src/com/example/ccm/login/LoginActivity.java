@@ -113,6 +113,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	private LoginButton facebookLoginBtn;
 	private SignInButton googleLoginBtn;
 	private Button btnRegistro;
+	private Button btnLogin;
 	
 	
 	
@@ -149,6 +150,10 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
         btnRegistro = (Button) findViewById( R.id.btn_registro_login_activity );
         btnRegistro.setOnClickListener(this);
         btnRegistro.setOnTouchListener(this);
+        
+        btnLogin = (Button) findViewById( R.id.btn_login_login_activity );
+        btnLogin.setOnClickListener(this);
+        btnLogin.setOnTouchListener(this);
         
         
         //Se crea un cliente PlusClient para gestionar el inicio de sesion por Google+
@@ -415,10 +420,12 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     		
     		case R.id.btn_registro_login_activity:
     			inicioRegistro( null, NATIVE_RESPONSE );
-    			/*
-    			Intent i = new Intent( this, AreaListActivity.class );
-    			startActivity( i );
-    			*/
+    			break;
+    			
+    		case R.id.btn_login_login_activity:
+    			startActivity( new Intent( this, LoginNativoActivity.class ) );
+    			break;
+    			
     		default:
     			break;
     		}
@@ -440,7 +447,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 		if ( event.getAction() == MotionEvent.ACTION_DOWN ){	//Si se presiona la pantalla...
 			Drawable d = v.getBackground();						// se captura el background la vista presionada
 			//d.mutate();
-			d.setAlpha(100);									// se agrega transparencia al background
+			d.setAlpha(50);									// se agrega transparencia al background
 			v.setBackgroundDrawable(d);							// A la vista presionada se agrega el nuevo background transparente
 		}
 		else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL){

@@ -36,7 +36,7 @@
     <style name="btn_red_large">
         <item name="android:background">@drawable/btn_rojo</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/txt_20sp</item>
+        <item name="android:textSize">@dimen/txt_18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:padding">5dp</item>
     </style>

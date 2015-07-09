@@ -19,6 +19,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,9 +52,10 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 	
 	
 	//URLs correspondientes a las opciones que publica el WebService para su consumo
-	//private static final String URL_PERSONA_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona/create";
-	private static final String URL_PERSONA_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/create";
+	private static final String URL_PERSONA_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona/create";
+	//private static final String URL_PERSONA_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/create";
 	
+	private static final String URL_PERSONA_EXIST = "http://ccm2015.specializedti.com/index.php/rest/persona/exist";
 	
 	//Nombre de los campos de la tabla Persona para proceder al registro
 	//( se usan en RegistroActivity.guardarDatosFormulario() )
@@ -164,8 +166,14 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 		try {
 			httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
 			HttpResponse response = httpClient.execute( httpPost );
-			//Log.v("response", String.valueOf( response.getStatusLine().getStatusCode() ) );
-			return true;
+			int statusCode = response.getStatusLine().getStatusCode();
+			if ( statusCode == 200  ||  statusCode == 201 ){
+				return true;
+			}
+			else{
+				mensajeError = String.valueOf( statusCode );
+				return false;
+			}
 		} 
 		catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
@@ -185,69 +193,6 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 		}
 		return false;		
 	}
-	
-	/*
-	public boolean existePersona( String numDocumento ){
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost( URL_EVENTOS_UBICACION_READ );
-		//httpPost.setHeader( "Content-type", "application/json" );      //AL ENVIAR Content-type AL WEB SERVICE, ESTE DEVUELVE UN ERROR DICIENDO QUE SE DESCONOCEN LOS PARAMETROS
-		                                                                 //POST: idtipo_area y dia, UNA ALTERNATIVA SERIA COLOCAR Accept: application/json
-		
-		String textoResultado = "";
-		JSONArray jsonArray = null;		
-		InputStream inputStream = null;
-		
-		//Log.v( "parametros: ", idTipoArea + ", " + dia );
-		List<NameValuePair> parametros = new ArrayList<NameValuePair>();
-		parametros.add( new BasicNameValuePair(KEY_IDTIPO_AREA, idTipoArea) );
-		parametros.add( new BasicNameValuePair(KEY_DIA, dia) );
-		
-		try{
-			httpPost.setEntity( new UrlEncodedFormEntity(parametros) );
-			HttpResponse response = httpClient.execute( httpPost );
-			HttpEntity entity = response.getEntity();
-			inputStream = entity.getContent();
-			BufferedReader reader = new BufferedReader( new InputStreamReader(inputStream, "UTF-8") );
-			String linea = reader.readLine();
-			while ( linea != null ){
-				textoResultado += String.format( "%s \n", linea );
-				linea = reader.readLine();
-			}
-			//Log.i( "EventosUbicacionJSON", textoResultado );
-			jsonArray = new JSONArray( textoResultado );
-		}
-		catch (UnsupportedEncodingException error){
-			error.printStackTrace();
-			mensajeError = "UnsupportedEncodingException: " + error.getMessage(); 
-		}
-		catch (ClientProtocolException error){
-			error.printStackTrace();
-			mensajeError = "ClientProtocolException: " + error.getMessage();
-		}
- 		catch (IOException error){
- 			error.printStackTrace();
- 			mensajeError = "IOException: " + error.getMessage();
- 		}
-		catch (JSONException error){
-			error.printStackTrace();
-			mensajeError = "JSONException: " + error.getMessage();
-		}
-		finally{
-			if ( inputStream != null ){
-				try {
-					inputStream.close();
-				} 
-				catch (IOException error) {
-					Log.i( "IOException finally: ", error.getMessage() );
-					mensajeError = error.getMessage();
-				}
-			}
-		}
-		ArrayList<Object[]> resultado = procesarJSONArray( jsonArray );
-		return resultado;
-	}
-	*/
-	
 	
 
 }

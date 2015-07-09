@@ -80,7 +80,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginEmailActivity" >
+        <activity 
+            android:name=".login.LoginNativoActivity"
+            android:screenOrientation="portrait" >
         </activity>
 
         <!--

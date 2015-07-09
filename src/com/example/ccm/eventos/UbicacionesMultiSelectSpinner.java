@@ -7,16 +7,12 @@ import java.util.List;
 import com.example.ccm.R;
 import com.example.ccm.preferences.CCMPreferences;
 import com.example.ccm.restclient.GuardadoEventosUbicRestClientTask;
-import com.example.ccm.restclient.RegistroRestClientTask;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -32,7 +28,6 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	private String[] items;	
 	private boolean[] selectedItems;	
 	private String dialogTitle;
-	private GuardadoEventosUbicRestClientTask guardadoEventosUbicRestClientTask;
 	
 	
 	
@@ -41,8 +36,7 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 		super(context, attrs);
 		this.context = context;
 		this.adapter = new ArrayAdapter<String>( context, android.R.layout.simple_spinner_dropdown_item );
-		setAdapter( adapter );		
-		this.guardadoEventosUbicRestClientTask = new GuardadoEventosUbicRestClientTask( context );
+		setAdapter( adapter );
 	}
 	
 	
@@ -118,6 +112,7 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	//Método que captura las ubicaciones a las cuales va a asistir la persona
 	//mediante el siguiente formato: [idUbicacion, docPersona, tipoPersona]
 	//y las almacena en un ArrayList para ser procesadas por guardadoEventosUbicRestClientTask.agregarRegistrosPersonaUbicacion()
+	/*
 	private void almacenarRegistrosPersonaUbicacion(){
 		ArrayList<String[]> registros = new ArrayList<String[]>();
 		ArrayList<String> idUbicaciones = getIdSelectedItems();
@@ -131,6 +126,7 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 		guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.CREAR_PERSONA_UBICACION );
 		
 	}
+	*/
 	
 	
 	
@@ -144,8 +140,8 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 		AlertDialog.Builder builder = new AlertDialog.Builder( getContext() ); 
 		builder.setMultiChoiceItems( items, selectedItems, this );
 		builder.setTitle( this.dialogTitle );
+		/*
 		builder.setPositiveButton( context.getResources().getString(R.string.guardar), new DialogInterface.OnClickListener(){
-
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch ( which ){
@@ -155,10 +151,10 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 				case DialogInterface.BUTTON_NEGATIVE:
 					break;
 				}				
-			}
-			
+			}			
 		} );
 		builder.setNegativeButton( context.getResources().getString(R.string.cancelar) , null);
+		*/
 		builder.show();
 		return false;
 	}
@@ -173,15 +169,22 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	@Override
 	public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 		selectedItems[which] = isChecked;
+		String docPersona = new CCMPreferences( this.context ).obtenerDocPersona();
+		String tipoPersona = "4";
+		String[] registro = { idItems.get(which), docPersona, tipoPersona };
+		GuardadoEventosUbicRestClientTask guardadoEventosUbicRestClientTask = new GuardadoEventosUbicRestClientTask( context );
+		if ( isChecked ){
+			guardadoEventosUbicRestClientTask.agregarRegistroPersonaUbicacion( registro );
+			guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.CREAR_PERSONA_UBICACION );
+		}
+		else{
+			guardadoEventosUbicRestClientTask.agregarRegistroPersonaUbicacion( registro );
+			guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.BORRAR_PERSONA_UBICACION );
+		}
 		adapter.clear();
 		adapter.add( getSelectedItemsString() );
 		adapter.notifyDataSetChanged();
 	}
-
-	
-	
-	
-	//=================================Métodos de OnClickListener======================================
 
 
 }

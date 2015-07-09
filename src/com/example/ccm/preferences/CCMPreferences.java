@@ -15,6 +15,7 @@ public class CCMPreferences {
 	private static final String CAMPO_DOC_PERSONA = RegistroRestClientTask.CAMPO_DOC_PERSONA;
 	private static final String CAMPO_NOMBRE_PERSONA = RegistroRestClientTask.CAMPO_NOMBRE_PERSONA;
 	private static final String CAMPO_APELLIDOS_PERSONA = RegistroRestClientTask.CAMPO_APELLIDOS_PERSONA;
+	private static final String CAMPO_CORREO_ELECTRONICO_PERSONA = RegistroRestClientTask.CAMPO_CORREO_ELECTRONICO_PERSONA;
 	public static final String CAMPO_LOGIN_TYPE = "login_type";
 	
 	
@@ -38,6 +39,13 @@ public class CCMPreferences {
 		Editor editor = pref.edit();
 		editor.putString( CAMPO_NOMBRE_PERSONA, nombrePersona );
 		editor.putString( CAMPO_APELLIDOS_PERSONA, apellidosPersona );
+		editor.commit();
+	}
+	
+	
+	public void guardarEmailPersona( String emailPersona ){		
+		Editor editor = pref.edit();
+		editor.putString( CAMPO_CORREO_ELECTRONICO_PERSONA, emailPersona );
 		editor.commit();
 	}
 	
@@ -69,6 +77,11 @@ public class CCMPreferences {
 			resultado += entry.getKey() + ": " + entry.getValue().toString() + "\n";
 		}
 		return resultado;
+	}
+	
+	public void vaciar(){
+		Editor editor = pref.edit();
+		editor.clear();
 	}
 
 

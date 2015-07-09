@@ -47,31 +47,16 @@
             android:drawableLeft="@drawable/ic_pwd"
             android:ems="10"
             android:hint="@string/num_documento"
-            android:inputType="textPassword" />
+            android:inputType="textPassword" />       
 
-        <LinearLayout
-            android:id="@+id/main"
+        <Button
+            android:id="@+id/btnLogin"
+            style="@style/btn_red_large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/btnLogin"
-                style="@style/btn_red_large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/login" />
-
-            <Button
-                android:id="@+id/btnRegistro"
-                style="@style/btn_red_large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/pad_30dp"
-                android:layout_weight="1"
-                android:text="@string/registro" />
-        </LinearLayout>
+            android:layout_weight="1"
+            android:text="@string/login" />
+        
 
     </LinearLayout>
 

@@ -37,15 +37,14 @@ public class SpinnerRestClientTask extends AsyncTask<String, Integer, ArrayList<
 	
 	
 	//URLs correspondientes a las opciones que publica el WebService para su consumo
-	/*
 	private static final String URL_TIPO_DOC_READ = "http://ccm2015.specializedti.com/index.php/rest/tipo-doc";
 	private static final String URL_PAIS_PROCEDENCIA_READ = "http://ccm2015.specializedti.com/index.php/rest/pais-procedencia";
 	private static final String URL_INSTITUCION_READ = "http://ccm2015.specializedti.com/index.php/rest/institucion";
-	*/
+	/*
 	private static final String URL_TIPO_DOC_READ = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/tipo-doc";
 	private static final String URL_PAIS_PROCEDENCIA_READ = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/pais-procedencia";
 	private static final String URL_INSTITUCION_READ = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/institucion";
-	
+	*/
 	
 	
 	//Nombres de las Tablas de COmpletitud (USADAS EN RegistroActivity.java y en la presente actividad: SpinnerRestClient.java)

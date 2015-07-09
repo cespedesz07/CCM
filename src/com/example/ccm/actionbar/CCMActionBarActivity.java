@@ -92,6 +92,10 @@ public class CCMActionBarActivity extends ActionBarActivity {
 			googleApiClient.disconnect();
 			return true;
 		}
+		
+		//Se elimina todo de las preferencias
+		CCMPreferences preferences = new CCMPreferences( getApplicationContext() );
+		preferences.vaciar();
 		return false;
 	}
 	

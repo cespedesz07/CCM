@@ -30,7 +30,9 @@
 	<dimen name="login_activity_txt_margin_top">40dp</dimen>
 	<dimen name="login_activity_txt_margin_bottom">25dp</dimen>
 	<dimen name="login_activity_buttons_margin_top">20dp</dimen>
-	<dimen name="login_activity_buttons_margin_bottom">20dp</dimen> 
+	<dimen name="login_activity_buttons_margin_bottom">20dp</dimen>
+	<dimen name="login_activity_buttons_margin_left">20dp</dimen>
+	<dimen name="login_activity_buttons_margin_right">20dp</dimen>
 	<dimen name="line_height">1dp</dimen>
 	<dimen name="login_activity_line_margin_top">20dp</dimen>
 	<dimen name="login_activity_line_margin_bottom">20dp</dimen>

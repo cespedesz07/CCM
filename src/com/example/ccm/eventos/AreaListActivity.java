@@ -3,6 +3,7 @@ package com.example.ccm.eventos;
 import com.example.ccm.R;
 import com.example.ccm.R.id;
 import com.example.ccm.R.layout;
+import com.example.ccm.actionbar.CCMActionBarActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -29,7 +30,7 @@ import android.view.MenuInflater;
  * This activity also implements the required {@link AreaListFragment.Callbacks}
  * interface to listen for item selections.
  */
-public class AreaListActivity extends ActionBarActivity implements AreaListFragment.Callbacks {
+public class AreaListActivity extends CCMActionBarActivity implements AreaListFragment.Callbacks {
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
