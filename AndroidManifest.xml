@@ -120,7 +120,11 @@
         </activity>
         <activity 
             android:name=".eventos.AreaDetailActivity"
+            android:parentActivityName=".menuinicio.MenuInicioActivity"
             android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".menuinicio.MenuInicioActivity" />
         </activity>
         <activity
             android:name=".qrcode.QRCodeActivity"
