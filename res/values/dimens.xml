@@ -63,7 +63,7 @@
 	<dimen name="qr_code_activity_line_margin_top">20dp</dimen>
 	<dimen name="qr_code_activity_line_margin_bottom">20dp</dimen>
 	
-		<!-- DIEMSIONES PARA item_evento.xml DESPLEGADO EN EL FRAGMENT TabFragment.java -->
+	<!-- DIEMSIONES PARA item_evento.xml DESPLEGADO EN EL FRAGMENT TabFragment.java -->
 	<dimen name="item_evento_xml_padding">10dp</dimen>
 	<dimen name="item_evento_xml_textviews_size">14sp</dimen>
 	<dimen name="item_evento_xml_textviews_margin_top">15dp</dimen>
@@ -71,6 +71,13 @@
 	<dimen name="item_evento_xml_textview_nombre_evento_size">16sp</dimen>
 	<dimen name="item_evento_xml_textview_cupos_disponibles_size">20sp</dimen>
 	<dimen name="item_evento_xml_textview_hora_evento_size">15sp</dimen>
+	
+	<!-- DIMENSIONES PARA MenuInicioActivity.java -->
+	<dimen name="menu_inicio_activity_txt">15sp</dimen>
+	<dimen name="menu_inicio_activity_logo_margin_bottom">35dp</dimen>
+	<dimen name="menu_inicio_activity_group_margin_right">40dp</dimen>
+	<dimen name="menu_inicio_activity_group_margin_bottom">20dp</dimen>
+	<dimen name="menu_inicio_activity_textview_margin_bottom">35dp</dimen>
 	
     
 

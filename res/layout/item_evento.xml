@@ -28,28 +28,12 @@
         android:text="Ponencia dictada por el doctor Chochimilco de México, en la cual se mostrará la dinámica de los sistemas abstractos lineales mediante técnicas en R"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="@dimen/item_evento_xml_textviews_size" />
-    
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-	    <TextView 
-	        android:id="@+id/textview_cupos_disponibles_evento"
-	        android:layout_width="wrap_content"
-	  	    android:layout_height="wrap_content"
-	  	    android:textAppearance="?android:attr/textAppearanceLarge"
-	  	    android:textSize="@dimen/item_evento_xml_textview_cupos_disponibles_size"
-	  	    android:text="10 Cupos" />
-		<!-- 	  
-	    <Spinner
-    	    android:id="@+id/spinner_hora_lugar_evento"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content" />
-    	-->
+
+	    
     	<com.example.ccm.eventos.UbicacionesMultiSelectSpinner 
     	    android:id="@+id/multi_select_spinner_hora_lugar_evento"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"/>
-	</LinearLayout>
 
     
 

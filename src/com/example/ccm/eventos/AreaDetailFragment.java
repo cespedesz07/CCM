@@ -106,8 +106,12 @@ public class AreaDetailFragment extends Fragment implements ActionBar.TabListene
 				actionBar.setSelectedNavigationItem( position );
 			}
 		});
+		//IMPORTANTE:
+		//Cuando se despliega el patron Master/Detail en Tablets (Two-Pane-Mode)
+		//La primera vez que se obtenga la supportActionBar(), no van a haber Tabs,
+		//en este caso, cuando el numero de tabs es 0, se tienen que agregar.
 		if ( actionBar.getTabCount() == 0 ){
-			actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_lun )  ).setTabListener(this).setTag("Monday")    );
+			//actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_lun )  ).setTabListener(this).setTag("Monday")    );
 			actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_mar )  ).setTabListener(this).setTag("Tuesday")   );
 			actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_mie )  ).setTabListener(this).setTag("Wednesday") );
 			actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_jue )  ).setTabListener(this).setTag("Thursday")  );

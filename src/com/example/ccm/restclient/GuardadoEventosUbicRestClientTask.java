@@ -3,6 +3,7 @@ package com.example.ccm.restclient;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -19,6 +20,9 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.provider.Settings.System;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -38,11 +42,11 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 	
 	
 	//URL que conecta a los datos de eventos y ubicaciones
-	//private static final String URL_PERSONA_UBICACION_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/create";
-	private static final String URL_PERSONA_UBICACION_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/create";
+	private static final String URL_PERSONA_UBICACION_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/create";
+	//private static final String URL_PERSONA_UBICACION_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/create";
 	
-	//private static final String URL_PERSONA_UBICACION_DELETE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/remove";
-	private static final String URL_PERSONA_UBICACION_DELETE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/remove";
+	private static final String URL_PERSONA_UBICACION_DELETE = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/remove";
+	//private static final String URL_PERSONA_UBICACION_DELETE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/remove";
 	
 	
 	//Llaves o campos asociados a los parametros POST enviados al WebService 
@@ -141,7 +145,7 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 			parametros.add(  new BasicNameValuePair( CAMPO_PERSONA_DOCPERSONA, registro[0] )  );
 			parametros.add(  new BasicNameValuePair( CAMPO_UBICACION_IDUBICACION, registro[1] )  );			
 			parametros.add(  new BasicNameValuePair( CAMPO_TIPO_PERSONA_IDTIPO_PERSONA, registro[2] )  );
-			httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
+			httpPost.setEntity( new UrlEncodedFormEntity( parametros, "utf-8" ) );
 			HttpResponse response = httpClient.execute( httpPost );
 			int statusCode = response.getStatusLine().getStatusCode();
 			if ( statusCode != 200  && statusCode != 201  ){

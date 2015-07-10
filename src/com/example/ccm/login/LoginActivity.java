@@ -7,6 +7,7 @@ import java.util.Calendar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 import com.example.ccm.R;
 import com.example.ccm.actionbar.CCMActionBarActivity;
 import com.example.ccm.eventos.AreaListActivity;
+import com.example.ccm.menuinicio.MenuInicioActivity;
 import com.example.ccm.preferences.CCMPreferences;
 import com.example.ccm.qrcode.QRCodeActivity;
 import com.example.ccm.registro.RegistroActivity;
@@ -63,10 +66,10 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	//Constantes que representan el tipo de response, utilizadas en el método inicioRegistro()
 	//De acuerdo al tipo de response, se insertan en un Bundle los parámetros que retorne la API
 	//respectiva, y se envian a la actividad RegistroActivity.java
-	public static final String FACEBOOK_RESPONSE = "facebookResponse";
-	public static final String GOOGLE_RESPONSE = "googleResponse";
-	public static final String TWITTER_RESPONSE = "twitterResponse";
-	public static final String NATIVE_RESPONSE = "nativeResponse";
+	public static final String FACEBOOK_LOGIN = "facebookLogin";
+	public static final String GOOGLE_LOGIN = "googleLogin";
+	public static final String TWITTER_LOGIN = "twitterLogin";
+	public static final String NATIVE_LOGIN = "nativeLogin";
 	
 	
 	//Variables que se van a extraer de la peciticion a Facebook con GraphApi
@@ -103,12 +106,6 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	//problema previniendo un logueo sin esperar
 	private boolean signedInUser;
 	
-	//Variable para verificar si el usuario ya ha iniciado sesion en facebook
-	//(usada principalmente luego de cargar el splash screen y evitar que se 
-	//inicie el login principal, es decir LoginActivity.java )
-	private boolean facebookLoggedIn;
-	private boolean googleLoggedIn;
-	private boolean nativeLoggedIn;
 	
 	private LoginButton facebookLoginBtn;
 	private SignInButton googleLoginBtn;
@@ -166,25 +163,9 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	    
 	    //Se envia la variable googleApiClient a la clase padre CCMActionBarActivity.java
 	    setGoogleApiClient(googleApiClient);
-	   
+	    disableHome();
+	    setSalirEnabled(false);
 	    
-	    
-	    //Se verifica si ha iniciado sesion con alguna de las redes sociales
-	    facebookLoggedIn = false;
-	    googleLoggedIn = false;
-	    nativeLoggedIn = false;
-	    //Con Facebook
-	    if ( AccessToken.getCurrentAccessToken() != null ){
-    		facebookLoggedIn = true;
-    	}
-	    //COn Google
-    	else if ( googleApiClient.isConnected() ){
-    		googleLoggedIn = true;
-    	}
-	    //COn inicio de sesion nativo
-    	else if ( new CCMPreferences( LoginActivity.this ).obtenerTipoResponse().equals( NATIVE_RESPONSE ) ){
-    		nativeLoggedIn = true;
-    	}
 	    
 	    
     }
@@ -216,27 +197,29 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     
     //Método que se ejecuta luego de que la actividad ha sido creada al llamar onCreate()
     protected void onStart(){
-    	super.onStart();
-    	//float density = getResources().getDisplayMetrics().density;
-    	// return 0.75 if it's LDPI
-    	// return 1.0 if it's MDPI
-    	// return 1.5 if it's HDPI
-    	// return 2.0 if it's XHDPI
-    	//Toast.makeText(this, "Density Screen: " + String.valueOf(density), Toast.LENGTH_LONG).show();   	
-    	
-    	//Luego de que la actividad es Created, se conecta el usuario ya logueado a Google+
-    	if ( facebookLoggedIn ){
-    		
+    	super.onStart();   	
+    	googleApiClient.connect();
+    	//Luego de que la actividad es Created, se conecta el usuario ya logueado
+    	//segun la red social utilizada para hacer el login
+    	String loginType = new CCMPreferences( this ).obtenerTipoLogin();
+    	Log.v( "LoginType inicio: ", loginType );
+    	if ( !loginType.equals("") ){
+    		Intent i = new Intent( this, MenuInicioActivity.class );
+    		startActivity( i );
     	}
-    	else if ( googleLoggedIn ){
+    	/*
+    	if ( loginType.equals( FACEBOOK_LOGIN ) ){
+    	}
+    	else if ( loginType.equals( GOOGLE_LOGIN ) ){
     		googleApiClient.connect();
     	}
-    	else if ( nativeLoggedIn ){
-    		Intent i = new Intent( this, AreaListActivity.class );
-			startActivity( i );
+    	else if ( loginType.equals( TWITTER_LOGIN ) ){
     	}
-    	
-    	
+    	else if ( loginType.equals( NATIVE_LOGIN ) ){
+    		Intent i = new Intent( this, MenuInicioActivity.class );
+    		startActivity( i );
+    	}
+    	*/    	
     }
     
     
@@ -271,6 +254,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 		*/
     	if ( !googleApiClient.isConnected()  &&  connectionResult != null ){
     		try {
+    			//redirige a onActivityResult() 
 				connectionResult.startResolutionForResult(this, REQUEST_CODE_SIGN_IN);
 			} 
     		catch (SendIntentException e) {
@@ -337,14 +321,14 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     
     //Método que captura los datos del usuario del inicio de sesion en redes sociales
     //y los envia a la actividad RegistroActivity.java
-    private void inicioRegistro( JSONObject jsonResponse, String responseType ){
+    private void inicioRegistro( JSONObject jsonResponse, String loginType ){
     	//Se inician las animaciones de: 
     	//enterAnim (R.animator.first_close_translate): trasladar de derecha al centro la actividad a abrir (RegistroActivity.class)
     	//exitAnim: (R.animator.first_close_scale): Escalar o disminuir tamaño de la actividad saliente (LoginActivity.class)
     	//overridePendingTransition( R.animator.first_close_translate, R.animator.second_close_scale);
     	//Log.v( "json response", jsonResponse.toString() );
     	Bundle bundleParams = new Bundle();
-    	if ( responseType.equals( FACEBOOK_RESPONSE ) ){
+    	if ( loginType.equals( FACEBOOK_LOGIN ) ){
     		try{
     			bundleParams.putString( RegistroRestClientTask.CAMPO_NOMBRE_PERSONA, jsonResponse.getString( FB_NOMBRE ) );
     			bundleParams.putString( RegistroRestClientTask.CAMPO_APELLIDOS_PERSONA, jsonResponse.getString( FB_APELLIDOS ) );
@@ -356,18 +340,19 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     			Log.i( "JSONException", error.getMessage() );
     		}
     	}
-    	else if ( responseType.equals( GOOGLE_RESPONSE )  ){
+    	else if ( loginType.equals( GOOGLE_LOGIN )  ){
     		
     	}
-    	else if ( responseType.equals( TWITTER_RESPONSE ) ){
+    	else if ( loginType.equals( TWITTER_LOGIN ) ){
     		
     	}
-    	else if ( responseType.equals( NATIVE_RESPONSE ) ){
+    	else if ( loginType.equals( NATIVE_LOGIN ) ){
     		//SI es un inicio de sesion nativo, no se coloca ningun parametro en el Bundle,
     		//por lo tanto este queda vacio
     	}
-    	bundleParams.putString( CCMPreferences.CAMPO_LOGIN_TYPE, responseType );
+    	//new CCMPreferences( this ).guardarTipoLogin( loginType );
     	
+    	bundleParams.putString( CCMPreferences.CAMPO_LOGIN_TYPE, loginType );    	
     	Intent i = new Intent( this, RegistroActivity.class );
     	i.putExtras( bundleParams );
     	startActivity( i );
@@ -419,7 +404,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     			break;	
     		
     		case R.id.btn_registro_login_activity:
-    			inicioRegistro( null, NATIVE_RESPONSE );
+    			inicioRegistro( null, NATIVE_LOGIN );
     			break;
     			
     		case R.id.btn_login_login_activity:
@@ -477,9 +462,10 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     //===========================================================================================================
     
 	//--------------------------------------------------GOOGLE CALLBACK------------------------------------------
+    //Método que se llama luego de conectar a la Api de Google
+    //es decir, luego de invocar googleApiClient.connect()
 	@Override
 	public void onConnected(Bundle arg0) {
-		/*
 		signedInUser = false;
 	    if ( Plus.PeopleApi.getCurrentPerson(googleApiClient) != null ){
 	    	Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);	    	
@@ -490,8 +476,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	    			+ "Birthday: %s"
 	    			+ "Email: %s", currentPerson.getDisplayName(), currentPerson.getGender(),
 	    			currentPerson.getName(), currentPerson.getBirthday(), Plus.AccountApi.getAccountName(googleApiClient) );	
-	    }
-	    */	 
+	    } 
 		Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
 		Log.v( "current Person: ", currentPerson.getBirthday() + currentPerson.getName() );
 	}
@@ -542,12 +527,11 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 		GraphRequest request = GraphRequest.newMeRequest( result.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
 			@Override
 			//Cuando se complete el request a Facebook se procesa
-			//la respuesta que entrega la API en formato JSON que es asi:
-			//
+			//la respuesta que entrega la API en formato JSON que es asi
 			public void onCompleted( JSONObject object, GraphResponse response ) {
 				JSONObject jsonResponse = response.getJSONObject();
-				Log.v( "Log", response.toString() );
-				inicioRegistro( jsonResponse, FACEBOOK_RESPONSE );				
+				//Log.v( "Facebook onSuccess", response.toString() );
+				inicioRegistro( jsonResponse, FACEBOOK_LOGIN );				
 			}			
 		});
         Bundle parameters = new Bundle();

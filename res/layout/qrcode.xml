@@ -86,7 +86,7 @@
 	            android:textSize="@dimen/qr_code_activity_txt" />            
       	</LinearLayout>
       	
-        
+        <!-- 
         <Button
              android:id="@+id/btn_siguiente"
 	         style="@style/btn_red_large"
@@ -94,6 +94,7 @@
 	         android:layout_height="wrap_content"	         
 	         android:text="@string/siguiente"
 	         android:layout_gravity="center" />
+	     -->
         
      
      </LinearLayout>

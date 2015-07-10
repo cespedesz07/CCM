@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
+import android.support.v4.app.FragmentManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -28,10 +30,13 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	private ArrayAdapter<String> adapter;
 	private View itemView;
 	private List<String> idItems;
-	private String[] items;	
+	private String[] items;
+	private ArrayList<String> cuposDisponibles;	
 	private boolean[] selectedItems;	
 	private String dialogTitle;
 	
+	private AlertDialog.Builder builder;
+	private AlertDialog dialog;
 	
 	
 
@@ -53,11 +58,13 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	public void setItems( ArrayList< ArrayList<String> > items ){
 		this.idItems = items.get(0);
 		this.items = items.get(1).toArray( new String[idItems.size()] );
-		this.selectedItems = new boolean[ items.size() ];
+		
+		this.selectedItems = new boolean[ items.size() ];		
 		Arrays.fill( selectedItems, false );					//Se indica que ningun elemento ha sido seleccionado...
+		
 		adapter.clear();
 		adapter.add( getSelectedItemsString() );
-		adapter.notifyDataSetChanged();
+		adapter.notifyDataSetChanged();		
 	}
 	
 	
@@ -123,53 +130,63 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	}
 	
 	
-	//Método que captura las ubicaciones a las cuales va a asistir la persona
-	//mediante el siguiente formato: [idUbicacion, docPersona, tipoPersona]
-	//y las almacena en un ArrayList para ser procesadas por guardadoEventosUbicRestClientTask.agregarRegistrosPersonaUbicacion()
-	/*
-	private void almacenarRegistrosPersonaUbicacion(){
-		ArrayList<String[]> registros = new ArrayList<String[]>();
-		ArrayList<String> idUbicaciones = getIdSelectedItems();
-		String docPersona = new CCMPreferences( this.context ).obtenerDocPersona();
-		String tipoPersona = "4";
-		for ( String idUbicacion : idUbicaciones ){
-			String[] registro = { idUbicacion, docPersona, tipoPersona };
-			registros.add( registro );
-		}
-		guardadoEventosUbicRestClientTask.agregarRegistrosPersonaUbicacion( registros );
-		guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.CREAR_PERSONA_UBICACION );
-		
-	}
-	*/
-	
-	
 	
 	
 	
 	
 	
 	//Método que se llama cuando se presiona el Spinner para desplegar las Ubicaciones
+	@SuppressLint("NewApi")
 	@Override
 	public boolean performClick(){
-		AlertDialog.Builder builder = new AlertDialog.Builder( getContext() ); 
-		builder.setMultiChoiceItems( items, selectedItems, this );
-		builder.setTitle( this.dialogTitle );
-		/*
-		builder.setPositiveButton( context.getResources().getString(R.string.guardar), new DialogInterface.OnClickListener(){
+		this.builder = new AlertDialog.Builder( this.context ); 
+		builder.setMultiChoiceItems( items, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
+			
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch ( which ){
-				case DialogInterface.BUTTON_POSITIVE:
-					almacenarRegistrosPersonaUbicacion();
-					break;
-				case DialogInterface.BUTTON_NEGATIVE:
-					break;
-				}				
-			}			
+			public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
+				//Si la ubicacion a seleccionar tiene 0 cupos disponibles
+				//se desabilita la opcion de seleccionado
+				//Log.v( "checked", String.valueOf(which) + ": " + isChecked);
+				String itemRef = dialog.getListView().getItemAtPosition( which ).toString();
+				String[] itemRefPartido = itemRef.split(" - ");
+				String cuposLibres = itemRefPartido[ itemRefPartido.length - 1 ];
+				Log.v( "Cupos Libres", cuposLibres );
+				int cuposRef =  Integer.valueOf( cuposLibres.split(" ")[0] );
+				Log.v( "Cupos Ref", String.valueOf( cuposRef ) );
+				if ( cuposRef == 0  &&  isChecked ){
+					dialog.getListView().getChildAt( which ).setEnabled( false );
+					dialog.getListView().setItemChecked(which, false);
+				}
+				else{
+					selectedItems[which] = isChecked;
+					String docPersona = new CCMPreferences( context ).obtenerDocPersona();
+					String tipoPersona = "4";
+					String[] registro = { docPersona, idItems.get(which), tipoPersona };
+					GuardadoEventosUbicRestClientTask guardadoEventosUbicRestClientTask = new GuardadoEventosUbicRestClientTask( context );
+					if ( isChecked ){
+						//Log.v( "a ingresar: " , Arrays.toString(registro));
+						guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
+						guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.CREAR_PERSONA_UBICACION );
+						cuposRef -= 1;
+					}
+					else{
+						//Log.v( "a eliminar: " , Arrays.toString(registro));
+						guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
+						guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.BORRAR_PERSONA_UBICACION );
+						cuposRef += 1;
+					}
+					actualizarRegistroUbicacionListView(which, isChecked, cuposRef);
+					adapter.clear();
+					adapter.add( getSelectedItemsString() );
+					adapter.notifyDataSetChanged();
+				}
+				
+			}
 		} );
-		builder.setNegativeButton( context.getResources().getString(R.string.cancelar) , null);
-		*/
-		builder.show();
+		builder.setTitle( this.dialogTitle );
+		
+		this.dialog = builder.create();
+		dialog.show();
 		return false;
 	}
 	
@@ -182,24 +199,57 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	//Método para controlar los eventos de Checkeado de Items
 	@Override
 	public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-		selectedItems[which] = isChecked;
-		String docPersona = new CCMPreferences( this.context ).obtenerDocPersona();
-		String tipoPersona = "4";
-		String[] registro = { docPersona, idItems.get(which), tipoPersona };
-		GuardadoEventosUbicRestClientTask guardadoEventosUbicRestClientTask = new GuardadoEventosUbicRestClientTask( context );
-		if ( isChecked ){
-			//Log.v( "a ingresar: " , Arrays.toString(registro));
-			guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
-			guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.CREAR_PERSONA_UBICACION );
+		//Si la ubicacion a seleccionar tiene 0 cupos disponibles
+		//se desabilita la opcion de seleccionado
+		Log.v( "checked", String.valueOf(which) + ": " + isChecked);
+		String itemRef = this.dialog.getListView().getItemAtPosition( which ).toString();
+		String cuposLibres = itemRef.split(" - ")[2];
+		int cuposRef =  Integer.valueOf( cuposLibres.split(" ")[0] );
+		if ( cuposRef == 0  &&  isChecked ){
+			this.dialog.getListView().getChildAt( which ).setEnabled( false );
+			this.dialog.getListView().setItemChecked(which, false);
 		}
 		else{
-			//Log.v( "a eliminar: " , Arrays.toString(registro));
-			guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
-			guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.BORRAR_PERSONA_UBICACION );
+			selectedItems[which] = isChecked;
+			String docPersona = new CCMPreferences( this.context ).obtenerDocPersona();
+			String tipoPersona = "4";
+			String[] registro = { docPersona, idItems.get(which), tipoPersona };
+			GuardadoEventosUbicRestClientTask guardadoEventosUbicRestClientTask = new GuardadoEventosUbicRestClientTask( context );
+			if ( isChecked ){
+				//Log.v( "a ingresar: " , Arrays.toString(registro));
+				guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
+				guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.CREAR_PERSONA_UBICACION );
+				cuposRef -= 1;
+			}
+			else{
+				//Log.v( "a eliminar: " , Arrays.toString(registro));
+				guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
+				guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.BORRAR_PERSONA_UBICACION );
+				cuposRef += 1;
+			}
+			actualizarRegistroUbicacionListView(which, isChecked, cuposRef);
+			adapter.clear();
+			adapter.add( getSelectedItemsString() );
+			adapter.notifyDataSetChanged();
 		}
+	}
+	
+	
+	public void actualizarRegistroUbicacionListView( int position, boolean checkeado, int nuevosCupos ){
+		String actual = this.dialog.getListView().getItemAtPosition(position).toString();		
+		String[] partido = actual.split( " - " );
+		String nuevoString = String.format("%s - %s - %s Libres", partido[0], partido[1], nuevosCupos );
+		this.items[position] = nuevoString;
 		adapter.clear();
-		adapter.add( getSelectedItemsString() );
 		adapter.notifyDataSetChanged();
+		
+		dialog.dismiss();
+		
+		this.builder = new AlertDialog.Builder( this.context ); 
+		builder.setMultiChoiceItems( items, selectedItems, this );
+		builder.setTitle( this.dialogTitle );		
+		this.dialog = builder.create();
+		dialog.show();
 	}
 
 

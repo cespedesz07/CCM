@@ -138,8 +138,7 @@
                  android:hint="@string/email"
                  android:inputType="textEmailAddress"
                  android:drawableLeft="@android:drawable/ic_menu_add"
-                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
-                  />
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />
              
              
              
@@ -210,7 +209,8 @@
                  android:textAppearance="?android:attr/textAppearanceMedium"
                  android:textSize="@dimen/registro_activity_txt"
                  android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
-                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />  
+                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />
+             
              <DatePicker
                  android:id="@+id/picker_fecha_nacimiento"
                  android:layout_below="@id/textview_fecha_nacimiento"
@@ -219,7 +219,7 @@
                  android:layout_centerHorizontal="true"
                  android:calendarViewShown="false"
                  android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />             
-             
+              
              
              
              

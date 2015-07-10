@@ -40,6 +40,27 @@
         <item name="android:textStyle">bold</item>
         <item name="android:padding">5dp</item>
     </style>
+    
+    
+    
+    <!-- Estilo de los botones del Menu de Inicio -->
+    <style name="btn_eventos">
+       <item name="android:background">@drawable/events_icon_black</item>
+       <item name="android:textSize">@dimen/txt_12sp</item>
+       <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="btn_mapa">
+     	<item name="android:background">@drawable/map_icon</item>
+        <item name="android:textSize">@dimen/txt_12sp</item>
+        <item name="android:textStyle">bold</item>   
+    </style>
+    
+    <style name="btn_codigo_qr">
+     	<item name="android:background">@drawable/qrcode_icon</item>
+        <item name="android:textSize">@dimen/txt_12sp</item>
+        <item name="android:textStyle">bold</item>   
+    </style>
 
     
     

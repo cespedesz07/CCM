@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import com.example.ccm.R;
 import com.example.ccm.actionbar.CCMActionBarActivity;
 import com.example.ccm.eventos.AreaListActivity;
+import com.example.ccm.mapa.MapaActivity;
+import com.example.ccm.menuinicio.MenuInicioActivity;
+import com.example.ccm.preferences.CCMPreferences;
 import com.example.ccm.restclient.QRCodeHttpClientTask;
 import com.example.ccm.restclient.RegistroRestClientTask;
 
@@ -25,12 +28,12 @@ import com.example.ccm.restclient.RegistroRestClientTask;
  * @author Santiago Céspedes Zapata - cespedesz07@gmail.com
  *
  */
-public class QRCodeActivity extends CCMActionBarActivity implements OnClickListener, OnTouchListener {	
+public class QRCodeActivity extends CCMActionBarActivity {	
 	
 	
 	private String documentoPersona;
 	private ImageView codigoQR;
-	private Button btnSiguiente;
+	//private Button btnSiguiente;
 	
 	
 	@Override
@@ -39,17 +42,21 @@ public class QRCodeActivity extends CCMActionBarActivity implements OnClickListe
 		setContentView(R.layout.qrcode);
 		
 		codigoQR = (ImageView) findViewById( R.id.codigo_qr );
-		
+		/*
 		btnSiguiente = (Button) findViewById( R.id.btn_siguiente);		
 		btnSiguiente.setOnTouchListener( this );
 		btnSiguiente.setOnClickListener( this );
+		*/
 		
+		/*
 		Bundle bundleParams = getIntent().getExtras();
-		documentoPersona = bundleParams.getString( RegistroRestClientTask.CAMPO_DOC_PERSONA );		
+		documentoPersona = bundleParams.getString( RegistroRestClientTask.CAMPO_DOC_PERSONA );
+		*/
+		documentoPersona = new CCMPreferences(this).obtenerDocPersona();
 		new QRCodeHttpClientTask(this, codigoQR).execute( documentoPersona );
 	}
 
-
+	/*
 	//Método para capturar el presionado del botón y cabiar el fondo del mismo
 	//esto es para crear el efecto de presionado de los botones
 	@Override
@@ -73,10 +80,11 @@ public class QRCodeActivity extends CCMActionBarActivity implements OnClickListe
 	@Override
 	public void onClick(View view) {
 		if ( view.getId() == R.id.btn_siguiente ){
-			Intent i = new Intent( QRCodeActivity.this, AreaListActivity.class );
+			Intent i = new Intent( QRCodeActivity.this, MenuInicioActivity.class );
 			startActivity( i );	
 		}		
 	}
+	*/
 	
 	
 	

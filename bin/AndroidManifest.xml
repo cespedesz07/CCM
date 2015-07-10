@@ -17,7 +17,7 @@
 
     <!--
          Datos de la aplicacion como el icono y la clase
-         CCMApplication para inicializar APIs y Libreria de PARSE
+         CCMApplication para inicializar APIs y Libreria de PARSE
     -->
     <application
         android:name=".application.CCMApplication"
@@ -37,7 +37,63 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <!-- Actividades -->
+        <!-- ================================= Actividades ======================================== -->
+
+        <activity
+            android:name=".splash.SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".actionbar.CCMActionBarActivity"
+            android:label="@string/title_activity_ccmaction_bar" >
+        </activity>
+        <activity
+            android:name=".login.LoginActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".login.LoginNativoActivity"
+            android:parentActivityName=".login.LoginActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".login.LoginActivity" />
+        </activity>
+        <activity
+            android:name=".registro.RegistroActivity"
+            android:label="@string/title_activity_registro"
+            android:parentActivityName=".login.LoginActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".login.LoginActivity" />
+        </activity>
+        <activity
+            android:name=".menuinicio.MenuInicioActivity"
+            android:label="@string/title_activity_menu_inicio"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".mapa.MapaActivity"
+            android:label="@string/title_activity_mapa"
+            android:screenOrientation="landscape"
+            android:parentActivityName=".menuinicio.MenuInicioActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".menuinicio.MenuInicioActivity" />
+        </activity>
+
         <!--
              IMPORTANTE:
              Registro del AreaListActivity.java que corresponde a la lista de areas de la izquierda del dispositivo.
@@ -52,63 +108,41 @@
         <activity
             android:name=".eventos.AreaListActivity"
             android:label="@string/app_name"
+            android:parentActivityName=".menuinicio.MenuInicioActivity"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MENUITEMLISTACTIVITY" />
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".eventos.AreaDetailActivity"></activity>
-          
-        <activity
-            android:name=".login.LoginActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".splash.SplashActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>           
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".menuinicio.MenuInicioActivity" />
         </activity>
         <activity 
-            android:name=".login.LoginNativoActivity"
+            android:name=".eventos.AreaDetailActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".qrcode.QRCodeActivity"
+            android:label="@string/title_activity_qr"
+            android:parentActivityName=".menuinicio.MenuInicioActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".menuinicio.MenuInicioActivity" />
+        </activity>
 
+        <!-- =================================Otras Actividades=================================== -->
         <!--
              MUY IMPORTANTE:
         	 SE REGISTRA LA FacebookActivity PARA PODER DESPLEGAR EL DIALOGO DE INICIO DE SESION EN
-        	 FACEBOOK CUANDO SE PRESIONA EL LoginButton (Ver LoginActivity.java)
-         -->
+        	 FACEBOOK CUANDO SE PRESIONA EL LoginButton (Ver LoginActivity.java)
+        -->
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name=".registro.RegistroActivity"
-            android:label="@string/title_activity_registro"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".actionbar.CCMActionBarActivity"
-            android:label="@string/title_activity_ccmaction_bar" >
-        </activity>
-        <activity
-            android:name="com.example.ccm.qrcode.QRCodeActivity"
-            android:label="@string/title_activity_qr"
-            android:screenOrientation="portrait" >
-        </activity>
     </application>
 
 </manifest>

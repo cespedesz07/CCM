@@ -23,6 +23,8 @@ public class TabFragment extends Fragment{
 	private String idTipoAreaActual; 
 	private String pageTitle;
 	
+	private ListView listaEventos;
+	
 	
 	public TabFragment( String idTipoAreaActual, String pageTitle ){
 		this.idTipoAreaActual = idTipoAreaActual;
@@ -34,14 +36,28 @@ public class TabFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		super.onCreateView(inflater, container, savedInstanceState);
-		
+		Log.i( "TabFragment", "OnCreateView" );
 		View vistaFragment = inflater.inflate( R.layout.lista_eventos, container, false );
-		ListView listaEventos = (ListView) vistaFragment.findViewById( R.id.listview_lista_eventos );
+		listaEventos = (ListView) vistaFragment.findViewById( R.id.listview_lista_eventos );		
+		return vistaFragment;		
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		Log.i( "TabFragment", "OnPause" );
+		/*
 		CargaEventosRestClientTask cargaEventosRestClientTask = new CargaEventosRestClientTask( getActivity(), listaEventos );
 		cargaEventosRestClientTask.execute( idTipoAreaActual, pageTitle );
-		
-		return vistaFragment;
-		
+		*/
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.i( "TabFragment", "OnResume" );
+		CargaEventosRestClientTask cargaEventosRestClientTask = new CargaEventosRestClientTask( getActivity(), listaEventos );
+		cargaEventosRestClientTask.execute( idTipoAreaActual, pageTitle );
 	}
 	
 }

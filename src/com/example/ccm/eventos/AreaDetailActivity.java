@@ -30,7 +30,7 @@ import com.example.ccm.actionbar.CCMActionBarActivity;
  */
 @SuppressLint("NewApi")
 @SuppressWarnings("deprecation")
-public class AreaDetailActivity extends CCMActionBarActivity implements ActionBar.TabListener {
+public class AreaDetailActivity extends CCMActionBarActivity{
 	
 	
 	private ViewPagerAdapter viewPagerAdapter;
@@ -88,16 +88,11 @@ public class AreaDetailActivity extends CCMActionBarActivity implements ActionBa
 		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_jue )  ).setTabListener(this).setTag("Thursday")  );
 		actionBar.addTab( actionBar.newTab().setText(  getResources().getString( R.string.tab_vie )  ).setTabListener(this).setTag("Friday")    );
 		*/
-	}
-
-	
-
-
-
-	
+	}	
 	
 	
 	//=============================================== MÉTODOS DE ActionBar.TabListener =============================================
+	/*
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction fragmentTransaction) {
 	}
@@ -114,5 +109,6 @@ public class AreaDetailActivity extends CCMActionBarActivity implements ActionBa
 	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
 		
 	}
+	*/
 	
 }

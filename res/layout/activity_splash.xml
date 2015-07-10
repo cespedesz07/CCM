@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
         android:orientation="horizontal" >
 
@@ -21,7 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/pad_30dp"
-            android:src="@drawable/logo_scm_cropped_170x142" />
+            android:src="@drawable/logo_scm_cropped_170x142"
+            android:layout_margin="5dp" />
 
         <ImageView
             android:id="@+id/logo_un_splash_screen"
@@ -34,8 +35,9 @@
         android:id="@+id/logo_congreso_splash_screen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_margin="10dp"
         android:src="@drawable/logo_congreso_cropped_600x216" />
 
 </RelativeLayout>

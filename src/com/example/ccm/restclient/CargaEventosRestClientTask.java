@@ -50,8 +50,8 @@ public class CargaEventosRestClientTask extends AsyncTask< String, Integer, Arra
 	
 	
 	//URL que conecta a los datos de eventos y ubicaciones
-	//private static final String URL_EVENTOS_UBICACION_READ = "http://ccm2015.specializedti.com/index.php/rest/evento/sql";
-	private static final String URL_EVENTOS_UBICACION_READ = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/evento/sql";
+	private static final String URL_EVENTOS_UBICACION_READ = "http://ccm2015.specializedti.com/index.php/rest/evento/sql";
+	//private static final String URL_EVENTOS_UBICACION_READ = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/evento/sql";
 	
 	
 	//Llaves o campos asociados a los parametros POST enviados al WebService
@@ -106,19 +106,21 @@ public class CargaEventosRestClientTask extends AsyncTask< String, Integer, Arra
 	//Luego de ejecutar la consulta en el metodo doInBackground()
 	@Override
 	protected void onPostExecute( ArrayList<Object[]> result ){
-		if ( progressDialog.isShowing() ){
-			progressDialog.dismiss();
-		}
-		if ( !result.isEmpty() ){
-			ItemEventoAdapter itemEventoAdapter = new ItemEventoAdapter( context, result );
-			this.listaEventos.setAdapter( itemEventoAdapter );
-		}
-		else{
-			if ( mensajeError.length() == 0 ){
-				mensajeError = "Resultado Vacio";
+		if ( progressDialog != null ){
+			if ( progressDialog.isShowing() ){
+				progressDialog.dismiss();
 			}
-			alertDialog.setMessage( mensajeError );
-			alertDialog.show();
+			if ( !result.isEmpty() ){
+				ItemEventoAdapter itemEventoAdapter = new ItemEventoAdapter( context, result );
+				this.listaEventos.setAdapter( itemEventoAdapter );
+			}
+			else{
+				if ( mensajeError.length() == 0 ){
+					mensajeError = "Resultado Vacio";
+				}
+				alertDialog.setMessage( mensajeError );
+				alertDialog.show();
+			}
 		}
 	}	
 	
@@ -156,7 +158,7 @@ public class CargaEventosRestClientTask extends AsyncTask< String, Integer, Arra
 			HttpResponse response = httpClient.execute( httpPost );
 			HttpEntity entity = response.getEntity();
 			inputStream = entity.getContent();
-			BufferedReader reader = new BufferedReader( new InputStreamReader(inputStream, "UTF-8") );
+			BufferedReader reader = new BufferedReader( new InputStreamReader(inputStream) );
 			String linea = reader.readLine();
 			while ( linea != null ){
 				textoResultado += String.format( "%s \n", linea );
@@ -243,7 +245,7 @@ public class CargaEventosRestClientTask extends AsyncTask< String, Integer, Arra
 				error.printStackTrace();
 			}
 		}
-		//imprimirEstructura( eventosUbicaciones );
+		imprimirEstructura( eventosUbicaciones );
 		return eventosUbicaciones;
 	}
 	

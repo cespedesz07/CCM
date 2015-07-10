@@ -28,7 +28,7 @@ public class CCMPreferences {
 	private static final String CAMPO_NOMBRE_PERSONA = RegistroRestClientTask.CAMPO_NOMBRE_PERSONA;
 	private static final String CAMPO_APELLIDOS_PERSONA = RegistroRestClientTask.CAMPO_APELLIDOS_PERSONA;
 	private static final String CAMPO_CORREO_ELECTRONICO_PERSONA = RegistroRestClientTask.CAMPO_CORREO_ELECTRONICO_PERSONA;
-	private static final String CAMPO_UBICACION = "registros_ubicacion";
+	public static final String CAMPO_UBICACION = "registros_ubicacion";
 	public static final String CAMPO_LOGIN_TYPE = "login_type";
 	
 	
@@ -74,6 +74,15 @@ public class CCMPreferences {
 	}
 	
 	
+	public void guardarIdRegistrosUbicacion( HashSet<String> registrosPersonaUbicacion ){
+		Editor editor = pref.edit();
+		editor.remove( CAMPO_UBICACION );
+		editor.apply();
+		editor.putStringSet( CAMPO_UBICACION, registrosPersonaUbicacion);
+		editor.commit();
+	}
+	
+	
 	public void sincronizarRegistroUbicacion( String idUbicacion, String metodo ){
 		Set<String> registrosPersonaUbicacion = pref.getStringSet( CAMPO_UBICACION, new HashSet<String>() );
 		if ( metodo.equals( CREAR_PERSONA_UBICACION ) ){
@@ -96,8 +105,18 @@ public class CCMPreferences {
 	}
 	
 	
+	public String obtenerNombrePersona(){
+		return pref.getString( CAMPO_NOMBRE_PERSONA, "" );
+	}
 	
-	public void guardarTipoResponse( String responseType ){
+	
+	public String obtenerApellidosPersona(){
+		return pref.getString( CAMPO_APELLIDOS_PERSONA, "" );
+	}
+	
+	
+	
+	public void guardarTipoLogin( String responseType ){
 		Editor editor = pref.edit();
 		editor.putString( CAMPO_LOGIN_TYPE, responseType );
 		editor.commit();
@@ -105,7 +124,7 @@ public class CCMPreferences {
 	
 	
 	
-	public String obtenerTipoResponse(){
+	public String obtenerTipoLogin(){
 		return pref.getString( CAMPO_LOGIN_TYPE, "" );		
 	}
 	
@@ -122,6 +141,7 @@ public class CCMPreferences {
 	public void vaciar(){
 		Editor editor = pref.edit();
 		editor.clear();
+		editor.commit();
 	}
 
 

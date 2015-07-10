@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -34,6 +36,7 @@ import android.util.Log;
 
 import com.example.ccm.R;
 import com.example.ccm.eventos.AreaListActivity;
+import com.example.ccm.menuinicio.MenuInicioActivity;
 import com.example.ccm.preferences.CCMPreferences;
 import com.example.ccm.qrcode.QRCodeActivity;
 import com.example.ccm.registro.RegistroActivity;
@@ -54,8 +57,8 @@ import com.example.ccm.registro.RegistroActivity;
 public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{		
 	
 	
-	//private static final String URL_PERSONA_EXIST = "http://ccm2015.specializedti.com/index.php/rest/persona/exist";
-	private static final String URL_PERSONA_EXIST = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/exist";
+	private static final String URL_PERSONA_EXIST = "http://ccm2015.specializedti.com/index.php/rest/persona/exist";
+	//private static final String URL_PERSONA_EXIST = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/exist";
 	
 	public static final String EXISTE_PERSONA = "existePersona";
 	public static final String LOGIN_PERSONA = "loginPersona";
@@ -63,7 +66,12 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 	//Nombre de los campos de la tabla Persona para proceder al registro
 	//( se usan en RegistroActivity.guardarDatosFormulario() )
 	public static final String CAMPO_DOC_PERSONA = "docPersona";
+	public static final String CAMPO_NOMBRE_PERSONA = "nombre";
+	public static final String CAMPO_APELLIDOS_PERSONA = "apellidos";
 	public static final String CAMPO_CORREO_ELECTRONICO_PERSONA = "correo_electronico";
+	
+	private static final String KEY_PERSONA_DOCPERSONA = "persona_docPersona";
+	private static final String CAMPO_UBICACION_IDUBICACION = "ubicacion_idubicacion";
 	
 	//Valor por defecto de las personas que se se registraron
 	public static final String VALOR_ASISTIO_NO = "NO";
@@ -76,6 +84,8 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 	private String[] params;
 	private String metodo;
 	private RegistroActivity registroActivity;
+	private String nombrePersona;
+	private String apellidosPersona;
 	
 	
 	
@@ -119,17 +129,21 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 			else if ( metodo.equals( LOGIN_PERSONA ) ){
 				CCMPreferences preferences = new CCMPreferences( this.context );
 				preferences.guardarDocPersona( this.params[0] );
+				preferences.guardarNombreApellidosPersona( this.nombrePersona, this.apellidosPersona );
 				preferences.guardarEmailPersona( this.params[1] );
-				preferences.guardarTipoResponse( this.params[2] );
-				this.context.startActivity( new Intent( this.context, AreaListActivity.class ) );
+				preferences.guardarTipoLogin( this.params[2] );	
+				Intent i = new Intent( this.context, MenuInicioActivity.class );
+				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				this.context.startActivity( i );
 			}
 		}
 		else{
 			if ( metodo.equals( EXISTE_PERSONA ) ){
 				CCMPreferences preferences = new CCMPreferences( this.context );
 				preferences.guardarDocPersona( this.params[0] );
-				preferences.guardarEmailPersona( this.params[1] );
-				preferences.guardarTipoResponse( this.params[2] );
+				preferences.guardarNombreApellidosPersona(this.params[1], this.params[2]);
+				preferences.guardarEmailPersona( this.params[3] );
+				preferences.guardarTipoLogin( this.params[4] );
 				this.registroActivity.guardarDatosFormulario();
 			}
 			if ( metodo.equals( LOGIN_PERSONA ) ){
@@ -141,8 +155,6 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 	
 	
 	
-	//Consulta que se hace de fondo
-	//La estructura de llamado de este método es doInBackground( String nombre_metodo, Object params )
 	@Override
 	protected Boolean doInBackground(String... params){
 		if ( metodo.equals( EXISTE_PERSONA ) ){
@@ -196,7 +208,7 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 		parametros.add( new BasicNameValuePair(CAMPO_DOC_PERSONA, numDocumento) );
 		
 		try{
-			httpPost.setEntity( new UrlEncodedFormEntity(parametros) );
+			httpPost.setEntity( new UrlEncodedFormEntity(parametros, "utf-8") );
 			HttpResponse response = httpClient.execute( httpPost );
 			HttpEntity entity = response.getEntity();
 			inputStream = entity.getContent();
@@ -212,6 +224,8 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 				if ( email != null ){
 					if ( jsonObject.getString( CAMPO_DOC_PERSONA ).equals( numDocumento )  &&  
 					     jsonObject.getString( CAMPO_CORREO_ELECTRONICO_PERSONA ).equals( email ) ){
+						this.nombrePersona = jsonObject.getString( CAMPO_NOMBRE_PERSONA );
+						this.apellidosPersona = jsonObject.getString( CAMPO_APELLIDOS_PERSONA );						
 						return true;
 					}
 					else{

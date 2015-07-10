@@ -33,7 +33,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.ccm.R;
+import com.example.ccm.menuinicio.MenuInicioActivity;
 import com.example.ccm.qrcode.QRCodeActivity;
+import com.example.ccm.registro.RegistroActivity;
 
 
 /**
@@ -52,11 +54,8 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 	
 	
 	//URLs correspondientes a las opciones que publica el WebService para su consumo
-	//private static final String URL_PERSONA_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona/create";
-	private static final String URL_PERSONA_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/create";
-	
-	//private static final String URL_PERSONA_EXIST = "http://ccm2015.specializedti.com/index.php/rest/persona/exist";
-	private static final String URL_PERSONA_EXIST = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/exist";
+	private static final String URL_PERSONA_CREATE = "http://ccm2015.specializedti.com/index.php/rest/persona/create";
+	//private static final String URL_PERSONA_CREATE = "http://192.168.1.56/Yii_CCM_WebService/web/index.php/rest/persona/create";
 	
 	//Nombre de los campos de la tabla Persona para proceder al registro
 	//( se usan en RegistroActivity.guardarDatosFormulario() )
@@ -123,11 +122,9 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 			alertDialog.show();
 		}
 		else{
-			Bundle bundleParams = new Bundle();
-			bundleParams.putString( RegistroRestClientTask.CAMPO_DOC_PERSONA, this.documentoPersona );
-			Intent i = new Intent( context, QRCodeActivity.class );
-			i.putExtras( bundleParams );
-			context.startActivity( i );			
+			Intent i = new Intent( this.context, MenuInicioActivity.class );
+			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			this.context.startActivity( i );
 		}
 	}
 	
@@ -137,7 +134,7 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 	//La estructura de llamado de este método es doInBackground( String nombre_metodo, Object params )
 	@Override
 	protected Boolean doInBackground(Object... params){
-		List<NameValuePair> parametros = (List<NameValuePair>)params[0];
+		List<NameValuePair> parametros = (List<NameValuePair>) params[0];
 		this.documentoPersona = parametros.get(0).getValue();
 		return ingresarPersona( parametros );
 	}
@@ -165,7 +162,7 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost( URL_PERSONA_CREATE );					
 		try {
-			httpPost.setEntity( new UrlEncodedFormEntity( parametros ) );
+			httpPost.setEntity( new UrlEncodedFormEntity( parametros, "utf-8" ) );
 			HttpResponse response = httpClient.execute( httpPost );
 			int statusCode = response.getStatusLine().getStatusCode();
 			if ( statusCode == 200  ||  statusCode == 201 ){

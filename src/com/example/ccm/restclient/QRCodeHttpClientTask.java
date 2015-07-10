@@ -44,7 +44,7 @@ public class QRCodeHttpClientTask extends AsyncTask<String, Integer, Bitmap> {
 	private static final String VALUE_COLOR = "000000";
 	
 	private static final String KEY_SIZE = "size";
-	private static final String VALUE_SIZE = "220x220";
+	private static final String VALUE_SIZE = "520x520";
 	
 	private static final String KEY_FORMAT = "format";
 	private static final String VALUE_FORMAT = "png";

@@ -13,7 +13,9 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +28,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ccm.R;
 import com.example.ccm.actionbar.CCMActionBarActivity;
@@ -33,6 +36,7 @@ import com.example.ccm.eventos.AreaListActivity;
 import com.example.ccm.login.LoginActivity;
 import com.example.ccm.preferences.CCMPreferences;
 import com.example.ccm.qrcode.QRCodeActivity;
+import com.example.ccm.restclient.CargaUbicacionesPersonaRestClientTask;
 import com.example.ccm.restclient.LoginRestClientTask;
 import com.example.ccm.restclient.RegistroRestClientTask;
 import com.example.ccm.restclient.SpinnerRestClientTask;
@@ -140,7 +144,8 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		}
 		else{
 			this.responseType = bundleParamsLogin.getString( CCMPreferences.CAMPO_LOGIN_TYPE );
-			if ( !this.responseType.equals( LoginActivity.NATIVE_RESPONSE ) ){
+			//this.responseType = new CCMPreferences(this).obtenerTipoLogin();
+			if ( !this.responseType.equals( LoginActivity.NATIVE_LOGIN ) ){
 				obtenerDatosLoginRedesSociales( bundleParamsLogin );
 				new AlertDialog.Builder(this)
 				.setMessage( getResources().getString(R.string.alert_registro_redes_sociales) )
@@ -148,9 +153,7 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 				.show();
 			}
 		}
-				
-	}	
-	
+	}
 	
 	
 	
@@ -159,10 +162,10 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	//Este método es llamado 
 	private void obtenerDatosLoginRedesSociales( Bundle bundleParams ){
 		txtNombre.setText(  bundleParams.getString( RegistroRestClientTask.CAMPO_NOMBRE_PERSONA )  );
-		txtNombre.setEnabled(false);		
+		//txtNombre.setEnabled(false);		
 		
 		txtApellidos.setText(  bundleParams.getString( RegistroRestClientTask.CAMPO_APELLIDOS_PERSONA )  );
-		txtApellidos.setEnabled(false);
+		//txtApellidos.setEnabled(false);
 		
 		boolean radioButtonGeneroChecked = false;
 		int numRadioButtons = radioGroupGenero.getChildCount();
@@ -182,10 +185,10 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		
 		String[] fechaNacimientoPartida = bundleParams.getStringArray( RegistroRestClientTask.CAMPO_FECHA_NACIMIENTO_PERSONA );
 		pickerFechaNacimiento.updateDate(  Integer.valueOf(fechaNacimientoPartida[2]) , Integer.valueOf(fechaNacimientoPartida[0]) - 1, Integer.valueOf(fechaNacimientoPartida[1])  );
-		pickerFechaNacimiento.setEnabled(false);
+		//pickerFechaNacimiento.setEnabled(false);
 		
 		txtEmail.setText(  bundleParams.getString( RegistroRestClientTask.CAMPO_CORREO_ELECTRONICO_PERSONA )  );
-		txtEmail.setEnabled( false );
+		//txtEmail.setEnabled( false );
 	}	
 	
 	
@@ -207,6 +210,14 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	@Override
 	protected void onDestroy(){
 		super.onDestroy();
+		//Cuando se va a regresar a la actividad de atras (LoginActivity) se llama el metodo
+		//salir() del CCMActionBar para cerrar las sesiones abiertas (facebook, Google, Native)
+		//y se limpian todas las preferencias
+		//IMPORTANTE: Si se vacian primero las preferencias, al momento de llamar el metodo salir()
+		//no se tendría el tipo de login almacenado en preferencias, por lo que no se podria verificar
+		//por cuál red social se hizo el login
+		salir();
+		new CCMPreferences(this).vaciar();
 	}
 	
 	
@@ -236,16 +247,49 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	@Override
 	public void onClick(View v) {
 		if ( v.getId() == R.id.btn_registro_registro_activity ){
-			String numDocumentoCampo = txtNumDocumento.getText().toString();
-			String correoCampo = txtNumDocumento.getText().toString();
-			String tipoResponse = this.responseType;
-			String[] params = { numDocumentoCampo, correoCampo, tipoResponse };
-			LoginRestClientTask loginRestClientTask = new LoginRestClientTask( this, RegistroActivity.this );
-			loginRestClientTask.setParams( params );
-			loginRestClientTask.setMetodo( LoginRestClientTask.EXISTE_PERSONA );
-			loginRestClientTask.execute();
+			boolean formularioOk = validarCampos();
+			if ( formularioOk ){
+				String numDocumentoCampo = txtNumDocumento.getText().toString();
+				String nombreCampo = txtNombre.getText().toString();
+				String apellidosCampo = txtApellidos.getText().toString();
+				String correoCampo = txtEmail.getText().toString();
+				String tipoResponse = this.responseType;
+				String[] params = { numDocumentoCampo, nombreCampo, apellidosCampo, correoCampo, tipoResponse };
+				LoginRestClientTask loginRestClientTask = new LoginRestClientTask( this, RegistroActivity.this );
+				loginRestClientTask.setParams( params );
+				loginRestClientTask.setMetodo( LoginRestClientTask.EXISTE_PERSONA );
+				loginRestClientTask.execute();
+			}
+			else{
+				AlertDialog dialogCamposVacios = new AlertDialog.Builder(this)
+				.setTitle( "Error" )
+				.setMessage( getResources().getString( R.string.err_campos_vacios ) )
+				.setPositiveButton( getResources().getString(R.string.alert_ok), null)
+				.setCancelable( true )
+				.show();
+			}
 		}
 		
+	}
+	
+	
+	private boolean validarCampos(){
+		String numDocumentoCampo = txtNumDocumento.getText().toString(); 
+		String nombreCampo = txtNombre.getText().toString();
+		String apellidosCampo = txtApellidos.getText().toString();		
+			int indiceGeneroCampo = radioGroupGenero.getCheckedRadioButtonId();
+			String generoCampo = (  (RadioButton) radioGroupGenero.findViewById( indiceGeneroCampo )  ).getText().toString();		
+		String emailCampo = txtEmail.getText().toString();		
+		String telefonoCampo = txtTelefono.getText().toString();		
+		String fechaNacimientoCampo = obtenerFechaCampo( pickerFechaNacimiento );
+		
+		if ( !numDocumentoCampo.equals("")  &&  !nombreCampo.equals("")  &&  !apellidosCampo.equals("")  &&
+			 !emailCampo.equals("")  &&  !fechaNacimientoCampo.equals("")	){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	
@@ -281,19 +325,9 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_INSTITUCION_IDINSTITUCION_PERSONA, String.valueOf(institucionCampo)  )  				);
 		//parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_CODIGO_QR_PERSONA, codigoQRCampo )  													);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_FECHA_NACIMIENTO_PERSONA, fechaNacimientoCampo )  									);
-		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_ASISTIO_PERSONA, asistioCampo )            	        								);		
-
-		String params = "";
-		for ( NameValuePair pair : parametros ){
-			params += pair.getName() + ": " + pair.getValue() + "\n";
-		}
-		//Log.i( "Params: ", params );
-
-		//Se almacena el documento, correo y el tipo de login (facebookResponse, googleResponse, nativeResponse)
-		CCMPreferences pref = new CCMPreferences( RegistroActivity.this );
-		pref.guardarDocPersona( String.valueOf(numDocumentoCampo) );
-		pref.guardarEmailPersona( emailCampo );
-		pref.guardarTipoResponse( this.responseType );
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_ASISTIO_PERSONA, asistioCampo )            	        								);
+		
+		
 		
 		new RegistroRestClientTask( this ).execute( parametros );
 	}

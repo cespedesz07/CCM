@@ -29,7 +29,6 @@ public class ItemEventoAdapter extends BaseAdapter {
 	static class ViewHolder{
 		TextView textViewNombreEvento;
 		TextView textViewDescripcionEvento;
-		TextView textViewCuposDisponiblesEvento;
 		UbicacionesMultiSelectSpinner multiSelectSpinnerHoraLugarEvento;
 	}
 	
@@ -66,10 +65,11 @@ public class ItemEventoAdapter extends BaseAdapter {
 			holder = new ViewHolder();
 			holder.textViewNombreEvento = (TextView) convertView.findViewById( R.id.textview_nombre_evento );
 			holder.textViewDescripcionEvento = (TextView) convertView.findViewById( R.id.textview_descripcion_evento );
-			holder.textViewCuposDisponiblesEvento = (TextView) convertView.findViewById( R.id.textview_cupos_disponibles_evento );
-			//spinnerHoraLugarEvento = (Spinner) view.findViewById( R.id.spinner_hora_lugar_evento );
 			holder.multiSelectSpinnerHoraLugarEvento = (UbicacionesMultiSelectSpinner) convertView.findViewById( R.id.multi_select_spinner_hora_lugar_evento );
-			holder.multiSelectSpinnerHoraLugarEvento.setParentView( convertView );
+			
+			//Se envia la view padre que contiene el spinner para poder asignar un color
+			//cuando se marquen y se desmarquen ubicaciones del mismo spinner
+			holder.multiSelectSpinnerHoraLugarEvento.setParentView( convertView );	
 			
 			//Se almacena el holder con el view
 			convertView.setTag( holder );				
@@ -87,13 +87,14 @@ public class ItemEventoAdapter extends BaseAdapter {
 		
 		ArrayList< ArrayList<String> > ubicacionesExtraidas = new ArrayList< ArrayList<String> >();
 		ArrayList<String> idsUbicaciones = new ArrayList<String>();
-		ArrayList<String> horaLugarEventoString = new ArrayList<String>();
+		ArrayList<String> horaLugarUbicacionesString = new ArrayList<String>();
 		for ( Ubicacion u : ubicaciones ){
 			idsUbicaciones.add( u.idUbicacion );
-			horaLugarEventoString.add( String.format("%s  -  %s", u.horaInicio, u.lugar) );
+			horaLugarUbicacionesString.add( String.format("%s - %s - %s Libres", u.horaInicio, u.lugar, u.cuposDisponibles) );
 		}
 		ubicacionesExtraidas.add( idsUbicaciones );
-		ubicacionesExtraidas.add( horaLugarEventoString );
+		ubicacionesExtraidas.add( horaLugarUbicacionesString );
+		
 		
 		holder.textViewNombreEvento.setText( evento.nombre );
 		holder.textViewDescripcionEvento.setText( evento.descripcion );

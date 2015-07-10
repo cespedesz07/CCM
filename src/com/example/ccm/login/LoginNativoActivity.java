@@ -93,7 +93,7 @@ public class LoginNativoActivity extends CCMActionBarActivity implements OnClick
 			if ( !documentoString.equals("") ){
 				switch ( v.getId() ){
 				case R.id.btnLogin:
-					String[] params = { documentoString, emailString, LoginActivity.NATIVE_RESPONSE };
+					String[] params = { documentoString, emailString, LoginActivity.NATIVE_LOGIN };
 					LoginRestClientTask loginRestClientTask = new LoginRestClientTask( this, null );
 					loginRestClientTask.setParams( params );
 					loginRestClientTask.setMetodo( LoginRestClientTask.LOGIN_PERSONA );

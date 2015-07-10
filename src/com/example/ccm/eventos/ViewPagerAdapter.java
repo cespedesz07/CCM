@@ -35,19 +35,18 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {		
-		return 5;
+		return 4;
 	}
 	
 	
 	@Override
 	public CharSequence getPageTitle( int position ){
 		super.getPageTitle(position);
-		String tabLun = "Monday";
 		String tabMar = "Tuesday";
 		String tabMie = "Wednesday";
 		String tabJue = "Thursday";
 		String tabVie = "Friday";
-		String[] pageTabs = { tabLun, tabMar, tabMie, tabJue, tabVie };
+		String[] pageTabs = { tabMar, tabMie, tabJue, tabVie };
 		return pageTabs[position];
 	}
 }
