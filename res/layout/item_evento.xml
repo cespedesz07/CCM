@@ -6,6 +6,17 @@
     android:padding="@dimen/item_evento_xml_padding"
     android:background="@color/gray_light" >
     
+    <TextView
+        android:id="@+id/textview_tipo_evento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/item_evento_xml_textview_nombre_evento_size"
+        android:layout_marginTop="@dimen/item_evento_xml_textviews_margin_top"
+        android:layout_marginBottom="@dimen/item_evento_xml_textviews_margin_bottom"
+        android:text="Plenaria:" />
+    
     
     <TextView
         android:id="@+id/textview_nombre_evento"
@@ -30,7 +41,7 @@
         android:textSize="@dimen/item_evento_xml_textviews_size" />
 
 	    
-    	<com.example.ccm.eventos.UbicacionesMultiSelectSpinner 
+    	<com.specializedti.ccm.eventos.UbicacionesMultiSelectSpinner 
     	    android:id="@+id/multi_select_spinner_hora_lugar_evento"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"/>

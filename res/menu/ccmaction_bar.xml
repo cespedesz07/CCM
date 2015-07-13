@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.ccm.CCMActionBarActivity" >
+    tools:context="com.specializedti.ccm.CCMActionBarActivity" >
 
     <item
         android:id="@+id/action_acerca_de"
@@ -13,6 +13,12 @@
         android:id="@+id/action_salir"
         android:orderInCategory="90"
         android:title="@string/action_salir"
+        android:showAsAction="always"/>
+    
+    <item
+        android:id="@+id/action_ayuda_tipo_evento"
+        android:orderInCategory="80"
+        android:title="@string/action_ayuda_tipo_evento"
         android:showAsAction="always"/>
 
 </menu>

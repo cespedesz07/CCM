@@ -11,4 +11,16 @@
     <color name="main_color_gray_lt">#acacac</color>
     <color name="main_color_gray">#7d7d7d</color>
     <color name="gray_light">#e8e8e8</color>
+    
+    <color name="actionbar_red">#AB3C3D</color>
+    
+    <color name="master_detail_bg_red">#66AB3C3D</color>
+    
+    <!-- COLORES ASOCIADOS A LOS TIPOS DEL EVENTO -->
+    <color name="color_plenaria">#00A1CB</color>
+    <color name="color_semiplenaria">#7EB502</color>
+    <color name="color_cursillo">#EF8D04</color>
+    <color name="color_pres_posters">#E6412B</color>
+    <color name="color_conferencia">#87318C</color>
+    <color name="color_ponencia">#3E8479</color>
 </resources>

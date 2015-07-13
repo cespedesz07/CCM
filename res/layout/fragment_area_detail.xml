@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/fragmentContainer"
     android:orientation="horizontal"
-    tools:context="com.example.ccm.eventos.AreaDetailFragment" >
+    tools:context="com.specializedti.ccm.eventos.AreaDetailFragment" >
 	
     
     <TextView 
