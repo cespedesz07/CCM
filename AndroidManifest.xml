@@ -140,7 +140,7 @@
         <!--
              MUY IMPORTANTE:
         	 SE REGISTRA LA FacebookActivity PARA PODER DESPLEGAR EL DIALOGO DE INICIO DE SESION EN
-        	 FACEBOOK CUANDO SE PRESIONA EL LoginButton (Ver LoginActivity.java)
+        	 FACEBOOK CUANDO SE PRESIONA EL LoginButton (Ver LoginActivity.java)
         -->
         <activity
             android:name="com.facebook.FacebookActivity"
