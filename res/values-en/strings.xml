@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="facebook_app_id">694373840674926</string>
+    <!--
+         Números asociados con la libreria Parse para su inicializacion
+	     (Ver mas info en la clase CCMApplication.java
+    
+    <string name="parse_app_id">6iYB10BfMZCaWNOfccmsHEZjn6KZhPVVrNzyv9da</string>
+    <string name="parse_client_key">t1LyLjDNlovPqTmhBZJvTjYzsUnYOQl7Qh7yodHs</string>
+    -->
+
+    <!-- STRINGS BOTONES -->
+    <string name="com_facebook_login_view_com_facebook_login_text">Log In with Facebook</string>
+    <string name="com_facebook_login_view_com_facebook_logout_text">Log Out</string>
+    <string name="login_btn_google">Log In with con Google</string>
+    <string name="login_btn_twitter">Log In with Twitter</string>
+    <string name="app_name">CCM</string>
+    <string name="bienvenida">Sign Up with: </string>
+    <string name="bienvenida2">Or in the platform: </string>
+    <string name="contrasena">Password</string>
+    <string name="registro">Sign Up</string>
+    <string name="login">Log In</string>
+    <string name="alert_aceptar">Ok</string>
+    <string name="alert_cancelar">Cancel</string>
+    <string name="alert_cerrar_sesion">¿Do you really want to Log Out?</string>
+    <string name="alert_ok">OK, Understood!</string>
+    <string name="alert_cargando">Loading</string>
+    <string name="alert_guardando_usuario">Saving User...</string>
+    <string name="alert_sesion_cerrada">You don\'t have active accounts</string>
+    <string name="alert_no_internet">No Internet Connection. Plrease check the configuration of your device.</string>
+    <string name="alert_no_server">Connection stopped to the server. I the problem persists, please contact the support team. Thanks.</string>
+    <string name="err_doc_vacio">Please write your document number.</string>
+    <string name="err_email_vacio">Please write your email address.</string>
+    <string name="err_campos_vacios">Please write all the field values correctly.</string>
+    <string name="err_usuario_null">The User doesn\'t exists. Please try again.</string>
+    <string name="err_registro">Error when signing up. Please try again</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_registro">Sign Up</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Strings asociados al CCMActionBarActivity.java -->
+    <string name="action_acerca_de">About</string>
+    <string name="action_salir">Log Out</string>
+    <string name="action_ayuda_tipo_evento">Help</string>
+
+    <!-- Strings Asociados con la actividad LoginNativoActivity.java -->
+    <string name="alert_existe_persona">The user already exists, try again.</string>
+    <string name="alert_no_existe_persona">The user doesn\'t exists, try again.</string>
+
+    <!-- Strings Asociados con la actividad RegistroActivity.java (Actuan como hints o placeholders) -->
+    <string name="tipo_documento">Document Type: </string>
+    <string name="num_documento">Document Number</string>
+    <string name="nombre">First Name</string>
+    <string name="apellidos">Last Name</string>
+    <string name="genero">Gender: </string>
+    <string name="genero_masculino">Male</string>
+    <string name="genero_femenino">Female</string>
+    <string name="fecha_nacimiento">Birthday: </string>
+    <string name="email">email@domain.com</string>
+    <string name="telefono">Phone Number</string>
+    <string name="hotel">Lodging Hotel</string>
+    <string name="pais_procedencia">Country: </string>
+    <string name="institucion">Educational Institution: </string>
+    <string name="spinner_selecciona_opcion">Select an Option...</string>
+    <string name="title_activity_ccmaction_bar">CCMActionBarActivity</string>
+    <string name="alert_registro_redes_sociales">Please complete the formulary with the missing data.</string>
+    <string name="title_activity_qr">QRActivity</string>
+
+    <!-- Strings asociados al QRCodeActivity.java -->
+    <string name="codigo_qr_generado">Your generated QR Code is: </string>
+    <string name="descripcion_codigo_qr">This code identifies you as a participant during the Math Congress,
+        with this code you may access to the lunch services offered in the Congress.
+</string>
+    <string name="siguiente">Next</string>
+
+    <!-- String correspondientes a las pestañas o Tabs de Dias -->
+    <string name="tab_lun">Mon</string>
+    <string name="tab_mar">Tue</string>
+    <string name="tab_mie">Wed</string>
+    <string name="tab_jue">Thu</string>
+    <string name="tab_vie">Fri</string>
+
+    <!-- String correspondientes a UbicacionesMultiSelectSpinner.java -->
+    <string name="guardar">Save</string>
+    <string name="cancelar">Cancel</string>
+
+    <!-- String correspondientes a GuardadoEventosUbicRestClientTask.java -->
+    <string name="ubicaciones_sync_ok">Locations Sync Succesfully!</string>
+    <string name="title_activity_menu_inicio">Menu</string>
+
+    <!-- Strings de la Actividad MenuInicioActivity.java -->    
+    <string name="mis_eventos">My Events</string>
+    <string name="mapa_campus">Map of Campus</string>
+    <string name="codigo_qr">My QR Code</string>
+    <string name="bienvenida_usuario">Welcome</string>
+    <string name="ubicaciones_vacio">You don\'t have selected events. 
+        For selecting them you may push the button "My Events"</string>
+
+</resources>

@@ -36,7 +36,6 @@ import com.specializedti.ccm.eventos.AreaListActivity;
 import com.specializedti.ccm.login.LoginActivity;
 import com.specializedti.ccm.preferences.CCMPreferences;
 import com.specializedti.ccm.qrcode.QRCodeActivity;
-import com.specializedti.ccm.restclient.CargaUbicacionesPersonaRestClientTask;
 import com.specializedti.ccm.restclient.LoginRestClientTask;
 import com.specializedti.ccm.restclient.RegistroRestClientTask;
 import com.specializedti.ccm.restclient.SpinnerRestClientTask;
@@ -325,7 +324,8 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		String nombreCampo = txtNombre.getText().toString();
 		String apellidosCampo = txtApellidos.getText().toString();		
 			int indiceGeneroCampo = radioGroupGenero.getCheckedRadioButtonId();   //Si este valor retorna -1, es porque no se ha seleccionado ningun campo
-			String generoCampo = (  (RadioButton) radioGroupGenero.findViewById( indiceGeneroCampo )  ).getText().toString();		
+			String generoCampo = (  (RadioButton) radioGroupGenero.findViewById( indiceGeneroCampo )  ).getText().toString();
+			generoCampo = procesarGenero( generoCampo );
 		String emailCampo = txtEmail.getText().toString();		
 		String telefonoCampo = txtTelefono.getText().toString();
 		String hotelCampo = txtHotel.getText().toString();	
@@ -373,6 +373,19 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		fechaCapturada = año + "-" + mes + "-" + dia;
 		//Log.v( "Fecha Capturada: ", fechaCapturada );
 		return fechaCapturada;
+	}
+	
+	
+	private static String procesarGenero( String generoCampo ){
+		if ( generoCampo.equals( "Male" ) ){
+			return "Masculino";
+		}
+		else if ( generoCampo.equals( "Female" ) ){
+			return "Femenino";
+		}
+		else{
+			return generoCampo;
+		}
 	}
 
 	

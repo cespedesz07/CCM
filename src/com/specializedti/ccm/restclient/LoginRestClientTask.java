@@ -56,7 +56,11 @@ import com.specializedti.ccm.registro.RegistroActivity;
  *
  */
 
-public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{		
+public class LoginRestClientTask extends AsyncTask<String, Integer, Object[]>{
+	
+	
+	
+	private static final String URL_UBICACIONES_READ = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/ubicaciones";
 	
 	
 	private static final String URL_PERSONA_EXIST = "http://ccm2015.specializedti.com/index.php/rest/persona/exist";
@@ -118,22 +122,24 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 	
 	//Luego de ejecutar la consulta,
 	@Override
-	protected void onPostExecute( Boolean existePersona ){
+	protected void onPostExecute( Object[] result ){
 		if ( progressDialog.isShowing() ){
 			progressDialog.dismiss();
 		}
-		
+		boolean existePersona = (Boolean) result[0];
+		ArrayList<String> ubicacionesPersona = (ArrayList<String>)result[1];
 		if ( existePersona ){
 			if ( metodo.equals( EXISTE_PERSONA ) ){
 				alertDialog.setMessage( context.getResources().getString(R.string.alert_existe_persona) );
 				alertDialog.show();
 			}
-			else if ( metodo.equals( LOGIN_PERSONA ) ){
+			else if ( metodo.equals( LOGIN_PERSONA ) ){//
 				CCMPreferences preferences = new CCMPreferences( this.context );
 				preferences.guardarDocPersona( this.params[0] );
 				preferences.guardarNombreApellidosPersona( this.nombrePersona, this.apellidosPersona );
 				preferences.guardarEmailPersona( this.params[1] );
 				preferences.guardarTipoLogin( this.params[2] );	
+				preferences.guardarIdRegistrosUbicacion( new HashSet<String>(ubicacionesPersona) );
 				Intent i = new Intent( this.context, MenuInicioActivity.class );
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				this.context.startActivity( i );
@@ -145,7 +151,7 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 				alertDialog.show();
 			}
 			else{
-				if ( metodo.equals( EXISTE_PERSONA ) ){
+				if ( metodo.equals( EXISTE_PERSONA ) ){//
 					CCMPreferences preferences = new CCMPreferences( this.context );
 					preferences.guardarDocPersona( this.params[0] );
 					preferences.guardarNombreApellidosPersona(this.params[1], this.params[2]);
@@ -153,7 +159,7 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 					preferences.guardarTipoLogin( this.params[4] );
 					this.registroActivity.guardarDatosFormulario();
 				}
-				if ( metodo.equals( LOGIN_PERSONA ) ){
+				if ( metodo.equals( LOGIN_PERSONA ) ){//
 					alertDialog.setMessage( context.getResources().getString(R.string.alert_no_existe_persona) );
 					alertDialog.show();
 				}
@@ -164,22 +170,31 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 	
 	
 	@Override
-	protected Boolean doInBackground(String... params){
+	protected Object[] doInBackground(String... params){
+		Object[] result = new Object[2];
 		if ( !hayConexionWebService( URL_PERSONA_EXIST ) ){
-			return false;
+			result[0] = false;
+			result[1] = new ArrayList<String>();
 		}
 		else{
 			if ( metodo.equals( EXISTE_PERSONA ) ){
 				String docPersona = this.params[0];
-				return existePersona( docPersona, null );
+				result[0] = existePersona( docPersona, null );;
+				result[1] = new ArrayList<String>();
 			}
 			else if ( metodo.equals( LOGIN_PERSONA ) ){
 				String docPersona = this.params[0];
 				String email = this.params[1];
-				return existePersona( docPersona, email );
+				result[0] = existePersona( docPersona, email );
+				if ( (Boolean)result[0] == true ){
+					result[1] = consultarUbicacionesEnBD( docPersona );
+				}
+				else{
+					result[1] = new ArrayList<String>();
+				}
 			}
-			return false;
 		}
+		return result;
 	}
 	
 	
@@ -290,6 +305,75 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 	}
 	
 	
+	
+	
+	public ArrayList<String> consultarUbicacionesEnBD( String docPersona ){
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost( URL_UBICACIONES_READ );
+		
+		String textoResultado = "";
+		JSONArray jsonArray = null;		
+		InputStream inputStream = null;
+		
+		List<NameValuePair> parametros = new ArrayList<NameValuePair>();
+		parametros.add( new BasicNameValuePair(KEY_PERSONA_DOCPERSONA, docPersona) );
+		
+		try{
+			httpPost.setEntity( new UrlEncodedFormEntity(parametros) );
+			HttpResponse response = httpClient.execute( httpPost );
+			Log.i("executed", "executed" );
+			HttpEntity entity = response.getEntity();
+			inputStream = entity.getContent();
+			BufferedReader reader = new BufferedReader( new InputStreamReader(inputStream) );
+			String linea = reader.readLine();
+			while ( linea != null ){
+				textoResultado += String.format( "%s \n", linea );
+				linea = reader.readLine();
+			}
+			jsonArray = new JSONArray( textoResultado );
+		}
+		catch (Exception error){
+			error.printStackTrace();
+			this.progressDialog.dismiss();
+		}
+		finally{
+			if ( inputStream != null ){
+				try {
+					inputStream.close();
+				} 
+				catch (IOException error) {
+					Log.i( "IOException finally: ", error.getMessage() );
+					mensajeError = error.getMessage();
+				}
+			}
+		}
+		ArrayList<String> resultado = procesarJSONArray( jsonArray );
+		return resultado;
+	}
+	
+	
+	
+	public ArrayList<String> procesarJSONArray( JSONArray jsonArray ){
+		ArrayList<String> ubicacionesEnBD = new ArrayList<String>(); 
+		int numJSONObjects = jsonArray.length();
+		for ( int i=0; i<numJSONObjects; i++ ){
+			try{
+				JSONObject jsonObjectElement = jsonArray.getJSONObject(i);
+				ubicacionesEnBD.add(  jsonObjectElement.getString( CAMPO_UBICACION_IDUBICACION )  );				
+			}
+			catch ( JSONException error ){
+				mensajeError = error.getMessage();
+				error.printStackTrace();
+			}
+		}
+		return ubicacionesEnBD;
+	}
+	
+	
+	
+	
+	
+	
 	public boolean hayConexionWebService( String urlString ){
 		try{
     		URL url = new URL( urlString );
@@ -308,6 +392,14 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
     		return false;
     	}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 

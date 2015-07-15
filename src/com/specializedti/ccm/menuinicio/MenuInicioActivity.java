@@ -19,7 +19,6 @@ import com.specializedti.ccm.eventos.AreaListActivity;
 import com.specializedti.ccm.mapa.MapaActivity;
 import com.specializedti.ccm.preferences.CCMPreferences;
 import com.specializedti.ccm.qrcode.QRCodeActivity;
-import com.specializedti.ccm.restclient.CargaUbicacionesPersonaRestClientTask;
 
 public class MenuInicioActivity extends CCMActionBarActivity implements OnClickListener, OnTouchListener {
 	
