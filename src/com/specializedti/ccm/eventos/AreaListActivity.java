@@ -44,6 +44,9 @@ public class AreaListActivity extends CCMActionBarActivity implements AreaListFr
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_area_list);
 
+		//Si el contenedor area_detail_container se encuentra visible en la pantalla
+		//es porque se cargó la interfaz desde una tablet, por lo que se cambia
+		//el valor de mTowPane a true;
 		if (findViewById(R.id.area_detail_container) != null) {
 			// The detail container view will be present only in the
 			// large-screen layouts (res/values-large and

@@ -38,6 +38,7 @@ public class CCMApplication extends Application {
 		 
 	 
 		 // Add your initialization code here
+		 /*
 		 Parse.initialize( this, 
 				 getResources().getString( R.string.parse_app_id ), 
 				 getResources().getString( R.string.parse_client_key ) );
@@ -48,7 +49,7 @@ public class CCMApplication extends Application {
 	     // If you would like all objects to be private by default, remove this line.
 	     defaultACL.setPublicReadAccess(true); 
 	     ParseACL.setDefaultACL(defaultACL, true);
-        
+        */
 	     
 	     
 	     //Se inicializa la Facebook SDK version 4 

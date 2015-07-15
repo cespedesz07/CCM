@@ -65,6 +65,7 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	private RadioGroup radioGroupGenero;
 	private EditText txtEmail;
 	private EditText txtTelefono;
+	private EditText txtHotel;
 	private TextView textViewPaisProcedencia;
 	private Spinner spinnerPaisProcedencia;
 	private TextView textViewInstitucion;
@@ -110,6 +111,8 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		txtEmail = (EditText) findViewById( R.id.txt_email );
 		
 		txtTelefono = (EditText) findViewById( R.id.txt_telefono );
+		
+		txtHotel = (EditText) findViewById( R.id.txt_hotel );
 		
 		textViewPaisProcedencia = (TextView) findViewById( R.id.textview_pais_procedencia );
 		
@@ -173,10 +176,7 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 			genero = bundleParams.getString( LoginActivity.FB_GENERO );
 			fechaNacimientoPartida = bundleParams.getStringArray( LoginActivity.FB_FECHA_NACIMIENTO ) != null ? bundleParams.getStringArray( LoginActivity.FB_FECHA_NACIMIENTO ) : new String[]{"01", "01", "1900"} ;
 			email =  bundleParams.getString( LoginActivity.FB_EMAIL );
-		}
-		
-	
-			
+		}		
 		
 		txtNombre.setText(  nombre  );
 		//txtNombre.setEnabled(false);		
@@ -203,7 +203,7 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		pickerFechaNacimiento.updateDate(  Integer.valueOf(fechaNacimientoPartida[2]) , Integer.valueOf(fechaNacimientoPartida[0]) - 1, Integer.valueOf(fechaNacimientoPartida[1])  );
 		//pickerFechaNacimiento.setEnabled(false);
 		
-		txtEmail.setText(  bundleParams.getString( email )  );
+		txtEmail.setText(  email  );
 		//txtEmail.setEnabled( false );		
 	}	
 	
@@ -262,30 +262,31 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 	//Método para capturar las pulsaciones de los botones. Provienen de la interfaz OnClickListener
 	@Override
 	public void onClick(View v) {
-		if ( v.getId() == R.id.btn_registro_registro_activity ){
-			boolean formularioOk = validarCampos();
-			if ( formularioOk ){
-				String numDocumentoCampo = txtNumDocumento.getText().toString();
-				String nombreCampo = txtNombre.getText().toString();
-				String apellidosCampo = txtApellidos.getText().toString();
-				String correoCampo = txtEmail.getText().toString();
-				String tipoResponse = this.responseType;
-				String[] params = { numDocumentoCampo, nombreCampo, apellidosCampo, correoCampo, tipoResponse };
-				LoginRestClientTask loginRestClientTask = new LoginRestClientTask( this, RegistroActivity.this );
-				loginRestClientTask.setParams( params );
-				loginRestClientTask.setMetodo( LoginRestClientTask.EXISTE_PERSONA );
-				loginRestClientTask.execute();
+		if ( hayInternet() ){
+			if ( v.getId() == R.id.btn_registro_registro_activity ){
+				boolean formularioOk = validarCampos();
+				if ( formularioOk ){
+					String numDocumentoCampo = txtNumDocumento.getText().toString();
+					String nombreCampo = txtNombre.getText().toString();
+					String apellidosCampo = txtApellidos.getText().toString();
+					String correoCampo = txtEmail.getText().toString();
+					String tipoResponse = this.responseType;
+					String[] params = { numDocumentoCampo, nombreCampo, apellidosCampo, correoCampo, tipoResponse };
+					LoginRestClientTask loginRestClientTask = new LoginRestClientTask( this, RegistroActivity.this );
+					loginRestClientTask.setParams( params );
+					loginRestClientTask.setMetodo( LoginRestClientTask.EXISTE_PERSONA );
+					loginRestClientTask.execute();
+				}
+				else{
+					AlertDialog dialogCamposVacios = new AlertDialog.Builder(this)
+					.setTitle( "Error" )
+					.setMessage( getResources().getString( R.string.err_campos_vacios ) )
+					.setPositiveButton( getResources().getString(R.string.alert_ok), null)
+					.setCancelable( true )
+					.show();
+				}
 			}
-			else{
-				AlertDialog dialogCamposVacios = new AlertDialog.Builder(this)
-				.setTitle( "Error" )
-				.setMessage( getResources().getString( R.string.err_campos_vacios ) )
-				.setPositiveButton( getResources().getString(R.string.alert_ok), null)
-				.setCancelable( true )
-				.show();
-			}
-		}
-		
+		}		
 	}
 	
 	
@@ -296,12 +297,17 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 			int indiceGeneroCampo = radioGroupGenero.getCheckedRadioButtonId();
 			String generoCampo = (  (RadioButton) radioGroupGenero.findViewById( indiceGeneroCampo )  ).getText().toString();		
 		String emailCampo = txtEmail.getText().toString();		
-		String telefonoCampo = txtTelefono.getText().toString();		
+		String hotelCampo = txtHotel.getText().toString();
 		String fechaNacimientoCampo = obtenerFechaCampo( pickerFechaNacimiento );
 		
 		if ( !numDocumentoCampo.equals("")  &&  !nombreCampo.equals("")  &&  !apellidosCampo.equals("")  &&
-			 !emailCampo.equals("")  &&  !fechaNacimientoCampo.equals("")	){
-			return true;
+			 !emailCampo.equals("")  &&  !hotelCampo.equals("")  &&  !fechaNacimientoCampo.equals("")	){
+			if ( emailCampo.contains("@") ){
+				return true;
+			}
+			else{
+				return false;
+			}
 		}
 		else{
 			return false;
@@ -321,7 +327,8 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 			int indiceGeneroCampo = radioGroupGenero.getCheckedRadioButtonId();   //Si este valor retorna -1, es porque no se ha seleccionado ningun campo
 			String generoCampo = (  (RadioButton) radioGroupGenero.findViewById( indiceGeneroCampo )  ).getText().toString();		
 		String emailCampo = txtEmail.getText().toString();		
-		String telefonoCampo = txtTelefono.getText().toString();		
+		String telefonoCampo = txtTelefono.getText().toString();
+		String hotelCampo = txtHotel.getText().toString();	
 		String codigoQRCampo = null;
 		String fechaNacimientoCampo = obtenerFechaCampo( pickerFechaNacimiento );
 		String asistioCampo = RegistroRestClientTask.VALOR_ASISTIO_NO;
@@ -336,6 +343,7 @@ public class RegistroActivity extends CCMActionBarActivity implements OnTouchLis
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_GENERO_PERSONA, generoCampo )  														);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_CORREO_ELECTRONICO_PERSONA, emailCampo )  											);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_TELEFONO_PERSONA, telefonoCampo )  													);
+		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_HOTEL_PERSONA, hotelCampo )  													        );
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_TIPO_DOC_IDTIPO_DOC_PERSONA, String.valueOf(tipoDocumentoCampo)  ) 					);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_PAIS_PROCEDENCIA_IDPAIS_PROCEDENCIA_PERSONA, String.valueOf(paisProcedenciaCampo)  ) 	);
 		parametros.add(  new BasicNameValuePair( RegistroRestClientTask.CAMPO_INSTITUCION_IDINSTITUCION_PERSONA, String.valueOf(institucionCampo)  )  				);

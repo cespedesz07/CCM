@@ -1,8 +1,15 @@
 package com.specializedti.ccm.actionbar;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -19,6 +26,9 @@ import com.specializedti.ccm.login.LoginActivity;
 import com.specializedti.ccm.preferences.CCMPreferences;
 
 public class CCMActionBarActivity extends ActionBarActivity {
+	
+	
+	private static final String URL_STRING = "http://ccm2015.specializedti.co";
 	
 	private ActionBar actionBar;
 	private GoogleApiClient googleApiClient;
@@ -47,7 +57,7 @@ public class CCMActionBarActivity extends ActionBarActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.ccmaction_bar, menu);
 		menu.findItem( R.id.action_salir ).setEnabled( this.salirEnabled );
-		menu.findItem( R.id.action_salir ).setEnabled( this.ayudaTipoEventoEnabled );
+		menu.findItem( R.id.action_ayuda_tipo_evento ).setEnabled( this.ayudaTipoEventoEnabled );
 		return true;
 	}
 	
@@ -161,6 +171,37 @@ public class CCMActionBarActivity extends ActionBarActivity {
 		}		
 		return true;
 	}
+	
+	
+	
+    //Métdodo para verificar el estado de Internet
+    //IMPORTANTE: Para verificar la conexion a Internet es necerario agregar el siguiente permiso en el Manifest:
+    // <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    public boolean hayInternet(){
+    	boolean respuesta = true;
+    	ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService( Context.CONNECTIVITY_SERVICE );
+ 	    NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+ 	    if ( netInfo == null ){
+ 	    	respuesta = false;
+ 	    }
+ 	    else if ( !netInfo.isConnected() ){
+ 	    	respuesta = false;
+ 	    }
+ 	    else if ( !netInfo.isAvailable() ){
+ 	    	respuesta = false;
+ 	    }
+ 	    else{
+ 	    	respuesta = true;
+ 	    }
+ 	    
+ 	    if ( !respuesta ){
+ 	    	new AlertDialog.Builder( this )
+			.setMessage( getResources().getString(R.string.alert_no_internet) )
+			.setPositiveButton( getResources().getString(R.string.alert_ok) , null)
+			.show();
+ 	    }
+ 	    return respuesta;
+    }
 	
 	
 }

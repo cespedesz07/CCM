@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.specializedti.ccm"
     android:installLocation="auto"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="1.2" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -80,13 +80,10 @@
             android:name="com.specializedti.ccm.menuinicio.MenuInicioActivity"
             android:label="@string/title_activity_menu_inicio"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.specializedti.ccm.mapa.MapaActivity"
-            android:label="@string/title_activity_mapa"
+            android:label="@string/mapa_campus"
             android:screenOrientation="landscape"
             android:parentActivityName="com.specializedti.ccm.menuinicio.MenuInicioActivity" >
             <meta-data
@@ -107,7 +104,7 @@
         -->
         <activity
    			android:name="com.specializedti.ccm.eventos.AreaListActivity"
-            android:label="@string/app_name"
+            android:label="@string/mis_eventos"
             android:parentActivityName="com.specializedti.ccm.menuinicio.MenuInicioActivity"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -128,7 +125,7 @@
        </activity>
        <activity
             android:name="com.specializedti.ccm.qrcode.QRCodeActivity"
-            android:label="@string/title_activity_qr"
+            android:label="@string/codigo_qr"
             android:parentActivityName="com.specializedti.ccm.menuinicio.MenuInicioActivity"
             android:screenOrientation="portrait" >
             <meta-data

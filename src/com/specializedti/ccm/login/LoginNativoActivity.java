@@ -84,37 +84,39 @@ public class LoginNativoActivity extends CCMActionBarActivity implements OnClick
 	//Método que captura los eventos de los botones para ejecutar los Intents
 	@Override
 	public void onClick(View v){
-		String emailString = email.getText().toString();
-		String documentoString = documento.getText().toString();	
-		if ( !emailString.equals("") ){
-			if ( !documentoString.equals("") ){
-				switch ( v.getId() ){
-				case R.id.btnLogin:
-					String[] params = { documentoString, emailString, LoginActivity.NATIVE_LOGIN };
-					LoginRestClientTask loginRestClientTask = new LoginRestClientTask( this, null );
-					loginRestClientTask.setParams( params );
-					loginRestClientTask.setMetodo( LoginRestClientTask.LOGIN_PERSONA );
-					loginRestClientTask.execute();
-					break;				
-				default:
-					break;
-				}					
+		if ( hayInternet() ){
+			String emailString = email.getText().toString();
+			String documentoString = documento.getText().toString();	
+			if ( !emailString.equals("") ){
+				if ( !documentoString.equals("") ){
+					switch ( v.getId() ){
+					case R.id.btnLogin:
+						String[] params = { documentoString, emailString, LoginActivity.NATIVE_LOGIN };
+						LoginRestClientTask loginRestClientTask = new LoginRestClientTask( this, null );
+						loginRestClientTask.setParams( params );
+						loginRestClientTask.setMetodo( LoginRestClientTask.LOGIN_PERSONA );
+						loginRestClientTask.execute();
+						break;				
+					default:
+						break;
+					}					
+				}
+				else{
+					dialogCamposVacios.setMessage( R.string.err_doc_vacio );
+					dialogCamposVacios.show();
+				}
 			}
 			else{
-				dialogCamposVacios.setMessage( R.string.err_doc_vacio );
-				dialogCamposVacios.show();
+				if ( !documentoString.equals("") ){
+					dialogCamposVacios.setMessage( R.string.err_email_vacio );
+					dialogCamposVacios.show();
+				}
+				else{
+					dialogCamposVacios.setMessage( R.string.err_campos_vacios );
+					dialogCamposVacios.show();
+				}			
 			}
 		}
-		else{
-			if ( !documentoString.equals("") ){
-				dialogCamposVacios.setMessage( R.string.err_email_vacio );
-				dialogCamposVacios.show();
-			}
-			else{
-				dialogCamposVacios.setMessage( R.string.err_campos_vacios );
-				dialogCamposVacios.show();
-			}			
-		}		
 	}	
 	
 	

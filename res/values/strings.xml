@@ -5,13 +5,10 @@
     <!--
          Números asociados con la libreria Parse para su inicializacion
 	     (Ver mas info en la clase CCMApplication.java
-
-
-
-
-    -->
+    
     <string translatable="false" name="parse_app_id">6iYB10BfMZCaWNOfccmsHEZjn6KZhPVVrNzyv9da</string>
     <string translatable="false" name="parse_client_key">t1LyLjDNlovPqTmhBZJvTjYzsUnYOQl7Qh7yodHs</string>
+    -->
 
     <!-- STRINGS BOTONES -->
     <string translatable="false" name="com_facebook_login_view_com_facebook_login_text">Iniciar Sesion con Facebook</string>
@@ -32,9 +29,10 @@
     <string translatable="false" name="alert_guardando_usuario">Guardando Usuario...</string>
     <string translatable="false" name="alert_sesion_cerrada">No tienes cuentas abiertas.</string>
     <string translatable="false" name="alert_no_internet">No hay conexión a Internet. Por favor verifica la configuración del dispositivo.</string>
+    <string translatable="false" name="alert_no_server">La conexion al servidor ha sido interrumpida. Si el problema persiste contacta al equipo de soporte técnico. Gracias.</string>
     <string translatable="false" name="err_doc_vacio">Por favor digita el documento.</string>
     <string translatable="false" name="err_email_vacio">Por favor digita el correo electrónico.</string>
-    <string translatable="false" name="err_campos_vacios">Por favor ingresa todos los campos.</string>
+    <string translatable="false" name="err_campos_vacios">Por favor ingresa los campos correctamente.</string>
     <string translatable="false" name="err_usuario_null">El usuario digitado no existe, por favor reintentar.</string>
     <string translatable="false" name="err_registro">Error al registrarse. Por favor intente de nuevo.</string>
     <string translatable="false" name="hello_world">Hello world!</string>
@@ -42,7 +40,7 @@
     <string translatable="false" name="dummy_button">Dummy Button</string>
     <string translatable="false" name="dummy_content">DUMMY\nCONTENT</string>
     <string translatable="false" name="title_activity_login">LoginActivity</string>
-    <string translatable="false" name="title_activity_registro">RegistroActivity</string>
+    <string translatable="false" name="title_activity_registro">Registro</string>
     <string translatable="false" name="action_settings">Settings</string>
 
     <!-- Strings asociados al CCMActionBarActivity.java -->
@@ -65,6 +63,7 @@
     <string translatable="false" name="fecha_nacimiento">Fecha de Nacimiento: </string>
     <string translatable="false" name="email">email@dominio.com</string>
     <string translatable="false" name="telefono">Teléfono</string>
+    <string translatable="false" name="hotel">Hotel de Hospedaje</string>
     <string translatable="false" name="pais_procedencia">País de Procedencia: </string>
     <string translatable="false" name="institucion">Institución: </string>
     <string translatable="false" name="spinner_selecciona_opcion">Selecciona una Opción...</string>
@@ -92,13 +91,12 @@
 
     <!-- String correspondientes a GuardadoEventosUbicRestClientTask.java -->
     <string translatable="false" name="ubicaciones_sync_ok">Ubicaciones sincronizadas exitosamente!</string>
-    <string translatable="false" name="title_activity_menu_inicio">MenuInicioActivity</string>
+    <string translatable="false" name="title_activity_menu_inicio">Menu</string>
 
-    <!-- Strings de la Actividad MenuInicioActivity.java -->
+    <!-- Strings de la Actividad MenuInicioActivity.java -->    
     <string translatable="false" name="mis_eventos">Mis Eventos</string>
     <string translatable="false" name="mapa_campus">Mapa del Campus</string>
     <string translatable="false" name="codigo_qr">Mi Código QR</string>
-    <string translatable="false" name="title_activity_mapa">Mapa del Campus</string>
     <string translatable="false" name="bienvenida_usuario">Bienvenido(a)</string>
     <string translatable="false" name="ubicaciones_vacio">No has seleccionado Eventos.
         Para seleccionarlos presiona el boton "Mis Eventos".</string>

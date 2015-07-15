@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -51,7 +53,7 @@ public class CargaUbicacionesPersonaRestClientTask extends AsyncTask< String, In
 	
 	
 	//URL que conecta a los datos de eventos y ubicaciones
-	private static final String URL_UBICACIONES_READ = "http://ccm2015.specializedti.com/index.php/rest/evento/sql";
+	private static final String URL_UBICACIONES_READ = "http://ccm2015.specializedti.com/index.php/rest/persona-ubicacion/ubicaciones";
 	//private static final String URL_UBICACIONES_READ = "http://192.168.56.1/Yii_CCM_WebService/web/index.php/rest/persona-ubicacion/ubicaciones";
 	
 	
@@ -135,8 +137,13 @@ public class CargaUbicacionesPersonaRestClientTask extends AsyncTask< String, In
 
 	@Override
 	protected ArrayList<String> doInBackground(String... params) {
-		String docPersona = params[0];
-		return consultarUbicacionesEnBD( docPersona );
+		if ( !hayConexionWebService( URL_UBICACIONES_READ ) ){
+			return new ArrayList<String>();
+		}
+		else{
+			String docPersona = params[0];
+			return consultarUbicacionesEnBD( docPersona );
+		}
 	}
 	
 	
@@ -204,6 +211,26 @@ public class CargaUbicacionesPersonaRestClientTask extends AsyncTask< String, In
 			}
 		}
 		return ubicacionesEnBD;
+	}
+	
+	
+	public boolean hayConexionWebService( String urlString ){
+		try{
+    		URL url = new URL( urlString );
+    		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    		connection.connect();
+    		if ( connection.getResponseCode() != HttpURLConnection.HTTP_OK ){
+    			mensajeError = context.getResources().getString(R.string.alert_no_server);
+    			return false;
+    		} 	  
+    		else{
+    			return true;
+    		}
+    	}
+    	catch ( IOException error ){
+    		error.printStackTrace();
+    		return false;
+    	}
 	}
 
 }

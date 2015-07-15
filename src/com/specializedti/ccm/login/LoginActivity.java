@@ -167,31 +167,8 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
 	    setGoogleApiClient(googleApiClient);
 	    disableHome();
 	    setSalirEnabled(false);
-	    
-	    
-	    
     }
     
-    
-    //Métdodo para verificar el estado de Internet
-    //IMPORTANTE: Para verificar la conexion a Internet es necerario agregar el siguiente permiso en el Manifest:
-    // <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    public boolean hayInternet(){
-    	ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService( Context.CONNECTIVITY_SERVICE );
- 	    NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
- 	    if ( netInfo == null ){
- 	    	return false;
- 	    }
- 	    else if ( !netInfo.isConnected() ){
- 	    	return false;
- 	    }
- 	    else if ( !netInfo.isAvailable() ){
- 	    	return false;
- 	    }
- 	    else{
- 	    	return true;
- 	    }
-    } 
     
     
     
@@ -200,7 +177,7 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     //Método que se ejecuta luego de que la actividad ha sido creada al llamar onCreate()
     protected void onStart(){
     	super.onStart();   	
-    	googleApiClient.connect();
+    	//googleApiClient.connect();
     	//Luego de que la actividad es Created, se conecta el usuario ya logueado
     	//segun la red social utilizada para hacer el login
     	String loginType = new CCMPreferences( this ).obtenerTipoLogin();
@@ -417,12 +394,6 @@ public class LoginActivity extends CCMActionBarActivity implements OnClickListen
     		default:
     			break;
     		}
-    	}
-    	else{
-    		new AlertDialog.Builder( this )
-			.setMessage( getResources().getString(R.string.alert_no_internet) )
-			.setPositiveButton( getResources().getString(R.string.alert_ok) , null)
-			.show();
     	}		
 	}
     

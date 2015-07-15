@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -140,9 +142,14 @@ public class CargaEventosRestClientTask extends AsyncTask< String, Integer, Arra
 
 	@Override
 	protected ArrayList<Object[]> doInBackground(String... params) {
-		String idTipoArea = String.valueOf( params[0] );
-		String dia = String.valueOf( params[1] );
-		return consultarEventosUbicaciones( idTipoArea, dia );
+		if ( !hayConexionWebService( URL_EVENTOS_UBICACION_READ ) ){
+			return new ArrayList<Object[]>();
+		}
+		else{
+			String idTipoArea = String.valueOf( params[0] );
+			String dia = String.valueOf( params[1] );
+			return consultarEventosUbicaciones( idTipoArea, dia );
+		}
 	}
 	
 	
@@ -258,9 +265,10 @@ public class CargaEventosRestClientTask extends AsyncTask< String, Integer, Arra
 				error.printStackTrace();
 			}
 		}
-		imprimirEstructura( eventosUbicaciones );
+		//imprimirEstructura( eventosUbicaciones );
 		return eventosUbicaciones;
 	}
+	
 	
 	
 	private void imprimirEstructura( ArrayList<Object[]> eventosUbicaciones ){
@@ -273,6 +281,26 @@ public class CargaEventosRestClientTask extends AsyncTask< String, Integer, Arra
 			}
 		}
 		Log.i( "estructura: " , resultado);
+	}
+	
+	
+	public boolean hayConexionWebService( String urlString ){
+		try{
+    		URL url = new URL( urlString );
+    		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    		connection.connect();
+    		if ( connection.getResponseCode() != HttpURLConnection.HTTP_OK ){
+    			mensajeError = context.getResources().getString(R.string.alert_no_server);
+    			return false;
+    		} 	  
+    		else{
+    			return true;
+    		}
+    	}
+    	catch ( IOException error ){
+    		error.printStackTrace();
+    		return false;
+    	}
 	}
 
 }

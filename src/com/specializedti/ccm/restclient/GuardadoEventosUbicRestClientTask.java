@@ -2,6 +2,8 @@ package com.specializedti.ccm.restclient;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -175,6 +177,8 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 	}
 	
 	
+	
+	
 	//-------------------------------------------------------------------------------------------------
 	public boolean borrarRegistroPersonaUbicacion( String[] registro ){
 		HttpClient httpClient = new DefaultHttpClient();
@@ -211,6 +215,27 @@ public class GuardadoEventosUbicRestClientTask extends AsyncTask< String, Intege
 			mensajeError = e.getMessage();
 		}
 		return false;	
+	}
+	
+	
+	
+	public boolean hayConexionWebService( String urlString ){
+		try{
+    		URL url = new URL( urlString );
+    		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    		connection.connect();
+    		if ( connection.getResponseCode() != HttpURLConnection.HTTP_OK ){
+    			mensajeError = context.getResources().getString(R.string.alert_no_server);
+    			return false;
+    		} 	  
+    		else{
+    			return true;
+    		}
+    	}
+    	catch ( IOException error ){
+    		error.printStackTrace();
+    		return false;
+    	}
 	}
 
 }

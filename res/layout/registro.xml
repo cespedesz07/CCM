@@ -61,8 +61,7 @@
                  android:drawableLeft="@android:drawable/ic_menu_edit"
                  android:hint="@string/num_documento"
                  android:inputType="text"
-                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
-                  />
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />
                        
              
 			
@@ -114,15 +113,15 @@
                      android:layout_height="wrap_content"
                      android:text="@string/genero_masculino"
                      android:textSize="@dimen/registro_activity_txt"
-                     android:layout_marginRight="@dimen/registro_activity_radio_button_margin_right" />
+                     android:layout_marginRight="@dimen/registro_activity_radio_button_margin_right"
+                     android:checked="true" />
 
                  <RadioButton
                      android:id="@+id/radio_femenino"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="@string/genero_femenino"
-                     android:textSize="@dimen/registro_activity_txt"
-                     android:checked="true" />
+                     android:textSize="@dimen/registro_activity_txt" />
              </RadioGroup>
 
             
@@ -138,9 +137,7 @@
                  android:hint="@string/email"
                  android:inputType="textEmailAddress"
                  android:drawableLeft="@android:drawable/ic_menu_add"
-                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />
-             
-             
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />    
              
              
              <EditText
@@ -152,12 +149,26 @@
                  android:hint="@string/telefono"
                  android:inputType="phone"
                  android:drawableLeft="@android:drawable/ic_menu_call"
-                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
-                  />
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />
+             
+             
+             <EditText
+                 android:id="@+id/txt_hotel"
+                 style="@style/editext_graybg"
+                 android:layout_below="@id/txt_telefono"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:hint="@string/hotel"
+                 android:inputType="text"
+                 android:drawableLeft="@android:drawable/ic_menu_myplaces"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />
+             
+             
+             
              
              <TextView
                  android:id="@+id/textview_pais_procedencia"
-                 android:layout_below="@id/txt_telefono"
+                 android:layout_below="@id/txt_hotel"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:layout_alignTop="@+id/spinner_pais_procedencia"
@@ -167,7 +178,7 @@
                  android:layout_marginTop="@dimen/registro_activity_textview_margin_top" />
              <Spinner
                  android:id="@+id/spinner_pais_procedencia"
-                 android:layout_below="@id/txt_telefono"
+                 android:layout_below="@id/txt_hotel"
                  android:layout_toRightOf="@+id/textview_pais_procedencia"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"

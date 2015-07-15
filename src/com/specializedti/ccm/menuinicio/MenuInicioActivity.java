@@ -93,33 +93,34 @@ public class MenuInicioActivity extends CCMActionBarActivity implements OnClickL
 	
 
 	@Override
-	public void onClick(View view) {		
-		switch ( view.getId() ){
-		
-		case R.id.btn_eventos:
-			/*
-			CCMPreferences preferences = new CCMPreferences(this);
-			List<String> idUbicaciones = preferences.obtenerIdRegistrosUbicacion();
-			if ( idUbicaciones.isEmpty() ){
-				String docPersona = preferences.obtenerDocPersona();		
-				new CargaUbicacionesPersonaRestClientTask(this).execute(docPersona);
-			}
-			else{
+	public void onClick(View view) {
+		if ( hayInternet() ){
+			switch ( view.getId() ){		
+			case R.id.btn_eventos:
+				/*
+				CCMPreferences preferences = new CCMPreferences(this);
+				List<String> idUbicaciones = preferences.obtenerIdRegistrosUbicacion();
+				if ( idUbicaciones.isEmpty() ){
+					String docPersona = preferences.obtenerDocPersona();		
+					new CargaUbicacionesPersonaRestClientTask(this).execute(docPersona);
+				}
+				else{
+					startActivity( new Intent(this, AreaListActivity.class) );
+				}*/
 				startActivity( new Intent(this, AreaListActivity.class) );
-			}*/
-			startActivity( new Intent(this, AreaListActivity.class) );
-			break;
-		
-		case R.id.btn_mapa_campus:
-			startActivity( new Intent(this, MapaActivity.class) );
-			break;
+				break;
 			
-		case R.id.btn_codigo_qr:
-			startActivity( new Intent(this, QRCodeActivity.class) );
-			break;
-			
-		default:
-			break;			
+			case R.id.btn_mapa_campus:
+				startActivity( new Intent(this, MapaActivity.class) );
+				break;
+				
+			case R.id.btn_codigo_qr:
+				startActivity( new Intent(this, QRCodeActivity.class) );
+				break;
+				
+			default:
+				break;			
+			}
 		}
 	}
 }

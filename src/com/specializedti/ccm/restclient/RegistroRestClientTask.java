@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +67,7 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 	public static final String CAMPO_GENERO_PERSONA = "genero";
 	public static final String CAMPO_CORREO_ELECTRONICO_PERSONA = "correo_electronico";
 	public static final String CAMPO_TELEFONO_PERSONA = "telefono";
+	public static final String CAMPO_HOTEL_PERSONA = "hotel";
 	public static final String CAMPO_CODIGO_QR_PERSONA = "codigo_qr";
 	public static final String CAMPO_FECHA_NACIMIENTO_PERSONA = "fecha_nacimiento";
 	public static final String CAMPO_ASISTIO_PERSONA = "asistio";
@@ -118,8 +121,10 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 			progressDialog.dismiss();
 		}
 		if ( !haCreadoUsuario ){
-			alertDialog.setMessage( mensajeError );
-			alertDialog.show();
+			if ( mensajeError.length() != 0 ){
+				alertDialog.setMessage( mensajeError );
+				alertDialog.show();
+			}
 		}
 		else{
 			Intent i = new Intent( this.context, MenuInicioActivity.class );
@@ -134,9 +139,14 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 	//La estructura de llamado de este método es doInBackground( String nombre_metodo, Object params )
 	@Override
 	protected Boolean doInBackground(Object... params){
-		List<NameValuePair> parametros = (List<NameValuePair>) params[0];
-		this.documentoPersona = parametros.get(0).getValue();
-		return ingresarPersona( parametros );
+		if ( !hayConexionWebService( URL_PERSONA_CREATE ) ){
+			return false;
+		}
+		else{
+			List<NameValuePair> parametros = (List<NameValuePair>) params[0];
+			this.documentoPersona = parametros.get(0).getValue();
+			return ingresarPersona( parametros );
+		}
 	}
 	
 	
@@ -191,6 +201,29 @@ public class RegistroRestClientTask extends AsyncTask<Object, Integer, Boolean>{
 		}
 		return false;		
 	}
+	
+	
+	public boolean hayConexionWebService( String urlString ){
+		try{
+    		URL url = new URL( urlString );
+    		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    		connection.connect();
+    		if ( connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND ){
+    			mensajeError = context.getResources().getString(R.string.alert_no_server);
+    			return false;
+    		} 	  
+    		else{
+    			return true;
+    		}
+    	}
+    	catch ( IOException error ){
+    		error.printStackTrace();
+    		return false;
+    	}
+	}
+	
+	
+	
 	
 
 }

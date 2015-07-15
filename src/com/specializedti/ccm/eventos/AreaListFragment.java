@@ -78,8 +78,6 @@ public class AreaListFragment extends ListFragment{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setListAdapter( new ArrayAdapter( getActivity(), android.R.layout.simple_list_item_activated_1, android.R.id.text1, DummyContent.ITEMS) );
-		//setListAdapter( new AreaListFragmentArrayAdapter( getActivity() ) );
-		
 	}
 	
 	
@@ -87,11 +85,11 @@ public class AreaListFragment extends ListFragment{
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
 		// Restore the previously serialized activated item position.
 		if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
 			setActivatedPosition( savedInstanceState.getInt(STATE_ACTIVATED_POSITION) );
 		}
+		
 	}
 
 	

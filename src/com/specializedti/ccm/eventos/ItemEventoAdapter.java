@@ -1,11 +1,17 @@
 package com.specializedti.ccm.eventos;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +39,7 @@ public class ItemEventoAdapter extends BaseAdapter {
 		TextView textViewNombreEvento;
 		TextView textViewDescripcionEvento;
 		UbicacionesMultiSelectSpinner multiSelectSpinnerHoraLugarEvento;
+		TextView textViewDiaSeparador;
 	}
 	
 	
@@ -108,6 +115,24 @@ public class ItemEventoAdapter extends BaseAdapter {
 		
 		return convertView;
 	}
+
+	
+	/*
+	private boolean despues( String hora1 ){
+		try{
+			SimpleDateFormat formatter = new SimpleDateFormat( "HH:mm:ss" );
+			Date horaDate1 = formatter.parse( hora1 );
+			Date horaDate2 = formatter.parse( this.horaInicioRef );
+			Log.v( "date" , horaDate1.toString() + " Despues De " + horaDate2.toString() );
+			return horaDate1.after( horaDate2 );
+			
+		}
+		catch ( Exception error ){
+			error.printStackTrace();
+		}
+		return false;			
+	}
+	*/
 
 
 	@Override

@@ -9,6 +9,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -183,56 +185,89 @@ public class UbicacionesMultiSelectSpinner extends Spinner implements OnMultiCho
 	@SuppressLint("NewApi")
 	@Override
 	public boolean performClick(){
-		this.builder = new AlertDialog.Builder( this.context ); 
-		builder.setMultiChoiceItems( items, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-				//Si la ubicacion a seleccionar tiene 0 cupos disponibles
-				//se desabilita la opcion de seleccionado
-				//Log.v( "checked", String.valueOf(which) + ": " + isChecked);
-				String itemRef = dialog.getListView().getItemAtPosition( which ).toString();
-				String[] itemRefPartido = itemRef.split( SEPARADOR_FORMATO_UBICACION );
-				String cuposLibres = itemRefPartido[ itemRefPartido.length - 1 ];
-				Log.v( "Cupos Libres", cuposLibres );
-				int cuposRef =  Integer.valueOf( cuposLibres.split(" ")[0] );
-				Log.v( "Cupos Ref", String.valueOf( cuposRef ) );
-				if ( cuposRef == 0  &&  isChecked ){
-					dialog.getListView().getChildAt( which ).setEnabled( false );
-					dialog.getListView().setItemChecked(which, false);
-				}
-				else{
-					selectedItems[which] = isChecked;
-					String docPersona = new CCMPreferences( context ).obtenerDocPersona();
-					String tipoPersona = "4";
-					String[] registro = { docPersona, idItems.get(which), tipoPersona };
-					GuardadoEventosUbicRestClientTask guardadoEventosUbicRestClientTask = new GuardadoEventosUbicRestClientTask( context );
-					if ( isChecked ){
-						//Log.v( "a ingresar: " , Arrays.toString(registro));
-						guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
-						guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.CREAR_PERSONA_UBICACION );
-						cuposRef -= 1;
+		if ( hayInternet() ){
+			this.builder = new AlertDialog.Builder( this.context ); 
+			builder.setMultiChoiceItems( items, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
+					//Si la ubicacion a seleccionar tiene 0 cupos disponibles
+					//se desabilita la opcion de seleccionado
+						
+					//Log.v( "checked", String.valueOf(which) + ": " + isChecked);
+					String itemRef = dialog.getListView().getItemAtPosition( which ).toString();
+					String[] itemRefPartido = itemRef.split( SEPARADOR_FORMATO_UBICACION );
+					String cuposLibres = itemRefPartido[ itemRefPartido.length - 1 ];
+					Log.v( "UbicacionesMultiSelectSpinner", "Cupos Libres: " + cuposLibres );
+					int cuposRef =  Integer.valueOf( cuposLibres.split(" ")[0] );
+					Log.v( "UbicacionesMultiSelectSpinner", "Cupos Ref: " + cuposLibres );
+					if ( cuposRef == 0  &&  isChecked ){
+						dialog.getListView().getChildAt( which ).setEnabled( false );
+						dialog.getListView().setItemChecked(which, false);
 					}
 					else{
-						//Log.v( "a eliminar: " , Arrays.toString(registro));
-						guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
-						guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.BORRAR_PERSONA_UBICACION );
-						cuposRef += 1;
+						selectedItems[which] = isChecked;
+						String docPersona = new CCMPreferences( context ).obtenerDocPersona();
+						String tipoPersona = "4";
+						String[] registro = { docPersona, idItems.get(which), tipoPersona };
+						GuardadoEventosUbicRestClientTask guardadoEventosUbicRestClientTask = new GuardadoEventosUbicRestClientTask( context );
+						if ( isChecked ){
+							//Log.v( "a ingresar: " , Arrays.toString(registro));
+							guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
+							guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.CREAR_PERSONA_UBICACION );
+							cuposRef -= 1;
+						}
+						else{
+							//Log.v( "a eliminar: " , Arrays.toString(registro));
+							guardadoEventosUbicRestClientTask.setRegistroPersonaUbicacion( registro );
+							guardadoEventosUbicRestClientTask.execute( GuardadoEventosUbicRestClientTask.BORRAR_PERSONA_UBICACION );
+							cuposRef += 1;
+						}
+						actualizarRegistroUbicacionListView(which, isChecked, cuposRef);
+						adapter.clear();
+						adapter.add( getSelectedItemsString() );
+						adapter.notifyDataSetChanged();
 					}
-					actualizarRegistroUbicacionListView(which, isChecked, cuposRef);
-					adapter.clear();
-					adapter.add( getSelectedItemsString() );
-					adapter.notifyDataSetChanged();
+					
 				}
-				
-			}
-		} );
-		builder.setTitle( this.dialogTitle );
-		
-		this.dialog = builder.create();
-		dialog.show();
+			} );
+			builder.setTitle( this.dialogTitle );
+			
+			this.dialog = builder.create();
+			dialog.show();
+		}
 		return false;
 	}
+	
+	
+    //Métdodo para verificar el estado de Internet
+    //IMPORTANTE: Para verificar la conexion a Internet es necerario agregar el siguiente permiso en el Manifest:
+    // <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    public boolean hayInternet(){
+    	boolean respuesta = true;
+    	ConnectivityManager connectivityManager = (ConnectivityManager) this.context.getSystemService( Context.CONNECTIVITY_SERVICE );
+ 	    NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+ 	    if ( netInfo == null ){
+ 	    	respuesta = false;
+ 	    }
+ 	    else if ( !netInfo.isConnected() ){
+ 	    	respuesta = false;
+ 	    }
+ 	    else if ( !netInfo.isAvailable() ){
+ 	    	respuesta = false;
+ 	    }
+ 	    else{
+ 	    	respuesta = true;
+ 	    }
+ 	    
+ 	    if ( !respuesta ){
+ 	    	new AlertDialog.Builder( this.context )
+			.setMessage( getResources().getString(R.string.alert_no_internet) )
+			.setPositiveButton( getResources().getString(R.string.alert_ok) , null)
+			.show();
+ 	    }
+ 	    return respuesta;
+    }
 	
 	
 	

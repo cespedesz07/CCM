@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -138,17 +140,23 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 			}
 		}
 		else{
-			if ( metodo.equals( EXISTE_PERSONA ) ){
-				CCMPreferences preferences = new CCMPreferences( this.context );
-				preferences.guardarDocPersona( this.params[0] );
-				preferences.guardarNombreApellidosPersona(this.params[1], this.params[2]);
-				preferences.guardarEmailPersona( this.params[3] );
-				preferences.guardarTipoLogin( this.params[4] );
-				this.registroActivity.guardarDatosFormulario();
-			}
-			if ( metodo.equals( LOGIN_PERSONA ) ){
-				alertDialog.setMessage( context.getResources().getString(R.string.alert_no_existe_persona) );
+			if ( mensajeError.length() != 0 ){
+				alertDialog.setMessage( mensajeError );
 				alertDialog.show();
+			}
+			else{
+				if ( metodo.equals( EXISTE_PERSONA ) ){
+					CCMPreferences preferences = new CCMPreferences( this.context );
+					preferences.guardarDocPersona( this.params[0] );
+					preferences.guardarNombreApellidosPersona(this.params[1], this.params[2]);
+					preferences.guardarEmailPersona( this.params[3] );
+					preferences.guardarTipoLogin( this.params[4] );
+					this.registroActivity.guardarDatosFormulario();
+				}
+				if ( metodo.equals( LOGIN_PERSONA ) ){
+					alertDialog.setMessage( context.getResources().getString(R.string.alert_no_existe_persona) );
+					alertDialog.show();
+				}
 			}
 		}
 	}
@@ -157,16 +165,21 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 	
 	@Override
 	protected Boolean doInBackground(String... params){
-		if ( metodo.equals( EXISTE_PERSONA ) ){
-			String docPersona = this.params[0];
-			return existePersona( docPersona, null );
+		if ( !hayConexionWebService( URL_PERSONA_EXIST ) ){
+			return false;
 		}
-		else if ( metodo.equals( LOGIN_PERSONA ) ){
-			String docPersona = this.params[0];
-			String email = this.params[1];
-			return existePersona( docPersona, email );
+		else{
+			if ( metodo.equals( EXISTE_PERSONA ) ){
+				String docPersona = this.params[0];
+				return existePersona( docPersona, null );
+			}
+			else if ( metodo.equals( LOGIN_PERSONA ) ){
+				String docPersona = this.params[0];
+				String email = this.params[1];
+				return existePersona( docPersona, email );
+			}
+			return false;
 		}
-		return false;
 	}
 	
 	
@@ -274,6 +287,26 @@ public class LoginRestClientTask extends AsyncTask<String, Integer, Boolean>{
 			}
 		}
 		return false;
+	}
+	
+	
+	public boolean hayConexionWebService( String urlString ){
+		try{
+    		URL url = new URL( urlString );
+    		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    		connection.connect();
+    		if ( connection.getResponseCode() != HttpURLConnection.HTTP_OK ){
+    			mensajeError = context.getResources().getString(R.string.alert_no_server);
+    			return false;
+    		} 	  
+    		else{
+    			return true;
+    		}
+    	}
+    	catch ( IOException error ){
+    		error.printStackTrace();
+    		return false;
+    	}
 	}
 	
 	

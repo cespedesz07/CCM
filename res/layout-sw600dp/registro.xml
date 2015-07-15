@@ -113,49 +113,18 @@
                      android:text="@string/genero_masculino"
                      android:textSize="@dimen/registro_activity_txt"
                      android:layout_marginRight="@dimen/registro_activity_radio_button_margin_right"
-                      />
+                     android:checked="true" />
 
                  <RadioButton
                      android:id="@+id/radio_femenino"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="@string/genero_femenino"
-                     android:textSize="@dimen/registro_activity_txt"
-                     android:checked="true" />
+                     android:textSize="@dimen/registro_activity_txt" />
              </RadioGroup>
-
              
              
-             <!-- ==========================LINEA SEPARADORA=====================-->
-             <View
-                 android:id="@+id/line1"     
-			     android:layout_width="match_parent"
-			     android:layout_height="@dimen/registro_activity_line_heigth"
-			     android:background="@android:color/darker_gray"
-			     android:layout_below="@id/radio_group_genero"
-			     android:layout_marginTop="@dimen/registro_activity_line_margin_top"
-			     android:layout_marginBottom="@dimen/registro_activity_line_margin_bottom" />
-             <!-- =================================================================== -->
-             
-             
-             <TextView
-                 android:id="@+id/textview_fecha_nacimiento"
-                 android:layout_below="@id/line1"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"                 
-                 android:text="@string/fecha_nacimiento"
-                 android:textAppearance="?android:attr/textAppearanceMedium"
-                 android:textSize="@dimen/registro_activity_txt"
-                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
-                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />  
-             <DatePicker
-                 android:id="@+id/picker_fecha_nacimiento"
-                 android:layout_below="@id/textview_fecha_nacimiento"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_centerHorizontal="true"
-                 android:calendarViewShown="true"
-                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />
+            
              
              
              
@@ -163,7 +132,7 @@
           	<EditText
                  android:id="@+id/txt_email"
                  style="@style/editext_graybg"
-                 android:layout_below="@id/picker_fecha_nacimiento"
+                 android:layout_below="@id/radio_group_genero"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:hint="@string/email"
@@ -182,45 +151,33 @@
                  android:inputType="phone"
                  android:drawableLeft="@android:drawable/ic_menu_call"
                  android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
-                  />
-             
-             
-             
-             
-             
-             
-
-             
-             
-             
-             
-             <!-- ===========================LINEA SEPARADORA======================= -->
-             <View
-                 android:id="@+id/line2"     
-			     android:layout_width="match_parent"
-			     android:layout_height="@dimen/registro_activity_line_heigth"
-			     android:background="@android:color/darker_gray"
-			     android:layout_below="@id/txt_telefono"
-			     android:layout_marginTop="@dimen/registro_activity_line_margin_top"
-			     android:layout_marginBottom="@dimen/registro_activity_line_margin_bottom" />
-             <!-- ==================================================================== -->
-             
+                  />   
+                  
+             <EditText
+                 android:id="@+id/txt_hotel"
+                 style="@style/editext_graybg"
+                 android:layout_below="@id/txt_telefono"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:hint="@string/hotel"
+                 android:inputType="text"
+                 android:drawableLeft="@android:drawable/ic_menu_myplaces"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />
              
              
              
              <TextView
                  android:id="@+id/textview_pais_procedencia"
-                 android:layout_below="@id/line2"
+                 android:layout_below="@id/txt_hotel"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:text="@string/pais_procedencia"
-                 android:drawableLeft="@android:drawable/ic_menu_mylocation"
                  android:textAppearance="?android:attr/textAppearanceMedium"
                  android:textSize="@dimen/registro_activity_txt"
                  android:paddingRight="@dimen/registro_activity_textview_padding_right" />             
              <Spinner
                  android:id="@+id/spinner_pais_procedencia"
-                 android:layout_below="@id/line2"
+                 android:layout_below="@id/txt_hotel"
                  android:layout_toRightOf="@id/textview_pais_procedencia"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"                 
@@ -247,7 +204,39 @@
                  android:layout_below="@id/spinner_pais_procedencia"
                  android:paddingTop="@dimen/registro_activity_spinners_padding_top"
                  android:paddingBottom="@dimen/registro_activity_spinners_padding_bottom"
+                 android:layout_marginBottom="@dimen/registro_activity_spinners_margin_bottom"
                  android:gravity="end" />
+	          
+	           <TextView
+                 android:id="@+id/textview_fecha_nacimiento"
+                 android:layout_below="@id/spinner_institucion"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"                 
+                 android:text="@string/fecha_nacimiento"
+                 android:textAppearance="?android:attr/textAppearanceMedium"
+                 android:textSize="@dimen/registro_activity_txt"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom"
+                 android:paddingRight="@dimen/registro_activity_textview_padding_right" />  
+             <DatePicker
+                 android:id="@+id/picker_fecha_nacimiento"
+                 android:layout_below="@id/textview_fecha_nacimiento"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerHorizontal="true"
+                 android:calendarViewShown="true"
+                 android:layout_marginBottom="@dimen/registro_activity_widgets_margin_bottom" />
+             
+             
+             <!-- ===========================LINEA SEPARADORA======================= -->
+             <View
+                 android:id="@+id/line2"     
+			     android:layout_width="match_parent"
+			     android:layout_height="@dimen/registro_activity_line_heigth"
+			     android:background="@android:color/darker_gray"
+			     android:layout_below="@id/picker_fecha_nacimiento"
+			     android:layout_marginTop="@dimen/registro_activity_line_margin_top"
+			     android:layout_marginBottom="@dimen/registro_activity_line_margin_bottom" />
+             <!-- ==================================================================== -->
              
          </RelativeLayout>         
          
