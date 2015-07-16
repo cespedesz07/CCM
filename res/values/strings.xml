@@ -74,7 +74,7 @@
     <!-- Strings asociados al QRCodeActivity.java -->
     <string name="codigo_qr_generado">Tu Código QR Generado es el siguiente: </string>
     <string name="descripcion_codigo_qr">Este código te identifica como participante durante la realización del evento,
-        y te permite acceder a los servicios de los almuerzos ofrecidos en el mismo.
+        y te permite validar la inscripción, así como acceder a los servicios de los almuerzos ofrecidos en el mismo.
 </string>
     <string name="siguiente">Siguiente</string>
 

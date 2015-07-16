@@ -74,7 +74,7 @@
     <!-- Strings asociados al QRCodeActivity.java -->
     <string name="codigo_qr_generado">Your generated QR Code is: </string>
     <string name="descripcion_codigo_qr">This code identifies you as a participant during the Math Congress,
-        with this code you may access to the lunch services offered in the Congress.
+        with this code you may validate your own registry, and access to the lunch services offered in the Congress.
 </string>
     <string name="siguiente">Next</string>
 

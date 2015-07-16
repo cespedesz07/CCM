@@ -617,7 +617,7 @@ int drawable logo_scm_cropped_170x142 0x7f020082
 int drawable logo_un 0x7f020083
 int drawable logo_unal 0x7f020084
 int drawable map_icon 0x7f020085
-int drawable mapa_campus 0x7f020086
+int drawable mapa_campus_color 0x7f020086
 int drawable menu_inicio_button 0x7f020087
 int drawable messenger_bubble_large_blue 0x7f020088
 int drawable messenger_bubble_large_white 0x7f020089
